@@ -23,6 +23,7 @@ const Scan = () => {
           <QrReader
             className="w-full"
             delay={300}
+            constraints={{ facingMode: "environment" }}
             onError={(err) => console.log(err)}
             onResult={(result, error) => {
               if (!!result) {
