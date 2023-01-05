@@ -59,7 +59,7 @@ export default function Home() {
             />
           </div>
         </div>
-        <Link href='/scan'>Visit Scanner</Link>
+        <Link href='/checkin'>Visit Scanner</Link>
 
         <div className={styles.grid}>
           <a

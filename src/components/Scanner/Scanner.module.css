@@ -1,0 +1,10 @@
+.qr_image_wrapper section { 
+    border-radius: 16px;                   
+  }
+
+  .qr_image_wrapper section div {
+    box-shadow: unset !important;     
+  }
+  .qr_image_wrapper{
+    width: 100%;
+  }
