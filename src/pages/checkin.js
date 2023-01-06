@@ -6,17 +6,27 @@ import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import React from "react";
+import React, { useEffect } from "react";
+import supabaseClient from "../utils/supabaseClient";
 
-const steps = [
-  "Verify Payment Details",
-  "Assign User ID",
-  "Confirm User",
-];
+const steps = ["Verify Payment Details", "Assign User ID", "Confirm User"];
+
 const Checkin = () => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
-
+  const [users, setUsers] = React.useState([]);
+  async function fetchUsers() {
+    console.log("Supabase CLient : ",supabaseClient)
+    const { data,error } = await supabaseClient.from("users").select();
+    console.log(error);
+    setUsers(data);
+    console.log(data);
+    console.log(users);
+  }
+  useEffect(() => {
+    fetchUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const totalSteps = () => {
     return steps.length;
   };
@@ -64,7 +74,6 @@ const Checkin = () => {
   };
   return (
     <>
-      
       <Box sx={{ width: "100%" }}>
         <Stepper nonLinear activeStep={activeStep}>
           {steps.map((label, index) => (
@@ -88,7 +97,7 @@ const Checkin = () => {
             </React.Fragment>
           ) : (
             <React.Fragment>
-              <Scanner/>
+              <Scanner />
               <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                 <Button
                   color="inherit"
