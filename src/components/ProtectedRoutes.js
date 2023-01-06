@@ -1,25 +1,25 @@
-import { useEffect } from 'react'
-import Router from 'next/router'
+import { useContext, useEffect } from "react";
+import { useRouter } from "next/router";
+import { UserContext } from "../context/userContext";
 
-const ProtectedRoute = (WrappedComponent) => {
+const ProtectedRoute = (WrappedComponent, role) => {
   const ProtectedRouteComponent = (props) => {
+    const { user, loading, roleLoaded } = useContext(UserContext);
+    const Router = useRouter();
     useEffect(() => {
-      if (!props.session) {
-        Router.push('/login')
+      if (!loading && !user) {
+        Router.push("/");
       }
-    }, [])
+    }, [user, loading]);
 
-    return <WrappedComponent {...props} />
-  }
+    if (loading || !user) return <div>Loading...</div>;
 
-  ProtectedRouteComponent.getInitialProps = async (context) => {
+    if (role == "volunteer" && user.role != "volunteer")
+      return <div>Not Authorized</div>;
+    return <WrappedComponent {...props} />;
+  };
 
-    return {
-      ...(WrappedComponent.getInitialProps ? await WrappedComponent.getInitialProps(context) : {})
-    }
-  }
+  return ProtectedRouteComponent;
+};
 
-  return ProtectedRouteComponent
-}
-
-export default ProtectedRoute
+export default ProtectedRoute;

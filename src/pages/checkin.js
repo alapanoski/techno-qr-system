@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import React, { useEffect } from "react";
 import supabaseClient from "../utils/supabaseClient";
+import protectedRoute from "../components/ProtectedRoutes";
 
 const steps = ["Verify Payment Details", "Assign User ID", "Confirm User"];
 
@@ -166,4 +167,4 @@ const Checkin = () => {
   )
 }
 
-export default Checkin
+export default protectedRoute(Checkin, "volunteer")
