@@ -54,7 +54,9 @@ export default function Sidebar() {
         </div>
         <Button
           onClick={() => {
-            supabaseClient.auth.signOut();
+            supabaseClient.auth.signOut().then(() => {
+              router.push("/");
+            });
           }}
           variant="contained"
           style={{
