@@ -15,6 +15,7 @@ const Checkin = () => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   const [users, setUsers] = React.useState([]);
+  const [qrResult,setQrResult]=React.useState("");
   async function fetchUsers() {
     console.log("Supabase CLient : ",supabaseClient)
     const { data,error } = await supabaseClient.from("users").select();
