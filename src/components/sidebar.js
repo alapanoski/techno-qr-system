@@ -1,17 +1,69 @@
+import { Button } from "@mui/material";
+import supabaseClient from "../utils/supabaseClient";
+import logo from "../assets/logo.png";
+import Image from "next/image";
+import { useRouter } from "next/router";
+
 export default function Sidebar() {
+  const router = useRouter();
   return (
-    <div className="h-full overflow-x-hidden md:w-72 p-4 flex flex-col items-start gap-10 bg-gray-300">
+    <div className="flex flex-col items-start h-full gap-10 p-4 overflow-x-hidden bg-gray-300 md:w-72">
       <div>
-        <h1 className="m-2 w-full text-3xl font-bold tracking-wider">
-          Technopreneur
-        </h1>
+        <Image src={logo} alt="" />
       </div>
-      <ul className="ml-8 w-full flex flex-col justify-evenly items-start gap-6 tracking-wide">
-        <li className="w-full hover:cursor-pointer">Home</li>
-        <li className="w-full hover:cursor-pointer">Check In</li>
-        <li className="w-full hover:cursor-pointer">Food</li>
-        <li className="w-full hover:cursor-pointer">Add Points</li>
-      </ul>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "1rem",
+          alignItems: "center",
+          width: "100%",
+        }}
+      >
+        <div
+          style={{
+            cursor: "pointer",
+          }}
+          onClick={() => router.push("/")}
+        >
+          Home
+        </div>
+        <div
+          style={{
+            cursor: "pointer",
+          }}
+          onClick={() => router.push("/checkin")}
+        >
+          Check In
+        </div>
+        <div
+          style={{
+            cursor: "pointer",
+          }}
+          onClick={() => router.push("/food")}
+        >
+          Food
+        </div>
+        <div
+          style={{
+            cursor: "pointer",
+          }}
+          onClick={() => router.push("/points")}
+        >
+          Add Points
+        </div>
+        <Button
+          onClick={() => {
+            supabaseClient.auth.signOut();
+          }}
+          variant="contained"
+          style={{
+            backgroundColor: "red",
+          }}
+        >
+          Logout
+        </Button>
+      </div>
     </div>
-  )
+  );
 }
