@@ -1,23 +1,32 @@
-import { Footer, Navbar, Scanner } from "../components"
-import styles from "../styles/Checkin.module.css"
-import Box from "@mui/material/Box"
-import Stepper from "@mui/material/Stepper"
-import Step from "@mui/material/Step"
-import StepButton from "@mui/material/StepButton"
-import Button from "@mui/material/Button"
-import Typography from "@mui/material/Typography"
-import React from "react"
-import { supabase } from "../utils/supabaseClient"
+import { Footer, Navbar, Scanner } from "../components";
+import styles from "../styles/Checkin.module.css";
+import Box from "@mui/material/Box";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepButton from "@mui/material/StepButton";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import React, { useEffect } from "react";
+import supabaseClient from "../utils/supabaseClient";
 
-const steps = ["Verify Payment Details", "Assign User ID", "Confirm User"]
+const steps = ["Verify Payment Details", "Assign User ID", "Confirm User"];
+
 const Checkin = () => {
-  const [activeStep, setActiveStep] = React.useState(0)
-  const [completed, setCompleted] = React.useState({})
-
-  const [qrResult, setQrResult] = React.useState("")
-  const [paymentId, setPaymentId] = React.useState(null)
-  const [userId, setUserId] = React.useState(null)
-
+  const [activeStep, setActiveStep] = React.useState(0);
+  const [completed, setCompleted] = React.useState({});
+  const [users, setUsers] = React.useState([]);
+  async function fetchUsers() {
+    console.log("Supabase CLient : ",supabaseClient)
+    const { data,error } = await supabaseClient.from("users").select();
+    console.log(error);
+    setUsers(data);
+    console.log(data);
+    console.log(users);
+  }
+  useEffect(() => {
+    fetchUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const totalSteps = () => {
     return steps.length
   }
