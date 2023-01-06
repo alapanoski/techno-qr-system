@@ -97,7 +97,7 @@ const Checkin = () => {
             </React.Fragment>
           ) : (
             <React.Fragment>
-              {/* <Scanner /> */}
+              <Scanner />
               <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                 <Button
                   color="inherit"
