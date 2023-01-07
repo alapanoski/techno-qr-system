@@ -22,7 +22,6 @@ export default function Hero() {
   }
   useEffect(() => {
     getUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const router = useRouter();
   async function signInWithGoogle() {
@@ -34,10 +33,10 @@ export default function Hero() {
 
   return (
     <div className={styles.hero_container}>
-      <Image src={logo} alt="" width={400} height={400} />
+      <Image src={logo} alt='' width={400} height={400} />
       <Button
         className={styles.hero_button}
-        variant="contained"
+        variant='contained'
         onClick={signInWithGoogle}
       >
         Login with Google
