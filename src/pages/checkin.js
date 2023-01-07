@@ -77,7 +77,7 @@ const Checkin = () => {
 
         // Todo: Add validation
 
-        const { data, error } = await supabase.from("users").insert({
+        const { data, error } = await supabaseClient.from("users").insert({
           name: "James Bond",
           payment_id: paymentId,
           user_id: userId,
