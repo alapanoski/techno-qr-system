@@ -2,10 +2,11 @@ import Head from "next/head"
 import { Inter } from "@next/font/google"
 
 import Sidebar from "../components/sidebar"
+import protectedRoute from "../components/ProtectedRoutes"
 
 const inter = Inter({ subsets: ["latin"] })
 
-export default function Dashboard() {
+function Dashboard() {
   return (
     <>
       <Head>
@@ -21,3 +22,5 @@ export default function Dashboard() {
     </>
   )
 }
+
+export default protectedRoute(Dashboard)

@@ -5,6 +5,8 @@ import logo from "../../assets/logo.png";
 import supabaseClient from "../../utils/supabaseClient";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { UserContext } from "../../context/userContext";
+
 export default function Hero() {
   const [user, setUser] = useState();
   async function getUser() {
