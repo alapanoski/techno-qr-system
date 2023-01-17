@@ -12,15 +12,12 @@ import Scanner from "../Scanner/Scanner";
 import styles from "./AddPoints.module.css";
 
 const AddPoints = () => {
-  const [queryId, setQueryId] = React.useState("");
   const [currentUser, setCurrentUser] = React.useState(null);
   const [points, setPoints] = React.useState(0);
   const [activeStep, setActiveStep] = React.useState(0);
   const [userId, setUserId] = React.useState("");
   const [completed, setCompleted] = React.useState({});
-  const [foodData, setFoodData] = useState([]);
   const steps = ["Verify User ID", "Add Score"];
-  const [loading, setLoading] = useState(true);
 
   const totalSteps = () => {
     return steps.length;
