@@ -9,7 +9,7 @@ function FoodCard({ food, setFoodTab }) {
       <h2>{food.name}</h2>
       <button
         className={styles.check_in_btn}
-        disabled={(food.time>=new Date().toISOString())?false:true}
+        disabled={food.time >= new Date().toISOString() ? false : true}
         onClick={() => setFoodTab(food.id)}
       >
         Check In

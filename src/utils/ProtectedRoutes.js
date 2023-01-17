@@ -9,7 +9,6 @@ const ProtectedRoute = (WrappedComponent, role) => {
     const Router = useRouter();
     useEffect(() => {
       if (!loading && !User) {
-        
         Router.push("/");
       }
       if (User?.email && User.role === "user") Router.push("/");

@@ -15,7 +15,6 @@ export default function Home() {
   const [loading1, setLoading1] = useState(false);
 
   useEffect(() => {
-    console.log(User);
     if (User?.role === "volunteer") {
       router.push("/dashboard");
     }
@@ -26,7 +25,6 @@ export default function Home() {
     const { data, error } = await supabaseClient.auth.signInWithOAuth({
       provider: "google",
     });
-    console.log(data);
   }
   if (loading) return <Loader />;
   return (

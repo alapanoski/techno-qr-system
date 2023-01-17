@@ -80,7 +80,7 @@ function Food() {
       }
     }
     if (activeStep === 1) {
-      if (foodEaten&&foodEaten.length > 0) {
+      if (foodEaten && foodEaten.length > 0) {
         alert("User has already checked in for this food");
         setUserId("");
         handleReset();
@@ -189,9 +189,10 @@ function Food() {
                           Techno ID: <b>{userId}</b>
                         </div>
                         <div>
-                          Food: <b>{foodData.find(
-                            (food) => food.id === foodTab
-                          ).name}</b>
+                          Food:{" "}
+                          <b>
+                            {foodData.find((food) => food.id === foodTab).name}
+                          </b>
                         </div>
                       </div>
                     )

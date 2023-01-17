@@ -1,6 +1,6 @@
 .food_card {
   width: 300px;
-  background-color: #04364F;
+  background-color: #04364f;
   border-radius: 10px;
   box-shadow: 2px 2px 10px #ccc;
   text-align: center;
@@ -19,7 +19,7 @@
 }
 
 .check_in_btn {
-  background-color: #0278AF;
+  background-color: #0278af;
   color: #fff;
   border: none;
   border-radius: 10px;

@@ -19,8 +19,7 @@
   align-items: center;
   gap: 0.5rem;
 }
-.dashboard_menu_mobile
-{
+.dashboard_menu_mobile {
   padding-top: 3rem;
   display: none;
   flex-direction: column;
@@ -71,7 +70,7 @@
   justify-content: center;
   cursor: pointer;
 }
-.dashboard_logo{
+.dashboard_logo {
   cursor: pointer;
 }
 .dashboard_menu_hamburger {
@@ -82,16 +81,13 @@
     width: 100%;
     min-height: auto;
   }
-  .dashboard_menu
-  {
+  .dashboard_menu {
     display: none;
   }
-  .dashboard_menu_mobile
-  {
+  .dashboard_menu_mobile {
     display: flex;
   }
-  .dashboard_menu_item_button_mobile
-  {
+  .dashboard_menu_item_button_mobile {
     display: flex;
   }
   .dashboard_menu_hamburger {
