@@ -3,6 +3,7 @@ import { CheckIn, Sidebar } from "../components";
 import CustomTitle from "../utils/customTitle";
 import styles from "../styles/Dashboard.module.css";
 import ProtectedRoute from "../utils/ProtectedRoutes";
+import AddPoints from "../components/AddPoints/AddPoints";
 
 function Dashboard() {
   const [tab, setTab] = useState(0);
@@ -15,6 +16,7 @@ function Dashboard() {
           {tab === 0 && <div>Tab 1</div>}
           {tab === 1 && <CheckIn />}
           {tab === 2 && <div>Tab 3</div>}
+          {tab === 3 && <AddPoints />}
         </div>
       </div>
     </>
