@@ -22,7 +22,7 @@ function Scanner({ qr_pay, setUserId, userId, setPaymentId, paymentId }) {
   });
 
   return (
-    <div className="container mx-auto scanner_container">
+    <div className="scanner_container">
       <div className={styles.scan_container}>
         <div className={styles.scan}>
           <div className={styles.scan_heading}>
