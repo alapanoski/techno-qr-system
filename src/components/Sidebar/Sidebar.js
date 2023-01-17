@@ -30,70 +30,68 @@ function Sidebar({ tab, setTab }) {
           />
         </div>
       </div>
-        <div className={styles.dashboard_menu}>
-          <div
-            className={
-              tab === 0
-                ? styles.dashboard_menu_item_active
-                : styles.dashboard_menu_item
-            }
-            onClick={() => {
-              setTab(0);
-            }}
-          >
-            Home
-          </div>
-          <div
-            onClick={() => {
-              setTab(1);
-            }}
-            className={
-              tab === 1
-                ? styles.dashboard_menu_item_active
-                : styles.dashboard_menu_item
-            }
-          >
-            Check In
-          </div>
-          <div
-            className={
-              tab === 2
-                ? styles.dashboard_menu_item_active
-                : styles.dashboard_menu_item
-            }
-            onClick={() => {
-              setTab(2);
-            }}
-          >
-            Food
-          </div>
-          <div
-            className={
-              tab === 3
-                ? styles.dashboard_menu_item_active
-                : styles.dashboard_menu_item
-            }
-            onClick={() => {
-              setTab(3);
-            }}
-          >
-            Add Points
-          </div>
-          <div
-            onClick={() => {
-              supabaseClient.auth.signOut().then(() => {
-                router.push("/");
-              });
-            }}
-            className={styles.dashboard_menu_item_button}
-          >
-            Logout
-          </div>
+      <div className={styles.dashboard_menu}>
+        <div
+          className={
+            tab === 0
+              ? styles.dashboard_menu_item_active
+              : styles.dashboard_menu_item
+          }
+          onClick={() => {
+            setTab(0);
+          }}
+        >
+          Home
         </div>
+        <div
+          onClick={() => {
+            setTab(1);
+          }}
+          className={
+            tab === 1
+              ? styles.dashboard_menu_item_active
+              : styles.dashboard_menu_item
+          }
+        >
+          Check In
+        </div>
+        <div
+          className={
+            tab === 2
+              ? styles.dashboard_menu_item_active
+              : styles.dashboard_menu_item
+          }
+          onClick={() => {
+            setTab(2);
+          }}
+        >
+          Food
+        </div>
+        <div
+          className={
+            tab === 3
+              ? styles.dashboard_menu_item_active
+              : styles.dashboard_menu_item
+          }
+          onClick={() => {
+            setTab(3);
+          }}
+        >
+          Add Points
+        </div>
+        <div
+          onClick={() => {
+            supabaseClient.auth.signOut().then(() => {
+              router.push("/");
+            });
+          }}
+          className={styles.dashboard_menu_item_button}
+        >
+          Logout
+        </div>
+      </div>
       {expanded && (
-        <div className={styles.dashboard_menu} style={{
-          display: expanded ? "block" : "none"
-        }}>
+        <div className={styles.dashboard_menu_mobile}>
           <div
             className={
               tab === 0
@@ -102,6 +100,7 @@ function Sidebar({ tab, setTab }) {
             }
             onClick={() => {
               setTab(0);
+              setExpanded(false);
             }}
           >
             Home
@@ -109,6 +108,7 @@ function Sidebar({ tab, setTab }) {
           <div
             onClick={() => {
               setTab(1);
+              setExpanded(false);
             }}
             className={
               tab === 1
@@ -126,6 +126,7 @@ function Sidebar({ tab, setTab }) {
             }
             onClick={() => {
               setTab(2);
+              setExpanded(false);
             }}
           >
             Food
@@ -138,6 +139,7 @@ function Sidebar({ tab, setTab }) {
             }
             onClick={() => {
               setTab(3);
+              setExpanded(false);
             }}
           >
             Add Points
@@ -148,7 +150,7 @@ function Sidebar({ tab, setTab }) {
                 router.push("/");
               });
             }}
-            className={styles.dashboard_menu_item_button}
+            className={styles.dashboard_menu_item_button_mobile}
           >
             Logout
           </div>
