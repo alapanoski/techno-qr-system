@@ -1,28 +1,26 @@
-import { Footer, Navbar, Scanner } from "../components";
-import styles from "../styles/Checkin.module.css";
+import { Scanner } from "..";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import styles from "./CheckIn.module.css";
 import React, { useEffect } from "react";
-import supabaseClient from "../utils/supabaseClient";
-import protectedRoute from "../components/ProtectedRoutes";
+import supabaseClient from "../../utils/supabaseClient";
 
 const steps = ["Verify Payment Details", "Assign User ID", "Confirm User"];
 
-const Checkin = () => {
+const CheckIn = () => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   const [users, setUsers] = React.useState([]);
-  const [qrResult,setQrResult]=React.useState("");
-  const [paymentId,setPaymentId]=React.useState("");
-  const [userId,setUserId]=React.useState("");
+  const [paymentId, setPaymentId] = React.useState("");
+  const [userId, setUserId] = React.useState("");
 
   async function fetchUsers() {
-    console.log("Supabase CLient : ",supabaseClient)
-    const { data,error } = await supabaseClient.from("users").select();
+    console.log("Supabase CLient : ", supabaseClient);
+    const { data, error } = await supabaseClient.from("users").select();
     console.log(error);
     setUsers(data);
     console.log(data);
@@ -33,83 +31,61 @@ const Checkin = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const totalSteps = () => {
-    return steps.length
-  }
+    return steps.length;
+  };
 
   const completedSteps = () => {
-    return Object.keys(completed).length
-  }
+    return Object.keys(completed).length;
+  };
 
   const isLastStep = () => {
-    return activeStep === totalSteps() - 1
-  }
+    return activeStep === totalSteps() - 1;
+  };
 
   const allStepsCompleted = () => {
-    return completedSteps() === totalSteps()
-  }
+    return completedSteps() === totalSteps();
+  };
 
   const handleNext = async () => {
     const newActiveStep =
       isLastStep() && !allStepsCompleted()
-        ? // It's the last step, but not all steps have been completed,
-          // find the first step that has been completed
-          steps.findIndex((step, i) => !(i in completed))
-        : activeStep + 1
-    setActiveStep(newActiveStep)
-
-    try {
-      if (activeStep === 0) {
-        console.log("Step 1")
-        if (qrResult != "") {
-          // Todo: Add validation
-          setPaymentId(qrResult)
-          setQrResult("")
-        }
-      } else if (activeStep === 1) {
-        console.log("Step 2")
-
-        // Todo: Add validation
-
-        // Getting user id from QR code
-        setUserId(qrResult.split("/")[3])
-      } else if (activeStep === 2) {
-        console.log("Step 3")
-
-        // Todo: Add validation
-
-        const { data, error } = await supabaseClient.from("users").insert({
-          name: "James Bond",
-          payment_id: paymentId,
-          user_id: userId,
-        })
-      }
-    } catch (error) {
-      console.error(error)
-    }
-  }
+        ? steps.findIndex((step, i) => !(i in completed))
+        : activeStep + 1;
+    setActiveStep(newActiveStep);
+  };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1)
-  }
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
 
   const handleStep = (step) => () => {
-    setActiveStep(step)
-  }
+    setActiveStep(step);
+  };
 
-  const handleComplete = () => {
-    const newCompleted = completed
-    newCompleted[activeStep] = true
-    setCompleted(newCompleted)
-    handleNext()
-  }
+  const handleComplete = async () => {
+    const newCompleted = completed;
+    newCompleted[activeStep] = true;
+    setCompleted(newCompleted);
+    handleNext();
+    if (activeStep === 2) {
+      const { error } = await supabaseClient
+        .from("users")
+        .update({ techno_id: userId })
+        .eq("payment_id", paymentId);
+      if (error) {
+        console.error(error);
+      }
+    }
+  };
 
   const handleReset = () => {
-    setActiveStep(0)
-    setCompleted({})
-  }
+    setActiveStep(0);
+    setCompleted({});
+  };
   return (
     <>
-      <Box sx={{ width: "100%" }}>
+      <div className={styles.heading}>Check In Page</div>
+      <Box>
         <Stepper nonLinear activeStep={activeStep}>
           {steps.map((label, index) => (
             <Step key={label} completed={completed[index]}>
@@ -132,7 +108,26 @@ const Checkin = () => {
             </React.Fragment>
           ) : (
             <React.Fragment>
-              <Scanner setQrResult={setQrResult} />
+              {activeStep === 0 ? (
+                <Scanner
+                  setPaymentId={setPaymentId}
+                  qr_pay={true}
+                  paymentId={paymentId}
+                />
+              ) : activeStep === 1 ? (
+                <Scanner setUserId={setUserId} qr_pay={false} userId={userId} />
+              ) : activeStep === 2 ? (
+                <div className={styles.confirm}>
+                  <div>
+                    Payment ID: <b>{paymentId}</b>
+                  </div>
+                  <div>
+                    User ID: <b>{userId}</b>
+                  </div>
+                </div>
+              ) : (
+                <div>Something went wrong</div>
+              )}
               <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                 <Button
                   color="inherit"
@@ -143,9 +138,6 @@ const Checkin = () => {
                   Back
                 </Button>
                 <Box sx={{ flex: "1 1 auto" }} />
-                <Button onClick={handleNext} sx={{ mr: 1 }}>
-                  Next
-                </Button>
                 {activeStep !== steps.length &&
                   (completed[activeStep] ? (
                     <Typography
@@ -155,11 +147,11 @@ const Checkin = () => {
                       Step {activeStep + 1} already completed
                     </Typography>
                   ) : (
-                    <Button onClick={handleComplete}>
+                    <div className={styles.button} onClick={handleComplete}>
                       {completedSteps() === totalSteps() - 1
                         ? "Finish"
                         : "Complete Step"}
-                    </Button>
+                    </div>
                   ))}
               </Box>
             </React.Fragment>
@@ -167,7 +159,7 @@ const Checkin = () => {
         </div>
       </Box>
     </>
-  )
-}
+  );
+};
 
-export default protectedRoute(Checkin, "volunteer")
+export default CheckIn;
