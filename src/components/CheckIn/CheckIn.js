@@ -85,7 +85,7 @@ const CheckIn = () => {
   return (
     <>
       <div className={styles.heading}>Check In Page</div>
-      <Box>
+      <Box className={styles.box}>
         <Stepper nonLinear activeStep={activeStep}>
           {steps.map((label, index) => (
             <Step key={label} completed={completed[index]}>
