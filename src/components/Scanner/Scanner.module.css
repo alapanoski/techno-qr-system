@@ -54,3 +54,10 @@
   font-weight: 800;
   color: #036491;
 }
+
+@media only screen and (max-width: 768px) {
+  .scan video {
+    width: 80%;
+    height: 80%;
+  }
+}

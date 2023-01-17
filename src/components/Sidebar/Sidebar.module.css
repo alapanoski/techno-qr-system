@@ -6,6 +6,12 @@
   min-height: 100vh;
   background-color: #041c2b;
 }
+.dashboard_menu_container .dashboard_logo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
 .dashboard_menu_container .dashboard_menu {
   padding-top: 3rem;
   display: flex;
@@ -46,4 +52,23 @@
 }
 .dashboard_logo{
   cursor: pointer;
+}
+.dashboard_menu_hamburger {
+  display: none;
+}
+
+@media only screen and (max-width: 768px) {
+  .dashboard_menu_container {
+    width: 100%;
+    min-height: auto;
+  }
+
+  .dashboard_menu_hamburger {
+    display: block;
+    color: white;
+  }
+
+  .dashboard_menu_hamburger {
+    width: 48px;
+  }
 }

@@ -4,9 +4,11 @@ import React from "react";
 import logo from "../../assets/logo.png";
 import supabaseClient from "../../utils/supabaseClient";
 import styles from "./Sidebar.module.css";
+import hamburger from "../../assets/hamburger.svg"
 
 function Sidebar({ tab, setTab }) {
   const router = useRouter();
+  const [expanded, setExpanded] = React.useState(true);
   return (
     <div className={styles.dashboard_menu_container}>
       <div
@@ -16,7 +18,13 @@ function Sidebar({ tab, setTab }) {
         }}
       >
         <Image src={logo} alt="" width={250} height={250} />
+        <div className={styles.dashboard_menu_hamburger} onClick={()=>{
+          setExpanded(!expanded)
+        }}>
+          <Image className={styles.dashboard_menu_hamburger} src={hamburger} alt="Toggle sidebar"/>
+        </div>
       </div>
+      {expanded && 
       <div className={styles.dashboard_menu}>
         <div
           className={
@@ -77,6 +85,7 @@ function Sidebar({ tab, setTab }) {
           Logout
         </div>
       </div>
+  }
     </div>
   );
 }
