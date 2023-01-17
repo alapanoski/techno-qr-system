@@ -19,12 +19,9 @@ const CheckIn = () => {
   const [userId, setUserId] = React.useState("");
 
   async function fetchUsers() {
-    console.log("Supabase Client : ", supabaseClient);
     const { data, error } = await supabaseClient.from("users").select();
     console.log(error);
     setUsers(data);
-    console.log(data);
-    console.log(users);
   }
   useEffect(() => {
     fetchUsers();

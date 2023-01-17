@@ -11,7 +11,6 @@ function convertDataUriToImage(dataUri, filePath) {
 export default async function generateQR(req, res) {
     const center_image = 'images/download.png'
     const { string } = req.body;
-    console.log(string)
     const width = 325; // To align the image in the center
     const cwidth = 75; // To increse the Quality of the image (Size)
     const canvas = createCanvas(width, width);

@@ -83,20 +83,16 @@ const AddPoints = () => {
   };
 
   async function addPoints() {
-    console.log(points);
     setCurrentUser({
       ...currentUser,
       points: parseInt(currentUser.points) + parseInt(points),
     });
-    console.log(currentUser);
   }
   async function reducePoints() {
-    console.log(points);
     setCurrentUser({
       ...currentUser,
       points: parseInt(currentUser.points) - parseInt(points),
     });
-    console.log(currentUser);
   }
 
 
