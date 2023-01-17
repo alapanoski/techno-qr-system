@@ -11,17 +11,13 @@ function Sidebar({ tab, setTab }) {
   const [expanded, setExpanded] = React.useState(true);
   return (
     <div className={styles.dashboard_menu_container}>
-      <div
-        className={styles.dashboard_logo}
-        onClick={() => {
-          setTab(0);
-        }}
-      >
+      <div className={styles.dashboard_logo}>
         <Image src={logo} alt="" width={250} height={250} />
-        <div className={styles.dashboard_menu_hamburger} onClick={()=>{
+        <div className={styles.dashboard_menu_hamburger}>
+          <Image className={styles.dashboard_menu_hamburger} src={hamburger} alt="Toggle sidebar" onClick={()=>{
           setExpanded(!expanded)
-        }}>
-          <Image className={styles.dashboard_menu_hamburger} src={hamburger} alt="Toggle sidebar"/>
+        }}
+        />
         </div>
       </div>
       {expanded && 
