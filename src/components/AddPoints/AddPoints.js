@@ -95,7 +95,6 @@ const AddPoints = () => {
     });
   }
 
-
   return (
     <>
       <div className={styles.food_container}>
