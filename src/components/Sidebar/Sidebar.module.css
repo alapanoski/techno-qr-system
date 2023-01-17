@@ -50,7 +50,9 @@
   justify-content: center;
   cursor: pointer;
 }
-
+.dashboard_logo{
+  cursor: pointer;
+}
 .dashboard_menu_hamburger {
   display: none;
 }

@@ -19,7 +19,7 @@ const CheckIn = () => {
   const [userId, setUserId] = React.useState("");
 
   async function fetchUsers() {
-    console.log("Supabase CLient : ", supabaseClient);
+    console.log("Supabase Client : ", supabaseClient);
     const { data, error } = await supabaseClient.from("users").select();
     console.log(error);
     setUsers(data);
@@ -63,10 +63,28 @@ const CheckIn = () => {
   };
 
   const handleComplete = async () => {
-    const newCompleted = completed;
-    newCompleted[activeStep] = true;
-    setCompleted(newCompleted);
-    handleNext();
+    if (activeStep === 0) {
+      if (!paymentId) {
+        alert("Please enter a valid payment id");
+      } else {
+        const newCompleted = completed;
+        newCompleted[activeStep] = true;
+        setCompleted(newCompleted);
+        handleNext();
+      }
+    }
+    if (activeStep === 1) {
+      if (users.filter((user) => user.techno_id === userId).length > 0) {
+        alert("User already exists");
+      } else if (!userId) {
+        alert("Please enter a valid user id");
+      } else {
+        const newCompleted = completed;
+        newCompleted[activeStep] = true;
+        setCompleted(newCompleted);
+        handleNext();
+      }
+    }
     if (activeStep === 2) {
       const { error } = await supabaseClient
         .from("users")
@@ -75,6 +93,12 @@ const CheckIn = () => {
       if (error) {
         console.error(error);
       }
+      setPaymentId("");
+      setUserId("");
+      const newCompleted = completed;
+      newCompleted[activeStep] = true;
+      setCompleted(newCompleted);
+      handleNext();
     }
   };
 
@@ -89,7 +113,18 @@ const CheckIn = () => {
         <Stepper nonLinear activeStep={activeStep}>
           {steps.map((label, index) => (
             <Step key={label} completed={completed[index]}>
-              <StepButton color="inherit" onClick={handleStep(index)}>
+              <StepButton
+                color="inherit"
+                onClick={
+                  activeStep === 0
+                    ? handleComplete
+                    : activeStep === 1
+                    ? handleComplete
+                    : activeStep === 2
+                    ? handleComplete
+                    : handleStep(index)
+                }
+              >
                 {label}
               </StepButton>
             </Step>
@@ -115,14 +150,19 @@ const CheckIn = () => {
                   paymentId={paymentId}
                 />
               ) : activeStep === 1 ? (
-                <Scanner setUserId={setUserId} qr_pay={false} userId={userId} />
+                <Scanner
+                  setUserId={setUserId}
+                  qr_pay={false}
+                  userId={userId}
+                  paymentId={paymentId}
+                />
               ) : activeStep === 2 ? (
                 <div className={styles.confirm}>
                   <div>
                     Payment ID: <b>{paymentId}</b>
                   </div>
                   <div>
-                    User ID: <b>{userId}</b>
+                    Techno ID: <b>{userId}</b>
                   </div>
                 </div>
               ) : (
