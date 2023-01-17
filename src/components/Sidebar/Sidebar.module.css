@@ -32,6 +32,7 @@
   background-color: #00a1ea;
   border-radius: 0.5rem;
   color: white;
+  cursor: pointer;
   padding: 0.5rem;
   width: 100%;
   display: flex;
@@ -62,7 +63,10 @@
     width: 100%;
     min-height: auto;
   }
-
+  .dashboard_menu
+  {
+    display: none;
+  }
   .dashboard_menu_hamburger {
     display: block;
     color: white;
