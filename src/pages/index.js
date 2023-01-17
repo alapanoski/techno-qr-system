@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
 import logo from "../assets/logo.png";
 import { UserContext } from "../context/userContext";
@@ -6,35 +6,29 @@ import { useRouter } from "next/router";
 import CustomTitle from "../utils/customTitle";
 import Image from "next/image";
 import supabaseClient from "../utils/supabaseClient";
+import { Loader } from "../components";
+import { CircleLoader, ClipLoader } from "react-spinners";
 
 export default function Home() {
-  const { user, setUser } = useContext(UserContext);
-  async function getUser() {
-    const {
-      data: { user },
-    } = await supabaseClient.auth.getUser();
+  const router = useRouter();
+  const { User, setUser, loading } = useContext(UserContext);
+  const [loading1, setLoading1] = useState(false);
 
-    console.log(user);
-    setUser(user);
-    if (user) {
+  useEffect(() => {
+    console.log(User);
+    if (User?.role === "volunteer") {
       router.push("/dashboard");
     }
-  }
-  useEffect(() => {
-    getUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [User]);
   async function signInWithGoogle() {
+    setLoading1(true);
     const { data, error } = await supabaseClient.auth.signInWithOAuth({
       provider: "google",
     });
     console.log(data);
   }
-
-  const router = useRouter();
-  if (user) {
-    router.push("/dashboard");
-  }
+  if (loading) return <Loader />;
   return (
     <>
       <CustomTitle title="Login" />
@@ -45,7 +39,7 @@ export default function Home() {
           variant="contained"
           onClick={signInWithGoogle}
         >
-          Login with Google
+          {loading1 ? <ClipLoader /> : "Login with Google"}
         </div>
       </div>
     </>

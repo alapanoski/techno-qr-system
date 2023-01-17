@@ -9,7 +9,12 @@ function Sidebar({ tab, setTab }) {
   const router = useRouter();
   return (
     <div className={styles.dashboard_menu_container}>
-      <div className={styles.dashboard_logo}>
+      <div
+        className={styles.dashboard_logo}
+        onClick={() => {
+          setTab(0);
+        }}
+      >
         <Image src={logo} alt="" width={250} height={250} />
       </div>
       <div className={styles.dashboard_menu}>

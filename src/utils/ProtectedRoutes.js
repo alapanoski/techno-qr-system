@@ -5,23 +5,23 @@ import Loader from "../components/Loader/Loader";
 
 const ProtectedRoute = (WrappedComponent, role) => {
   const ProtectedRouteComponent = (props) => {
-    const { user, loading, roleLoaded } = useContext(UserContext);
+    const { User, loading, roleLoaded } = useContext(UserContext);
     const Router = useRouter();
     useEffect(() => {
-      if (!loading && !user) {
+      if (!loading && !User) {
+        
         Router.push("/");
       }
+      if (User?.email && User.role === "user") Router.push("/");
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user, loading]);
+    }, [User, loading]);
 
-    if (loading || !user) return <Loader/>;
-
-    if (role == "volunteer" && user.role != "volunteer")
-      return <div>Not Authorized</div>;
-    return <WrappedComponent {...props} />;
+    if (User?.email && User.role === "volunteer")
+      return <WrappedComponent {...props} />;
+    if (User?.email && User.role === "user") Router.push("/");
+    return <Loader />;
   };
 
   return ProtectedRouteComponent;
 };
-
 export default ProtectedRoute;

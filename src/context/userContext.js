@@ -16,26 +16,30 @@ function UserState(props) {
     } = await supabaseClient.auth.getUser();
     if (user) {
       const { data, error } = await supabaseClient.from("volunteers").select();
-      data.find((volunteer) => {
-        if (volunteer.email == user.email) {
-          user.role = "volunteer";
-        }
-      });
+      if (
+        data.find((volunteer) => {
+          return volunteer.email === user.email;
+          1;
+        })
+      ) {
+        user.role = "volunteer";
+      } else {
+        user.role = "user";
+      }
     }
     setUser(user);
-
     setLoading(false);
   }
   useEffect(() => {
-    getUser();
-  }, []);
+    if (!User?.role) getUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [User]);
 
   supabaseClient.auth.onAuthStateChange((event, session) => {
     setUser(session?.user ?? null);
-    setLoading(false);
   });
   return (
-    <UserContext.Provider value={{ user: User, setUser, loading }}>
+    <UserContext.Provider value={{ User: User, setUser, loading }}>
       {props.children}
     </UserContext.Provider>
   );
