@@ -3,6 +3,7 @@ import styles from "../styles/Home.module.css";
 import logo from "../assets/logo.png";
 import { UserContext } from "../context/userContext";
 import { useRouter } from "next/router";
+import CustomTitle from "../utils/customTitle";
 import Image from "next/image";
 import supabaseClient from "../utils/supabaseClient";
 
@@ -36,6 +37,7 @@ export default function Home() {
   }
   return (
     <>
+      <CustomTitle title="Login" />
       <div className={styles.login_container}>
         <Image src={logo} alt="" width={400} height={400} />
         <div

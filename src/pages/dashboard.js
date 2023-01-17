@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { CheckIn, Sidebar } from "../components";
+import CustomTitle from "../utils/customTitle";
 import styles from "../styles/Dashboard.module.css";
 import ProtectedRoute from "../utils/ProtectedRoutes";
 
@@ -7,6 +8,7 @@ function Dashboard() {
   const [tab, setTab] = useState(0);
   return (
     <>
+      <CustomTitle title="Dashboard" />
       <div className={styles.container}>
         <Sidebar tab={tab} setTab={setTab} />
         <div className={styles.content}>
