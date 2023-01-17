@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { CheckIn, Food, Sidebar } from "../components";
+import { AddPoints, CheckIn, Food, Sidebar } from "../components";
 import CustomTitle from "../utils/customTitle";
 import styles from "../styles/Dashboard.module.css";
 import ProtectedRoute from "../utils/ProtectedRoutes";
-import AddPoints from "../components/AddPoints/AddPoints";
 import Image from "next/image";
 import logo from "../assets/logo.png";
 
