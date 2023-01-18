@@ -80,7 +80,7 @@
   pointer-events: none;
 }
 @media (max-width: 620px) {
-  .user_profile_logo img {
+  .users_profile_logo img {
     width: 300px;
   }
 }
