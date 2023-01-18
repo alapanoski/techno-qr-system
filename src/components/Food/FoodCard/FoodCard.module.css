@@ -11,9 +11,10 @@
   border-radius: 10px;
 }
 
-.food_card h2 {
+.food_card_title {
   margin-top: 20px;
   font-size: 24px;
+  font-weight: 600;
   color: white;
 }
 
