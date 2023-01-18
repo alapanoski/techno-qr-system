@@ -12,11 +12,8 @@ function FoodCard({ food, setFoodTab }) {
         height={150}
         className={styles.food_card_img}
       />
-      <div
-        className={styles.check_in_btn}
-        disabled={food.time >= new Date().toISOString() ? false : true}
-        onClick={() => setFoodTab(food.id)}
-      >
+      <div className={styles.food_card_title}>{food.name}</div>
+      <div className={styles.check_in_btn} onClick={() => setFoodTab(food.id)}>
         Check In
       </div>
     </div>
