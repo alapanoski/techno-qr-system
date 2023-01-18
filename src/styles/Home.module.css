@@ -18,3 +18,14 @@
   font-weight: 500;
   cursor: pointer;
 }
+.login_container img {
+  width: 500px;
+  height: auto;
+  pointer-events: none;
+}
+@media (max-width: 620px) {
+  .login_container img {
+    width: 300px;
+    height: auto;
+  }
+}
