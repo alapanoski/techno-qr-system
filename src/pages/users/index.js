@@ -6,6 +6,7 @@ import profile from "../../assets/temp_profile.jpeg";
 import styles from "../../styles/Users.module.css";
 import logo from "../../assets/logo.png";
 import { useRouter } from "next/router";
+import CustomTitle from "../../utils/customTitle";
 
 function Users() {
   const [users, setUsers] = React.useState([]);
@@ -38,47 +39,50 @@ function Users() {
   if (loading) return <Loader />;
 
   return (
-    <div className={styles.users_container}>
-      <Image src={logo} alt="" className={styles.user_profile_logo} />
-      <input
-        type="text"
-        placeholder="Search Users"
-        className={styles.search}
-        onChange={(e) => {
-          handleSearch(e.target.value);
-        }}
-      />
-      <div className={styles.user_container_cards}>
-        {users.map((user, index) => (
-          <div
-            key={index}
-            className={styles.user_card_container}
-            onClick={() => {
-              router.push(`/users/${user.techno_id}`);
-            }}
-          >
-            <div className={styles.user_card_image_container}>
-              <Image
-                src={user.image ? user.image : profile}
-                alt=""
-                width={150}
-                height={150}
-                className={styles.user_card_image}
-              />
-            </div>
-            <div className={styles.user_card_container_details}>
-              <div className={styles.user_card_id}>
-                Techno ID : <b>{user?.techno_id}</b>
+    <>
+      <CustomTitle title="Users" />
+      <div className={styles.users_container}>
+        <Image src={logo} alt="" className={styles.user_profile_logo} />
+        <input
+          type="text"
+          placeholder="Search Users"
+          className={styles.search}
+          onChange={(e) => {
+            handleSearch(e.target.value);
+          }}
+        />
+        <div className={styles.user_container_cards}>
+          {users.map((user, index) => (
+            <div
+              key={index}
+              className={styles.user_card_container}
+              onClick={() => {
+                router.push(`/users/${user.techno_id}`);
+              }}
+            >
+              <div className={styles.user_card_image_container}>
+                <Image
+                  src={user.image ? user.image : profile}
+                  alt=""
+                  width={150}
+                  height={150}
+                  className={styles.user_card_image}
+                />
               </div>
-              <div className={styles.user_card_name}>{user.name}</div>
-              <div className={styles.user_card_designation}>
-                {user?.designation}
+              <div className={styles.user_card_container_details}>
+                <div className={styles.user_card_id}>
+                  Techno ID : <b>{user?.techno_id}</b>
+                </div>
+                <div className={styles.user_card_name}>{user.name}</div>
+                <div className={styles.user_card_designation}>
+                  {user?.designation}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

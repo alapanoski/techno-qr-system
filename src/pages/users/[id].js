@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Loader, User } from "../../components";
+import { Loader } from "../../components";
 import supabaseClient from "../../utils/supabaseClient";
 import profile from "../../assets/temp_profile.jpeg";
 import Image from "next/image";
@@ -15,6 +15,7 @@ import {
 } from "react-icons/fa";
 import { FiGlobe } from "react-icons/fi";
 import Error from "../404";
+import CustomTitle from "../../utils/customTitle";
 
 const UserProfile = () => {
   const router = useRouter();
@@ -41,90 +42,95 @@ const UserProfile = () => {
   if (loading) return <Loader />;
   if (!user) return <Error />;
   return (
-    <div className={styles.user_profile_container}>
-      <Image src={logo} alt="" className={styles.user_profile_logo} />
-      <div className={styles.user_profile_card_container}>
-        <div className={styles.user_profile_image_container}>
-          <Image
-            src={user.image ? user.image : profile}
-            alt=""
-            width={200}
-            height={200}
-            className={styles.user_profile_container_image}
-          />
-        </div>
-        <div className={styles.user_profile_name}>{user.name}</div>
-        <div className={styles.user_profile_designation}>
-          {user.designation}
-        </div>
-        <div className={styles.user_profile_about}>{user.bio}</div>
-        {!view && (
-          <div
-            className={styles.user_profile_email_button}
-            onClick={() => setView(!view)}
-          >
-            View Email
+    <>
+      <CustomTitle title={user.name} />
+      <div className={styles.user_profile_container}>
+        <Image src={logo} alt="" className={styles.user_profile_logo} />
+        <div className={styles.user_profile_card_container}>
+          <div className={styles.user_profile_image_container}>
+            <Image
+              src={user.image ? user.image : profile}
+              alt=""
+              width={200}
+              height={200}
+              className={styles.user_profile_container_image}
+            />
           </div>
-        )}
-        {view && <div className={styles.user_profile_email}>{user.email}</div>}
-        <div className={styles.user_profile_social_icons}>
-          {user.twitter && (
-            <FaTwitter
-              style={{ cursor: "pointer" }}
-              onClick={() => {
-                window.open(user.twitter, "_blank");
-              }}
-            />
+          <div className={styles.user_profile_name}>{user.name}</div>
+          <div className={styles.user_profile_designation}>
+            {user.designation}
+          </div>
+          <div className={styles.user_profile_about}>{user.bio}</div>
+          {!view && (
+            <div
+              className={styles.user_profile_email_button}
+              onClick={() => setView(!view)}
+            >
+              View Email
+            </div>
           )}
-          {user.instagram && (
-            <FaInstagram
-              style={{ cursor: "pointer" }}
-              onClick={() => {
-                window.open(user.instagram, "_blank");
-              }}
-            />
+          {view && (
+            <div className={styles.user_profile_email}>{user.email}</div>
           )}
-          {user.portfolio && (
-            <FiGlobe
-              style={{ cursor: "pointer" }}
-              onClick={() => {
-                window.open(user.portfolio, "_blank");
-              }}
-            />
-          )}
-          {user.linkedin && (
-            <FaLinkedinIn
-              style={{ cursor: "pointer" }}
-              onClick={() => {
-                window.open(user.linkedin, "_blank");
-              }}
-            />
-          )}
-          {user.github && (
-            <FaGithub
-              style={{ cursor: "pointer" }}
-              onClick={() => {
-                window.open(user.github, "_blank");
-              }}
-            />
-          )}
-          {user.dev && (
-            <FaDev
-              style={{ cursor: "pointer" }}
-              onClick={() => {
-                window.open(user.dev, "_blank");
-              }}
-            />
-          )}
+          <div className={styles.user_profile_social_icons}>
+            {user.twitter && (
+              <FaTwitter
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  window.open(user.twitter, "_blank");
+                }}
+              />
+            )}
+            {user.instagram && (
+              <FaInstagram
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  window.open(user.instagram, "_blank");
+                }}
+              />
+            )}
+            {user.portfolio && (
+              <FiGlobe
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  window.open(user.portfolio, "_blank");
+                }}
+              />
+            )}
+            {user.linkedin && (
+              <FaLinkedinIn
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  window.open(user.linkedin, "_blank");
+                }}
+              />
+            )}
+            {user.github && (
+              <FaGithub
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  window.open(user.github, "_blank");
+                }}
+              />
+            )}
+            {user.dev && (
+              <FaDev
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  window.open(user.dev, "_blank");
+                }}
+              />
+            )}
+          </div>
+        </div>
+        <div
+          className={styles.users_button}
+          onClick={() => router.push("/users")}
+        >
+          View All Users
         </div>
       </div>
-      <div
-        className={styles.users_button}
-        onClick={() => router.push("/users")}
-      >
-        View All Users
-      </div>
-    </div>
+    </>
   );
 };
 
