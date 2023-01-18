@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import { UserContext } from "../context/userContext";
-import Loader from "../components/Loader/Loader";
+import { Loader } from "../components";
 
 const ProtectedRoute = (WrappedComponent, role) => {
   const ProtectedRouteComponent = (props) => {

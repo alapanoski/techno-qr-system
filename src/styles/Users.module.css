@@ -48,10 +48,10 @@
   font-size: 1rem;
   font-weight: 500;
 }
-.user_card_image_container {
-  border: 2px solid #00a1ea;
-  padding: 2px;
-  border-radius: 50%;
+.no_users {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
 }
 .user_card_container_details {
   display: flex;
@@ -59,9 +59,10 @@
   align-items: center;
   gap: 0.5rem;
 }
-.user_card_image {
+.user_card_image_container img {
   width: 150px;
   height: 150px;
+  border: 2px solid #00a1ea;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -73,12 +74,13 @@
   font-size: 1.2rem;
   font-weight: 500;
 }
-.user_profile_logo {
+.users_profile_logo img {
   width: 400px;
+  height: auto;
   pointer-events: none;
 }
 @media (max-width: 620px) {
-  .user_profile_logo {
+  .user_profile_logo img {
     width: 300px;
   }
 }

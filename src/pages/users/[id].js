@@ -1,7 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Loader } from "../../components";
-import supabaseClient from "../../utils/supabaseClient";
 import profile from "../../assets/temp_profile.jpeg";
 import Image from "next/image";
 import styles from "../../styles/User.module.css";
@@ -15,7 +15,7 @@ import {
 } from "react-icons/fa";
 import { FiGlobe } from "react-icons/fi";
 import Error from "../404";
-import CustomTitle from "../../utils/customTitle";
+import { CustomTitle, SupabaseClient } from "../../utils";
 
 const UserProfile = () => {
   const router = useRouter();
@@ -23,11 +23,9 @@ const UserProfile = () => {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState(false);
-  // Make an API call. Then we will get back the following data
 
   async function fetchUser() {
-    await supabaseClient
-      .from("users")
+    await SupabaseClient.from("users")
       .select()
       .eq("techno_id", id)
       .then((data) => {
@@ -45,15 +43,18 @@ const UserProfile = () => {
     <>
       <CustomTitle title={user.name} />
       <div className={styles.user_profile_container}>
-        <Image src={logo} alt="" className={styles.user_profile_logo} />
+        <div className={styles.user_profile_logo}>
+          <Image src={logo} alt="" />
+        </div>
         <div className={styles.user_profile_card_container}>
           <div className={styles.user_profile_image_container}>
-            <Image
-              src={user.image ? user.image : profile}
+            <img
+              src={
+                user.image
+                  ? user.image
+                  : "https://people.com/thmb/JGjxumyykHNuBoeyuELz33P2uHY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(719x309:721x311)/rick-astley-recreation-never-gonna-give-you-up-081922-1-909d277568c34a599c27fa7503ce7a4c.jpg"
+              }
               alt=""
-              width={200}
-              height={200}
-              className={styles.user_profile_container_image}
             />
           </div>
           <div className={styles.user_profile_name}>{user.name}</div>

@@ -1,12 +1,12 @@
+/* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
 import React from "react";
 import { Loader } from "../../components";
-import supabaseClient from "../../utils/supabaseClient";
 import profile from "../../assets/temp_profile.jpeg";
 import styles from "../../styles/Users.module.css";
 import logo from "../../assets/logo.png";
 import { useRouter } from "next/router";
-import CustomTitle from "../../utils/customTitle";
+import { CustomTitle, SupabaseClient } from "../../utils";
 
 function Users() {
   const [users, setUsers] = React.useState([]);
@@ -14,8 +14,7 @@ function Users() {
   const [loading, setLoading] = React.useState(true);
   const router = useRouter();
   async function fetchUsers() {
-    await supabaseClient
-      .from("users")
+    await SupabaseClient.from("users")
       .select()
       .then((data) => {
         setUsers(data.data);
@@ -42,7 +41,9 @@ function Users() {
     <>
       <CustomTitle title="Users" />
       <div className={styles.users_container}>
-        <Image src={logo} alt="" className={styles.user_profile_logo} />
+        <div className={styles.users_profile_logo}>
+          <Image src={logo} alt="" />
+        </div>
         <input
           type="text"
           placeholder="Search Users"
@@ -52,6 +53,9 @@ function Users() {
           }}
         />
         <div className={styles.user_container_cards}>
+          {users.length === 0 && (
+            <div className={styles.no_users}>No Users Found</div>
+          )}
           {users.map((user, index) => (
             <div
               key={index}
@@ -61,12 +65,13 @@ function Users() {
               }}
             >
               <div className={styles.user_card_image_container}>
-                <Image
-                  src={user.image ? user.image : profile}
+                <img
+                  src={
+                    user.image
+                      ? user.image
+                      : "https://people.com/thmb/JGjxumyykHNuBoeyuELz33P2uHY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(719x309:721x311)/rick-astley-recreation-never-gonna-give-you-up-081922-1-909d277568c34a599c27fa7503ce7a4c.jpg"
+                  }
                   alt=""
-                  width={150}
-                  height={150}
-                  className={styles.user_card_image}
                 />
               </div>
               <div className={styles.user_card_container_details}>

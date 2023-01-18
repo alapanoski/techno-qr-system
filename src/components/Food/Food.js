@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import FoodCard from "./FoodCard/FoodCard";
 import styles from "./Food.module.css";
-import supabaseClient from "../../utils/supabaseClient";
+import supabaseClient from "../../utils/SupabaseClient";
 import Scanner from "../Scanner/Scanner";
 import { Box } from "@mui/system";
 import {

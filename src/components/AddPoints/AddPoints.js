@@ -6,8 +6,8 @@ import {
   Stepper,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
-import supabaseClient from "../../utils/supabaseClient";
+import React from "react";
+import { SupabaseClient } from "../../utils";
 import Scanner from "../Scanner/Scanner";
 import styles from "./AddPoints.module.css";
 
@@ -56,8 +56,7 @@ const AddPoints = () => {
       if (!userId) {
         alert("Please enter a valid user id");
       } else {
-        const { data, error } = await supabaseClient
-          .from("users")
+        const { data, error } = await SupabaseClient.from("users")
           .select()
           .eq("techno_id", userId);
         if (error) console.log(error);
@@ -65,8 +64,7 @@ const AddPoints = () => {
       }
     }
     if (activeStep === 1) {
-      const { data, error } = await supabaseClient
-        .from("users")
+      const { data, error } = await SupabaseClient.from("users")
         .update(currentUser)
         .eq("techno_id", currentUser.techno_id);
       console.log(error);

@@ -71,6 +71,9 @@
   cursor: pointer;
 }
 .dashboard_logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
 }
 .dashboard_menu_hamburger {
@@ -80,6 +83,9 @@
   .dashboard_menu_container {
     width: 100%;
     min-height: auto;
+  }
+  .dashboard_logo {
+    justify-content: space-between;
   }
   .dashboard_menu {
     display: none;

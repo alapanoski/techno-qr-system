@@ -21,14 +21,10 @@
   background-color: #034f73;
   color: white;
 }
-.user_profile_image_container {
-  border: 2px solid #00a1ea;
-  padding: 2px;
-  border-radius: 50%;
-}
-.user_profile_container_image {
+.user_profile_image_container img {
   width: 200px;
   height: 200px;
+  border: 2px solid #00a1ea;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -67,8 +63,9 @@
   justify-content: center;
   font-size: 1.5rem;
 }
-.user_profile_logo {
+.user_profile_logo img {
   width: 400px;
+  height: auto;
   pointer-events: none;
 }
 .users_button {
@@ -88,7 +85,7 @@
   .user_profile_card_container {
     width: 100%;
   }
-  .user_profile_container_image {
+  .user_profile_image_container img {
     width: 150px;
     height: 150px;
   }
@@ -105,7 +102,7 @@
     font-size: 1.3rem;
     gap: 1rem;
   }
-  .user_profile_logo {
+  .user_profile_logo img {
     width: 300px;
   }
 }

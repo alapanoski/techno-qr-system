@@ -7,9 +7,8 @@
   padding: 20px;
 }
 
-.food_card img {
-  width: 100%;
-  border-radius: 10px 10px 0 0;
+.food_card_img {
+  border-radius: 10px;
 }
 
 .food_card h2 {

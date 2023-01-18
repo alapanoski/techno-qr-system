@@ -1,6 +1,6 @@
 import { useEffect, useState, createContext } from "react";
-import supabaseClient from "../utils/supabaseClient";
 import { useRouter } from "next/router";
+import { SupabaseClient } from "../utils";
 
 export const UserContext = createContext();
 
@@ -13,9 +13,9 @@ function UserState(props) {
   async function getUser() {
     const {
       data: { user },
-    } = await supabaseClient.auth.getUser();
+    } = await SupabaseClient.auth.getUser();
     if (user) {
-      const { data, error } = await supabaseClient.from("volunteers").select();
+      const { data, error } = await SupabaseClient.from("volunteers").select();
       if (
         data.find((volunteer) => {
           return volunteer.email === user.email;
@@ -35,7 +35,7 @@ function UserState(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [User]);
 
-  supabaseClient.auth.onAuthStateChange((event, session) => {
+  SupabaseClient.auth.onAuthStateChange((event, session) => {
     setUser(session?.user ?? null);
   });
   return (

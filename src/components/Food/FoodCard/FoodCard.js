@@ -5,15 +5,20 @@ import styles from "./FoodCard.module.css";
 function FoodCard({ food, setFoodTab }) {
   return (
     <div className={styles.food_card}>
-      <Image src={foodimage} alt="Food Name" />
-      <h2>{food.name}</h2>
-      <button
+      <Image
+        src={food.image ? food.image : foodimage}
+        alt="Food Name"
+        width={250}
+        height={150}
+        className={styles.food_card_img}
+      />
+      <div
         className={styles.check_in_btn}
         disabled={food.time >= new Date().toISOString() ? false : true}
         onClick={() => setFoodTab(food.id)}
       >
         Check In
-      </button>
+      </div>
     </div>
   );
 }

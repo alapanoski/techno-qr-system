@@ -2,9 +2,9 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import React from "react";
 import logo from "../../assets/logo.png";
-import supabaseClient from "../../utils/supabaseClient";
 import styles from "./Sidebar.module.css";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { SupabaseClient } from "../../utils";
 
 function Sidebar({ tab, setTab }) {
   const router = useRouter();
@@ -15,8 +15,7 @@ function Sidebar({ tab, setTab }) {
         <Image
           src={logo}
           alt=""
-          width={250}
-          height={250}
+          width={200}
           onClick={() => {
             setTab(0);
           }}
@@ -81,7 +80,7 @@ function Sidebar({ tab, setTab }) {
         </div>
         <div
           onClick={() => {
-            supabaseClient.auth.signOut().then(() => {
+            SupabaseClient.auth.signOut().then(() => {
               router.push("/");
             });
           }}
@@ -146,7 +145,7 @@ function Sidebar({ tab, setTab }) {
           </div>
           <div
             onClick={() => {
-              supabaseClient.auth.signOut().then(() => {
+              SupabaseClient.auth.signOut().then(() => {
                 router.push("/");
               });
             }}
