@@ -3,11 +3,10 @@ import styles from "../styles/Home.module.css";
 import logo from "../assets/logo.png";
 import { UserContext } from "../context/userContext";
 import { useRouter } from "next/router";
-import CustomTitle from "../utils/customTitle";
 import Image from "next/image";
-import supabaseClient from "../utils/supabaseClient";
 import { Loader } from "../components";
-import { CircleLoader, ClipLoader } from "react-spinners";
+import { ClipLoader } from "react-spinners";
+import { CustomTitle, SupabaseClient } from "../utils";
 
 export default function Home() {
   const router = useRouter();
@@ -22,7 +21,7 @@ export default function Home() {
   }, [User]);
   async function signInWithGoogle() {
     setLoading1(true);
-    const { data, error } = await supabaseClient.auth.signInWithOAuth({
+    const { data, error } = await SupabaseClient.auth.signInWithOAuth({
       provider: "google",
     });
   }
@@ -31,7 +30,7 @@ export default function Home() {
     <>
       <CustomTitle title="Login" />
       <div className={styles.login_container}>
-        <Image src={logo} alt="" width={400} height={400} />
+        <Image src={logo} alt="" width={300} />
         <div
           className={styles.login_button}
           variant="contained"

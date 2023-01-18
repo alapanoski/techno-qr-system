@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import styles from "./CheckIn.module.css";
 import React, { useEffect } from "react";
-import supabaseClient from "../../utils/supabaseClient";
+import { SupabaseClient } from "../../utils";
 
 const steps = ["Verify Payment Details", "Assign User ID", "Confirm User"];
 
@@ -19,7 +19,7 @@ const CheckIn = () => {
   const [userId, setUserId] = React.useState("");
 
   async function fetchUsers() {
-    const { data, error } = await supabaseClient.from("users").select();
+    const { data, error } = await SupabaseClient.from("users").select();
     console.log(error);
     setUsers(data);
   }
@@ -83,8 +83,7 @@ const CheckIn = () => {
       }
     }
     if (activeStep === 2) {
-      const { error } = await supabaseClient
-        .from("users")
+      const { error } = await SupabaseClient.from("users")
         .update({ techno_id: userId })
         .eq("payment_id", paymentId);
       if (error) {
