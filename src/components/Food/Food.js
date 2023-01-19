@@ -119,14 +119,14 @@ function Food() {
         <div className={styles.food_cards_container}>
           {foodData.find(
             (food) =>
-              new Date(food.time).toISOString() < new Date().toISOString()
+              new Date(food.time).toISOString() <= new Date().toISOString()
           ) ? (
             ""
           ) : (
             <div className={styles.food_heading}>Expired Food</div>
           )}
           {foodData?.map((food, index) =>
-            new Date(food.time).toISOString() >= new Date().toISOString() ? (
+            new Date(food.time).toISOString() <= new Date().toISOString() ? (
               <FoodCard
                 key={food.id}
                 food={food}
