@@ -11,7 +11,20 @@ function Scanner({ qr_pay, setUserId, userId, setPaymentId, paymentId }) {
       if (qr_pay) {
         setPaymentId(result.getText());
       } else {
-        setUserId(result.getText().split("/")[3]);
+
+        if (
+          result.getText().split("/")[
+            result.getText().split("/").length - 1
+          ] !== ""
+        )
+
+          setUserId(
+            result.getText().split("/")[result.getText().split("/").length - 1]
+          );
+        else
+          setUserId(
+            result.getText().split("/")[result.getText().split("/").length - 2]
+          );
       }
     },
     onError(error) {
