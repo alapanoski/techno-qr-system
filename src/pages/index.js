@@ -12,6 +12,7 @@ export default function Home() {
   const router = useRouter();
   const { User, setUser, loading } = useContext(UserContext);
   const [loading1, setLoading1] = useState(false);
+  const [browser, setBrowser] = useState(false);
 
   useEffect(() => {
     if (User?.role === "volunteer") {
@@ -19,6 +20,13 @@ export default function Home() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [User]);
+
+  useEffect(() => {
+    if (navigator.userAgent.indexOf("Chrome") === -1) {
+      setBrowser(true);
+    }
+  }, []);
+
   async function signInWithGoogle() {
     setLoading1(true);
     const { data, error } = await SupabaseClient.auth.signInWithOAuth({
@@ -26,6 +34,18 @@ export default function Home() {
     });
   }
   if (loading) return <Loader />;
+  if (browser)
+    return (
+      <>
+        <CustomTitle title="Login" />
+        <div className={styles.login_container}>
+          <Image src={logo} alt="" width={300} />
+          <div className={styles.login_warning}>
+            Please use Google Chrome to use this website.
+          </div>
+        </div>
+      </>
+    );
   return (
     <>
       <CustomTitle title="Login" />
