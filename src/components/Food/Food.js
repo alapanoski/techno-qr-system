@@ -15,6 +15,7 @@ import {
 
 function Food() {
   const [foodTab, setFoodTab] = React.useState(0);
+  const [users, setUsers] = useState([]);
   const [userId, setUserId] = useState("");
   const [foodEaten, setFoodEaten] = useState();
   const [activeStep, setActiveStep] = React.useState(0);
@@ -31,8 +32,14 @@ function Food() {
     setFoodData(data);
     setLoading(false);
   }
+  async function getUsers() {
+    const { data, error } = await supabaseClient.from("users").select();
+    setUsers(data);
+    setLoading(false);
+  }
   useEffect(() => {
     getFoodMenu();
+    getUsers();
   }, []);
   const completedSteps = () => {
     return Object.keys(completed).length;
@@ -67,6 +74,11 @@ function Food() {
       if (!userId) {
         alert("Please enter a valid user id");
       } else {
+        if (users.find((user) => user.techno_id === userId) === undefined) {
+          alert("User does not exist");
+          setUserId("");
+          return;
+        }
         const { data, error } = await supabaseClient
           .from("food_log")
           .select()
@@ -79,33 +91,49 @@ function Food() {
         handleNext();
       }
     }
-    if (activeStep === 1) {
-      if (foodEaten && foodEaten.length > 0) {
-        alert("User has already checked in for this food");
-        setUserId("");
-        handleReset();
-        setFoodTab(0);
-        return;
-      } else {
-        const { error } = await supabaseClient.from("food_log").insert({
-          techno_id: userId,
-          food_id: foodData.find((food) => food.id === foodTab).id,
-        });
-        if (error) {
-          console.error(error);
-        }
-      }
+    // if (activeStep === 1) {
+    //   if (foodEaten && foodEaten.length > 0) {
+    //     alert("User has already checked in for this food");
+    //     setUserId("");
+    //     handleReset();
+    //     setFoodTab(0);
+    //     return;
+    //   } else {
+    //     const { error } = await supabaseClient.from("food_log").insert({
+    //       techno_id: userId,
+    //       food_id: foodData.find((food) => food.id === foodTab).id,
+    //     });
+    //     if (error) {
+    //       console.error(error);
+    //     }
+    //   }
 
-      const newCompleted = completed;
-      newCompleted[activeStep] = true;
-      setCompleted(newCompleted);
-      handleNext();
-      setUserId("");
-      setFoodTab(0);
-    }
+    //   const newCompleted = completed;
+    //   newCompleted[activeStep] = true;
+    //   setCompleted(newCompleted);
+    //   handleNext();
+    //   setUserId("");
+    //   setFoodTab(0);
+    // }
   };
 
-  const handleReset = () => {
+  const handleReset = async () => {
+    if (foodEaten && foodEaten.length > 0) {
+      alert("User has already checked in for this food");
+      setUserId("");
+      handleReset();
+      setFoodTab(0);
+      return;
+    } else {
+      const { error } = await supabaseClient.from("food_log").insert({
+        techno_id: userId,
+        food_id: foodData.find((food) => food.id === foodTab).id,
+      });
+      if (error) {
+        console.error(error);
+      }
+    }
+    setUserId("");
     setActiveStep(0);
     setCompleted({});
   };
@@ -123,7 +151,7 @@ function Food() {
           ) ? (
             ""
           ) : (
-            <div className={styles.food_heading}>Expired Food</div>
+            <div className={styles.food_heading}>No food available</div>
           )}
           {foodData?.map((food, index) =>
             new Date(food.time).toISOString() <= new Date().toISOString() ? (
@@ -167,16 +195,17 @@ function Food() {
             </Stepper>
             <div>
               {allStepsCompleted() ? (
-                <React.Fragment>
-                  <Typography sx={{ mt: 2, mb: 1 }}>
-                    All steps completed - you&apos;re finished
-                  </Typography>
-                  <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-                    <Box sx={{ flex: "1 1 auto" }} />
-                    <Button onClick={handleReset}>Reset</Button>
-                  </Box>
-                </React.Fragment>
+                ""
               ) : (
+                // <React.Fragment>
+                //   <Typography sx={{ mt: 2, mb: 1 }}>
+                //     All steps completed - you&apos;re finished
+                //   </Typography>
+                //   <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+                //     <Box sx={{ flex: "1 1 auto" }} />
+                //     <Button onClick={handleReset}>Reset</Button>
+                //   </Box>
+                // </React.Fragment>
                 <React.Fragment>
                   {activeStep === 0 ? (
                     <Scanner
@@ -188,8 +217,17 @@ function Food() {
                     foodEaten && foodEaten.length > 0 ? (
                       <div className={styles.confirm}>
                         Food already checked in at{" "}
-                        <b>{foodEaten[0].created_at}</b> for Techno ID:{" "}
-                        <b>{userId}</b>
+                        <b>
+                          {new Date(
+                            foodEaten[0].created_at
+                          ).toLocaleDateString()}
+                          {" , "}
+                          {new Date(foodEaten[0].created_at).toLocaleString(
+                            "en-US",
+                            { hour: "numeric", minute: "numeric", hour12: true }
+                          )}
+                        </b>{" "}
+                        for Techno ID: <b>{userId}</b>
                       </div>
                     ) : (
                       <div className={styles.confirm}>
@@ -217,7 +255,7 @@ function Food() {
                       Back
                     </Button>
                     <Box sx={{ flex: "1 1 auto" }} />
-                    {activeStep !== steps.length &&
+                    {/* {activeStep !== steps.length &&
                       (completed[activeStep] ? (
                         <Typography
                           variant="caption"
@@ -225,13 +263,20 @@ function Food() {
                         >
                           Step {activeStep + 1} already completed
                         </Typography>
-                      ) : (
-                        <div className={styles.button} onClick={handleComplete}>
-                          {completedSteps() === totalSteps() - 1
-                            ? "Finish"
-                            : "Complete Step"}
-                        </div>
-                      ))}
+                      ) : ( */}
+                    <div
+                      className={styles.button}
+                      onClick={
+                        completedSteps() === totalSteps() - 1
+                          ? handleReset
+                          : handleComplete
+                      }
+                    >
+                      {completedSteps() === totalSteps() - 1
+                        ? "Finish"
+                        : "Complete Step"}
+                    </div>
+                    {/* ))} */}
                   </Box>
                 </React.Fragment>
               )}

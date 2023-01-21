@@ -64,6 +64,21 @@ const CheckIn = () => {
       if (!paymentId) {
         alert("Please enter a valid payment id");
       } else {
+        if (users.find((user) => user.payment_id === paymentId) === undefined) {
+          alert("Payment ID does not exist");
+          setPaymentId("");
+          return;
+        }
+        if (
+          users.find((user) => user.payment_id === paymentId).techno_id !== ""
+        ) {
+          console.log(
+            users.find((user) => user.payment_id === paymentId).techno_id
+          );
+          alert("User already checked in");
+          setPaymentId("");
+          return;
+        }
         const newCompleted = completed;
         newCompleted[activeStep] = true;
         setCompleted(newCompleted);
@@ -82,23 +97,31 @@ const CheckIn = () => {
         handleNext();
       }
     }
-    if (activeStep === 2) {
-      const { error } = await SupabaseClient.from("users")
-        .update({ techno_id: userId })
-        .eq("payment_id", paymentId);
-      if (error) {
-        console.error(error);
-      }
-      setPaymentId("");
-      setUserId("");
-      const newCompleted = completed;
-      newCompleted[activeStep] = true;
-      setCompleted(newCompleted);
-      handleNext();
-    }
+    // if (activeStep === 2) {
+    //   const { error } = await SupabaseClient.from("users")
+    //     .update({ techno_id: userId })
+    //     .eq("payment_id", paymentId);
+    //   if (error) {
+    //     console.error(error);
+    //   }
+    //   setPaymentId("");
+    //   setUserId("");
+    //   const newCompleted = completed;
+    //   newCompleted[activeStep] = true;
+    //   setCompleted(newCompleted);
+    //   handleNext();
+    // }
   };
 
-  const handleReset = () => {
+  const handleReset = async () => {
+    const { error } = await SupabaseClient.from("users")
+      .update({ techno_id: userId })
+      .eq("payment_id", paymentId);
+    if (error) {
+      console.error(error);
+    }
+    setPaymentId("");
+    setUserId("");
     setActiveStep(0);
     setCompleted({});
   };
@@ -128,16 +151,17 @@ const CheckIn = () => {
         </Stepper>
         <div>
           {allStepsCompleted() ? (
-            <React.Fragment>
-              <Typography sx={{ mt: 2, mb: 1 }}>
-                All steps completed - you&apos;re finished
-              </Typography>
-              <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-                <Box sx={{ flex: "1 1 auto" }} />
-                <Button onClick={handleReset}>Reset</Button>
-              </Box>
-            </React.Fragment>
+            ""
           ) : (
+            // <React.Fragment>
+            //   <Typography sx={{ mt: 2, mb: 1 }}>
+            //     All steps completed - you&apos;re finished
+            //   </Typography>
+            //   <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+            //     <Box sx={{ flex: "1 1 auto" }} />
+            //     <Button onClick={handleReset}>Reset</Button>
+            //   </Box>
+            // </React.Fragment>
             <React.Fragment>
               {activeStep === 0 ? (
                 <Scanner
@@ -160,6 +184,12 @@ const CheckIn = () => {
                   <div>
                     Techno ID: <b>{userId}</b>
                   </div>
+                  <div>
+                    Name :{" "}
+                    <b>
+                      {users.find((user) => user.payment_id === paymentId).name}
+                    </b>
+                  </div>
                 </div>
               ) : (
                 <div>Something went wrong</div>
@@ -174,7 +204,7 @@ const CheckIn = () => {
                   Back
                 </Button>
                 <Box sx={{ flex: "1 1 auto" }} />
-                {activeStep !== steps.length &&
+                {/* {activeStep !== steps.length &&
                   (completed[activeStep] ? (
                     <Typography
                       variant="caption"
@@ -182,13 +212,20 @@ const CheckIn = () => {
                     >
                       Step {activeStep + 1} already completed
                     </Typography>
-                  ) : (
-                    <div className={styles.button} onClick={handleComplete}>
-                      {completedSteps() === totalSteps() - 1
-                        ? "Finish"
-                        : "Complete Step"}
-                    </div>
-                  ))}
+                  ) : ( */}
+                <div
+                  className={styles.button}
+                  onClick={
+                    completedSteps() === totalSteps() - 1
+                      ? handleReset
+                      : handleComplete
+                  }
+                >
+                  {completedSteps() === totalSteps() - 1
+                    ? "Finish"
+                    : "Complete Step"}
+                </div>
+                {/* ))} */}
               </Box>
             </React.Fragment>
           )}

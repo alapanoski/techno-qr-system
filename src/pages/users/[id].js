@@ -62,17 +62,19 @@ const UserProfile = () => {
             {user.designation}
           </div>
           <div className={styles.user_profile_about}>{user.bio}</div>
-          {!view && (
-            <div
-              className={styles.user_profile_email_button}
-              onClick={() => setView(!view)}
-            >
-              View Email
-            </div>
-          )}
+          {user.email &&
+            !view&&(
+              <div
+                className={styles.user_profile_email_button}
+                onClick={() => setView(!view)}
+              >
+                View Email
+              </div>
+            )}
           {view && (
             <div className={styles.user_profile_email}>{user.email}</div>
           )}
+
           <div className={styles.user_profile_social_icons}>
             {user.twitter && (
               <FaTwitter

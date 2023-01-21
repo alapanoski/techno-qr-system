@@ -46,7 +46,7 @@ function Users() {
         </div>
         <input
           type="text"
-          placeholder="Search Users"
+          placeholder="Search Developers"
           className={styles.search}
           onChange={(e) => {
             handleSearch(e.target.value);
