@@ -6,13 +6,14 @@ import {
   Stepper,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { SupabaseClient } from "../../utils";
 import Scanner from "../Scanner/Scanner";
 import styles from "./AddPoints.module.css";
 
 const AddPoints = () => {
   const [currentUser, setCurrentUser] = React.useState(null);
+  const [users, setUsers] = React.useState([]);
   const [points, setPoints] = React.useState(0);
   const [activeStep, setActiveStep] = React.useState(0);
   const [userId, setUserId] = React.useState("");
@@ -22,7 +23,13 @@ const AddPoints = () => {
   const totalSteps = () => {
     return steps.length;
   };
-
+  async function getUsers() {
+    const { data, error } = await SupabaseClient.from("users").select();
+    setUsers(data);
+  }
+  useEffect(() => {
+    getUsers();
+  }, []);
   const completedSteps = () => {
     return Object.keys(completed).length;
   };
@@ -56,6 +63,11 @@ const AddPoints = () => {
       if (!userId) {
         alert("Please enter a valid user id");
       } else {
+        if (users.find((user) => user.techno_id === userId) === undefined) {
+          alert("User does not exist");
+          setUserId("");
+          return;
+        }
         const { data, error } = await SupabaseClient.from("users")
           .select()
           .eq("techno_id", userId);
@@ -63,19 +75,23 @@ const AddPoints = () => {
         setCurrentUser(data[0]);
       }
     }
-    if (activeStep === 1) {
-      const { data, error } = await SupabaseClient.from("users")
-        .update(currentUser)
-        .eq("techno_id", currentUser.techno_id);
-      console.log(error);
-    }
+    // if (activeStep === 1) {
+    //   const { data, error } = await SupabaseClient.from("users")
+    //     .update(currentUser)
+    //     .eq("techno_id", currentUser.techno_id);
+    //   console.log(error);
+    // }
     const newCompleted = completed;
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
     handleNext();
   };
 
-  const handleReset = () => {
+  const handleReset = async () => {
+    const { data, error } = await SupabaseClient.from("users")
+      .update(currentUser)
+      .eq("techno_id", currentUser.techno_id);
+    console.log(error);
     setActiveStep(0);
     setCompleted({});
   };
@@ -120,16 +136,17 @@ const AddPoints = () => {
           </Stepper>
           <div>
             {allStepsCompleted() ? (
-              <React.Fragment>
-                <Typography sx={{ mt: 2, mb: 1 }}>
-                  All steps completed - you&apos;re finished
-                </Typography>
-                <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-                  <Box sx={{ flex: "1 1 auto" }} />
-                  <Button onClick={handleReset}>Reset</Button>
-                </Box>
-              </React.Fragment>
+              ""
             ) : (
+              // <React.Fragment>
+              //   <Typography sx={{ mt: 2, mb: 1 }}>
+              //     All steps completed - you&apos;re finished
+              //   </Typography>
+              //   <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+              //     <Box sx={{ flex: "1 1 auto" }} />
+              //     <Button onClick={handleReset}>Reset</Button>
+              //   </Box>
+              // </React.Fragment>
               <React.Fragment>
                 {activeStep === 0 ? (
                   <Scanner
@@ -186,7 +203,7 @@ const AddPoints = () => {
                     Back
                   </Button>
                   <Box sx={{ flex: "1 1 auto" }} />
-                  {activeStep !== steps.length &&
+                  {/* {activeStep !== steps.length &&
                     (completed[activeStep] ? (
                       <Typography
                         variant="caption"
@@ -194,13 +211,20 @@ const AddPoints = () => {
                       >
                         Step {activeStep + 1} already completed
                       </Typography>
-                    ) : (
-                      <div className={styles.button} onClick={handleComplete}>
-                        {completedSteps() === totalSteps() - 1
-                          ? "Finish"
-                          : "Complete Step"}
-                      </div>
-                    ))}
+                    ) : ( */}
+                  <div
+                    className={styles.button}
+                    onClick={
+                      completedSteps() === totalSteps() - 1
+                        ? handleReset
+                        : handleComplete
+                    }
+                  >
+                    {completedSteps() === totalSteps() - 1
+                      ? "Finish"
+                      : "Complete Step"}
+                  </div>
+                  {/* ))} */}
                 </Box>
               </React.Fragment>
             )}

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import logo from "../../assets/logo.png";
 import styles from "./Sidebar.module.css";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -16,6 +16,7 @@ function Sidebar({ tab, setTab }) {
           src={logo}
           alt=""
           width={200}
+          style={{ cursor: "pointer" }}
           onClick={() => {
             setTab(0);
           }}
