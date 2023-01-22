@@ -1,0 +1,87 @@
+.users_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 3rem;
+  min-height: 100vh;
+  background-color: #041c2b;
+}
+.user_container_cards {
+  display: flex;
+  gap: 3rem;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+.user_card_container {
+  display: flex;
+  height: 330px;
+  cursor: pointer;
+  width: 300px;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  padding: 1.8rem;
+  gap: 1.3rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  background-color: #034f73;
+  transition: all 0.2s ease-in-out;
+  color: white;
+}
+.users_container input {
+  width: 300px;
+  height: 40px;
+  border-radius: 0.5rem;
+  border: none;
+  padding: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  outline: none;
+}
+.user_card_container:hover {
+  transform: scale(1.03);
+}
+.user_card_id {
+  font-size: 1rem;
+  font-weight: 500;
+}
+.no_users {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+}
+.user_card_container_details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.user_card_image_container img {
+  width: 150px;
+  height: 150px;
+  border: 2px solid #00a1ea;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.user_card_name {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.user_card_designation {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+.users_profile_logo img {
+  width: 400px;
+  height: auto;
+  pointer-events: none;
+}
+@media (max-width: 620px) {
+  .users_profile_logo img {
+    width: 300px;
+  }
+}
