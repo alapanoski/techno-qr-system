@@ -1,12 +1,36 @@
-// const fs = require("fs");
-// const QRCode = require("qrcode");
-// const { createCanvas, loadImage } = require("canvas");
+const qrcode = require('qrcode');
+const Jimp = require("jimp");
 
-// function convertDataUriToImage(dataUri, filePath) {
-//   const base64Data = dataUri.split(";base64,").pop();
-//   const buffer = Buffer.from(base64Data, "base64");
-//   fs.writeFileSync(filePath, buffer);
-// }
+export default async function generateQr(req, res) {
+    try {
+        const { string } = req.body;
+        const logo = "images/download.png";
+        const filePath = 'qrCodes/' + Math.random() + 'qr.png';
+
+
+        await qrcode.toFile(filePath, string, {
+            color: {
+                dark: '#000000',
+                light: '#FFFFFF',
+            },
+            scale: 11, margin: 2
+        });
+
+        const qrImage = await Jimp.read(filePath);
+        const attachment = await Jimp.read(logo);
+
+        // Resize the attachment image to fit in the middle of the QR code
+        attachment.resize(qrImage.bitmap.width / 4, qrImage.bitmap.height / 4);
+        qrImage.composite(attachment, qrImage.bitmap.width / 2.5, qrImage.bitmap.height / 2.5);
+
+        await qrImage.writeAsync(filePath);
+
+        res.status(200).json({ message: "QR code with image generated" });
+    } catch (error) {
+        console.log(error);
+    }
+
+}
 
 // export default async function generateQR(req, res) {
 //   const center_image = "images/download.png";
@@ -25,11 +49,48 @@
 //   ctx.drawImage(img, center, center, cwidth, cwidth);
 //   const filePath = "qrCodes/" + Math.random() + "qr.png";
 
-//   convertDataUriToImage(canvas.toDataURL("image/png"), filePath);
+// const fs = require('fs');
+// const QRCode = require("qrcode");
+// const { createCanvas, loadImage } = require("canvas");
+
+// function convertDataUriToImage(dataUri, filePath) {
+//     const base64Data = dataUri.split(';base64,').pop();
+//     const buffer = Buffer.from(base64Data, 'base64');
+//     fs.writeFileSync(filePath, buffer);
+// }
+
+// export default async function generateQR(req, res) {
+//     const center_image = 'images/download.png'
+//     const { string } = req.body;
+//     console.log(string)
+//     const width = 325; // To align the image in the center
+//     const cwidth = 75; // To increse the Quality of the image (Size)
+//     const canvas = createCanvas(width, width);
+//     QRCode.toCanvas(
+//         canvas,
+//         string, {
+//         scale: 11,
+//         // errorCorrectionLevel: 'L',
+//     }
+//     );
+
+//     const ctx = canvas.getContext("2d");
+//     const img = await loadImage(center_image);
+//     const center = ((width - cwidth) / 2) + 15;
+//     ctx.drawImage(img, center, center, cwidth, cwidth);
+//     const filePath = 'qrCodes/' + Math.random() + 'qr.png';
+
+//     convertDataUriToImage(canvas.toDataURL("image/png"), filePath);
+
+//     res.status(200).json({ message: "QR Code has been Successfully generated" });
+// }
 
 //   res.status(200).json({ message: "QR Code has been Successfully generated" });
 // }
 
+
+
+//////////////////////M1////////////////////////
 // const qrcode = require('qrcode');
 
 // export default async function generateQr(req, res) {
@@ -48,6 +109,9 @@
 
 //     res.status(200).json({ message: "QR generated" });
 // }
+
+
+// ////////////////////M2////////////////////////
 // const qrImage = require('qr-image');
 // const fs = require('fs');
 
