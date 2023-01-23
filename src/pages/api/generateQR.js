@@ -25,7 +25,7 @@ export default async function generateQr(req, res) {
 
         const font = await Jimp.loadFont(Jimp.FONT_SANS_16_BLACK);
         // Font, X coordinate, Y coordinate for the String
-        qrImage.print(font, 10, qrImage.bitmap.height - 20, string);
+        qrImage.print(font, 95, qrImage.bitmap.height - 20, string);
 
         await qrImage.writeAsync(filePath);
 
