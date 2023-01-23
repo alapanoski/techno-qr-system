@@ -23,6 +23,10 @@ export default async function generateQr(req, res) {
         attachment.resize(qrImage.bitmap.width / 4, qrImage.bitmap.height / 4);
         qrImage.composite(attachment, qrImage.bitmap.width / 2.5, qrImage.bitmap.height / 2.5);
 
+        const font = await Jimp.loadFont(Jimp.FONT_SANS_16_BLACK);
+        // Font, X coordinate, Y coordinate for the String
+        qrImage.print(font, 10, qrImage.bitmap.height - 20, string);
+
         await qrImage.writeAsync(filePath);
 
         res.status(200).json({ message: "QR code with image generated" });
