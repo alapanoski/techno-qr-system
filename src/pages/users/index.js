@@ -2,7 +2,6 @@
 import Image from "next/image";
 import React from "react";
 import { Loader } from "../../components";
-import profile from "../../assets/temp_profile.jpeg";
 import styles from "../../styles/Users.module.css";
 import logo from "../../assets/logo.png";
 import { useRouter } from "next/router";
