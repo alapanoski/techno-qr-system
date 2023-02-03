@@ -22,7 +22,7 @@ const handler = async (req, res) => {
       auth: process.env.GOOGLE_SHEETS_API_KEY,
     });
     const response = await sheets.spreadsheets.values.get({
-      spreadsheetId: process.env.SPREADSHEET_ID,
+      spreadsheetId: req.body.spreadsheetId,
       range: "Sheet1!A:M",
     });
     const rows = response.data.values;
