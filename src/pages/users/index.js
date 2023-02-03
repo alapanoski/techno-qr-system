@@ -2,7 +2,6 @@
 import Image from "next/image";
 import React from "react";
 import { Loader } from "../../components";
-import profile from "../../assets/temp_profile.jpeg";
 import styles from "../../styles/Users.module.css";
 import logo from "../../assets/logo.png";
 import { useRouter } from "next/router";
@@ -56,35 +55,37 @@ function Users() {
           {users.length === 0 && (
             <div className={styles.no_users}>No Users Found</div>
           )}
-          {users.map((user, index) => (
-            <div
-              key={index}
-              className={styles.user_card_container}
-              onClick={() => {
-                router.push(`/users/${user.techno_id}`);
-              }}
-            >
-              <div className={styles.user_card_image_container}>
-                <img
-                  src={
-                    user.image
-                      ? user.image
-                      : "https://people.com/thmb/JGjxumyykHNuBoeyuELz33P2uHY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(719x309:721x311)/rick-astley-recreation-never-gonna-give-you-up-081922-1-909d277568c34a599c27fa7503ce7a4c.jpg"
-                  }
-                  alt=""
-                />
-              </div>
-              <div className={styles.user_card_container_details}>
-                <div className={styles.user_card_id}>
-                  Techno ID : <b>{user?.techno_id}</b>
+          {users.map((user, index) =>
+            user.techno_id ? (
+              <div
+                key={index}
+                className={styles.user_card_container}
+                onClick={() => {
+                  router.push(`/users/${user.techno_id}`);
+                }}
+              >
+                <div className={styles.user_card_image_container}>
+                  <img
+                    src={
+                      user.image
+                        ? user.image
+                        : "https://people.com/thmb/JGjxumyykHNuBoeyuELz33P2uHY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(719x309:721x311)/rick-astley-recreation-never-gonna-give-you-up-081922-1-909d277568c34a599c27fa7503ce7a4c.jpg"
+                    }
+                    alt=""
+                  />
                 </div>
-                <div className={styles.user_card_name}>{user.name}</div>
-                <div className={styles.user_card_designation}>
-                  {user?.designation}
+                <div className={styles.user_card_container_details}>
+                  <div className={styles.user_card_id}>
+                    Techno ID : <b>{user?.techno_id}</b>
+                  </div>
+                  <div className={styles.user_card_name}>{user.name}</div>
+                  <div className={styles.user_card_designation}>
+                    {user?.designation}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ) : null
+          )}
         </div>
       </div>
     </>
