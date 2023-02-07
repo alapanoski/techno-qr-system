@@ -32,6 +32,7 @@ export default async function generateQr(req, res) {
         res.status(200).json({ message: "QR code with image generated" });
     } catch (error) {
         console.log(error);
+        res.status(500).json({ error });
     }
 
 }
