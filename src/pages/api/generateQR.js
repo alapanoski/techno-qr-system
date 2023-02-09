@@ -7,7 +7,7 @@ export default async function generateQr(req, res) {
         const logo = "images/download.png";
         const filePath = 'qrCodes/' + Math.random() + 'qr.png';
 
-
+        
         await qrcode.toFile(filePath, string, {
             color: {
                 dark: '#000000',
@@ -36,6 +36,7 @@ export default async function generateQr(req, res) {
     }
 
 }
+
 
 // export default async function generateQR(req, res) {
 //   const center_image = "images/download.png";
