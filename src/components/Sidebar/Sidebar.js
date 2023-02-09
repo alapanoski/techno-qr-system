@@ -1,14 +1,16 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React from "react";
 import logo from "../../assets/logo.png";
 import styles from "./Sidebar.module.css";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { SupabaseClient } from "../../utils";
+import { UserContext } from "../../context/userContext";
 
 function Sidebar({ tab, setTab }) {
   const router = useRouter();
   const [expanded, setExpanded] = React.useState(false);
+  const {setUser}=React.useContext(UserContext);
   return (
     <div className={styles.dashboard_menu_container}>
       <div className={styles.dashboard_logo}>
@@ -82,6 +84,8 @@ function Sidebar({ tab, setTab }) {
         <div
           onClick={() => {
             SupabaseClient.auth.signOut().then(() => {
+              sessionStorage.removeItem("user");
+              setUser(null)
               router.push("/");
             });
           }}
@@ -147,6 +151,8 @@ function Sidebar({ tab, setTab }) {
           <div
             onClick={() => {
               SupabaseClient.auth.signOut().then(() => {
+                sessionStorage.removeItem("user");
+                setUser(null)
                 router.push("/");
               });
             }}

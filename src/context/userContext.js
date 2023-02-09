@@ -19,7 +19,6 @@ function UserState(props) {
       if (
         data.find((volunteer) => {
           return volunteer.email === user.email;
-          1;
         })
       ) {
         user.role = "volunteer";
@@ -28,14 +27,16 @@ function UserState(props) {
       }
     }
     setUser(user);
+    sessionStorage.setItem("user", JSON.stringify(user));
     setLoading(false);
   }
   useEffect(() => {
-    if (!User?.role) getUser();
+    if (!(User?.role==='volunteer'||User?.role==='user')) getUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [User]);
 
   SupabaseClient.auth.onAuthStateChange((event, session) => {
+    if(!sessionStorage.getItem('user'))
     setUser(session?.user ?? null);
   });
   return (

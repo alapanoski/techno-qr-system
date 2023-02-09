@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { UserContext } from "../context/userContext";
 import { Loader } from "../components";
 
-const ProtectedRoute = (WrappedComponent, role) => {
+const ProtectedRoute = (WrappedComponent) => {
   const ProtectedRouteComponent = (props) => {
     const { User, loading, roleLoaded } = useContext(UserContext);
     const Router = useRouter();
@@ -14,7 +14,7 @@ const ProtectedRoute = (WrappedComponent, role) => {
       if (User?.email && User.role === "user") Router.push("/");
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [User, loading]);
-
+    console.log(User);
     if (User?.email && User.role === "volunteer")
       return <WrappedComponent {...props} />;
     if (User?.email && User.role === "user") Router.push("/");
