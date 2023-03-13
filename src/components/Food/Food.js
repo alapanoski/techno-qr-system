@@ -121,7 +121,6 @@ function Food() {
     if (foodEaten && foodEaten.length > 0) {
       alert("User has already checked in for this food");
       setUserId("");
-      handleReset();
       setFoodTab(0);
       return;
     } else {
