@@ -49,7 +49,7 @@ export default function Home() {
       provider: "google",
     });
   }
- if (loading) return <Loader />;
+  if (loading) return <Loader />;
   if (browser)
     return (
       <>
@@ -67,10 +67,40 @@ export default function Home() {
       <CustomTitle title="Login" />
       <div className={styles.login_container}>
         <Image src={logo} alt="" width={300} />
-        <input type="password" placeholder="Password" onChange={(e)=>{
-          setPassword(e.target.value)
-        }} />
-        <button onClick={signInWithAltPassword}>Submit</button>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "2rem",
+            flexWrap: "wrap",
+          }}
+        >
+          <input
+            type="password"
+            placeholder="Password"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+          />
+          <div
+            onClick={signInWithAltPassword}
+            className={styles.login_button}
+            style={{
+              cursor: "pointer",
+            }}
+          >
+            Submit
+          </div>
+        </div>
+        <h2
+          style={{
+            color: "white",
+          }}
+        >
+          OR
+        </h2>
         <div
           className={styles.login_button}
           variant="contained"
