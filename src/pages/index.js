@@ -20,6 +20,7 @@ export default function Home() {
     if (User?.role === "volunteer") {
       router.push("/dashboard");
     }
+    console.log(User)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [User]);
 
@@ -30,17 +31,20 @@ export default function Home() {
   }, []);
 
   async function signInWithAltPassword() {
-    console.log({ password });
-    axios
-      .post("/api/altLogin", {
-        password: password,
-      })
-      .then((res) => {
-        if (res.data.data === true) {
-          setUser({ role: "volunteer", email: "volunteer@iedc.in" });
-          console.log("Logged in with alt password");
-        } else alert("Wrong Password!");
-      });
+    const { data, error } = await SupabaseClient.auth.signInWithPassword({
+      email: "iedcmec@mec.ac.in",
+      password: password,
+    });
+
+    if (error?.__isAuthError == true) {
+      alert("Incorrect password");
+    }
+
+    if (data?.user?.role === "authenticated") {
+      router.push("/dashboard");
+    }
+
+    console.log({ data, error });
   }
 
   async function signInWithGoogle() {
