@@ -7,12 +7,14 @@ import Image from "next/image";
 import { Loader } from "../components";
 import { ClipLoader } from "react-spinners";
 import { CustomTitle, SupabaseClient } from "../utils";
+import axios from "axios";
 
 export default function Home() {
   const router = useRouter();
   const { User, setUser, loading } = useContext(UserContext);
   const [loading1, setLoading1] = useState(false);
   const [browser, setBrowser] = useState(false);
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     if (User?.role === "volunteer") {
@@ -27,13 +29,27 @@ export default function Home() {
     }
   }, []);
 
+  async function signInWithAltPassword() {
+    console.log({ password });
+    axios
+      .post("/api/altLogin", {
+        password: password,
+      })
+      .then((res) => {
+        if (res.data.data === true) {
+          setUser({ role: "volunteer", email: "volunteer@iedc.in" });
+          console.log("Logged in with alt password");
+        } else alert("Wrong Password!");
+      });
+  }
+
   async function signInWithGoogle() {
     setLoading1(true);
     const { data, error } = await SupabaseClient.auth.signInWithOAuth({
       provider: "google",
     });
   }
-  if (loading) return <Loader />;
+ if (loading) return <Loader />;
   if (browser)
     return (
       <>
@@ -51,6 +67,10 @@ export default function Home() {
       <CustomTitle title="Login" />
       <div className={styles.login_container}>
         <Image src={logo} alt="" width={300} />
+        <input type="password" placeholder="Password" onChange={(e)=>{
+          setPassword(e.target.value)
+        }} />
+        <button onClick={signInWithAltPassword}>Submit</button>
         <div
           className={styles.login_button}
           variant="contained"
