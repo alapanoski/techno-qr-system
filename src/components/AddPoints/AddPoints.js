@@ -95,6 +95,7 @@ const AddPoints = () => {
     //console.log(error);
     setActiveStep(0);
     setCompleted({});
+    setUserId("")
   };
 
   async function addPoints() {
