@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AddPoints, CheckIn, Food, Sidebar } from "../components";
+import { AddPoints, CheckIn, Food, Home, Sidebar } from "../components";
 import styles from "../styles/Dashboard.module.css";
 import Image from "next/image";
 import logo from "../assets/logo.png";
@@ -13,7 +13,7 @@ function Dashboard() {
       <div className={styles.container}>
         <Sidebar tab={tab} setTab={setTab} />
         <div className={styles.content}>
-          {tab === 0 && <Image src={logo} width={300} alt="" />}
+          {tab === 0 && <Home/>}
           {tab === 1 && <CheckIn />}
           {tab === 2 && <Food />}
           {tab === 3 && <AddPoints />}
