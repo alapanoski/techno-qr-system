@@ -29,7 +29,7 @@ function Scanner({ qr_pay, setUserId, userId, setPaymentId, paymentId }) {
     },
     onError(error) {
       if (!(error.name === "NotFoundException")) {
-        console.log(error);
+        //console.log(error);
       }
     },
   });

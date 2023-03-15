@@ -71,7 +71,8 @@ const AddPoints = () => {
         const { data, error } = await SupabaseClient.from("users")
           .select()
           .eq("techno_id", userId);
-        if (error) console.log(error);
+        // if (error) 
+        // console.log(error);
         setCurrentUser(data[0]);
       }
     }
@@ -91,7 +92,7 @@ const AddPoints = () => {
     const { data, error } = await SupabaseClient.from("users")
       .update(currentUser)
       .eq("techno_id", currentUser.techno_id);
-    console.log(error);
+    //console.log(error);
     setActiveStep(0);
     setCompleted({});
   };

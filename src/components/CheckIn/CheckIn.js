@@ -20,7 +20,7 @@ const CheckIn = () => {
 
   async function fetchUsers() {
     const { data, error } = await SupabaseClient.from("users").select();
-    console.log(error);
+    //console.log(error);
     setUsers(data);
   }
   useEffect(() => {
@@ -72,9 +72,9 @@ const CheckIn = () => {
         if (
           users.find((user) => user.payment_id === paymentId).techno_id !== ""
         ) {
-          console.log(
-            users.find((user) => user.payment_id === paymentId).techno_id
-          );
+          //console.log(
+          //  users.find((user) => user.payment_id === paymentId).techno_id
+         // );
           alert("User already checked in");
           setPaymentId("");
           return;
@@ -118,7 +118,7 @@ const CheckIn = () => {
       .update({ techno_id: userId })
       .eq("payment_id", paymentId);
     if (error) {
-      console.error(error);
+      //console.error(error);
     }
     setPaymentId("");
     setUserId("");

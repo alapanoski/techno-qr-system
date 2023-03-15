@@ -20,7 +20,7 @@ export default function Home() {
     if (User?.role === "volunteer") {
       router.push("/dashboard");
     }
-    console.log(User);
+    //console.log(User);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [User]);
 
@@ -31,6 +31,7 @@ export default function Home() {
   }, []);
 
   async function signInWithAltPassword() {
+    //console.log("clicked");
     const { data, error } = await SupabaseClient.auth.signInWithPassword({
       email: "iedcmec@mec.ac.in",
       password: password,
