@@ -20,7 +20,7 @@ export default function Home() {
     if (User?.role === "volunteer") {
       router.push("/dashboard");
     }
-    console.log(User)
+    //console.log(User);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [User]);
 
@@ -31,6 +31,7 @@ export default function Home() {
   }, []);
 
   async function signInWithAltPassword() {
+    //console.log("clicked");
     const { data, error } = await SupabaseClient.auth.signInWithPassword({
       email: "iedcmec@mec.ac.in",
       password: password,
@@ -38,13 +39,8 @@ export default function Home() {
 
     if (error?.__isAuthError == true) {
       alert("Incorrect password");
+      setPassword("");
     }
-
-    if (data?.user?.role === "authenticated") {
-      router.push("/dashboard");
-    }
-
-    console.log({ data, error });
   }
 
   async function signInWithGoogle() {
@@ -84,6 +80,7 @@ export default function Home() {
           <input
             type="password"
             placeholder="Password"
+            value={password}
             onChange={(e) => {
               setPassword(e.target.value);
             }}

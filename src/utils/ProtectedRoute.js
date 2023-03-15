@@ -8,13 +8,15 @@ const ProtectedRoute = (WrappedComponent) => {
     const { User, loading, roleLoaded } = useContext(UserContext);
     const Router = useRouter();
     useEffect(() => {
+
+      //console.log("User",User);
       if (!loading && !User) {
         Router.push("/");
       }
       if (User?.email && User.role === "user") Router.push("/");
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [User, loading]);
-    console.log(User);
+    //console.log(User);
     if (User?.email && User.role === "volunteer")
       return <WrappedComponent {...props} />;
     if (User?.email && User.role === "user") Router.push("/");

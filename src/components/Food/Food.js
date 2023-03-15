@@ -129,7 +129,7 @@ function Food() {
         food_id: foodData.find((food) => food.id === foodTab).id,
       });
       if (error) {
-        console.error(error);
+        //console.error(error);
       }
     }
     setUserId("");

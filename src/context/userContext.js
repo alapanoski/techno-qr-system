@@ -14,6 +14,7 @@ function UserState(props) {
     const {
       data: { user },
     } = await SupabaseClient.auth.getUser();
+    //console.log(user);
     if (user) {
       const { data, error } = await SupabaseClient.from("volunteers").select();
       if (
@@ -31,13 +32,14 @@ function UserState(props) {
     setLoading(false);
   }
   useEffect(() => {
-    if (!(User?.role==='volunteer'||User?.role==='user')) getUser();
+    if (!(User?.role === "volunteer" || User?.role === "user")) getUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [User]);
 
   SupabaseClient.auth.onAuthStateChange((event, session) => {
-    if(!sessionStorage.getItem('user'))
-    setUser(session?.user ?? null);
+    // if(!sessionStorage.getItem('user'))
+    // setUser(session?.user ?? null);
+    getUser();
   });
   return (
     <UserContext.Provider value={{ User: User, setUser, loading }}>
