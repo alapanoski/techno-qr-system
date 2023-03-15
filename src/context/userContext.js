@@ -14,6 +14,7 @@ function UserState(props) {
     const {
       data: { user },
     } = await SupabaseClient.auth.getUser();
+    console.log(user);
     if (user) {
       const { data, error } = await SupabaseClient.from("volunteers").select();
       if (
