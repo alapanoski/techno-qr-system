@@ -68,14 +68,7 @@ export default function Home() {
       <div className={styles.login_container}>
         <Image src={logo} alt="" width={300} />
         <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "2rem",
-            flexWrap: "wrap",
-          }}
+          className={styles.login_form}
         >
           <input
             type="password"
