@@ -1,6 +1,7 @@
 import "../styles/globals.css";
 import UserState from "../context/userContext";
 import { createTheme, ThemeProvider } from "@mui/material";
+import { Toaster } from "react-hot-toast";
 
 export default function App({ Component, pageProps }) {
   const theme = createTheme({
@@ -23,6 +24,7 @@ export default function App({ Component, pageProps }) {
 
   return (
     <ThemeProvider theme={theme}>
+      <Toaster />
       <UserState>
         <Component {...pageProps} />
       </UserState>
