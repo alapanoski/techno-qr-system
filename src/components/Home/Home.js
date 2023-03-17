@@ -4,6 +4,7 @@ import { ClipLoader } from "react-spinners";
 import styles from "../../styles/Home.module.css";
 import logo from "../../assets/logo.png";
 import { SupabaseClient } from "../../utils";
+import { Autocomplete, TextField } from "@mui/material";
 
 function Home() {
   const [name, setName] = React.useState("");
@@ -13,22 +14,20 @@ function Home() {
 
   async function getUsers() {
     setLoading1(true);
-    const users = await SupabaseClient.from("users").select("*");
-    setUsers(users.data);
+    const data = await SupabaseClient.from("users").select("*");
+    setUsers(data.data);
     setLoading1(false);
+    console.log(users);
   }
 
-  async function getID() {
+  async function getID(value) {
     setLoading1(true);
-    const user = users.find(
-      (user) => user.name.toLowerCase() === name.toLowerCase()
-    );
-    if (user) {
-      console.log(user);
-      setId(user.techno_id);
+    if (value?.techno_id) {
+      setId(value.techno_id);
     } else {
-      setId("User not found");
+      setId("Not Found");
     }
+
     setName("");
     setLoading1(false);
   }
@@ -66,7 +65,7 @@ function Home() {
             flexWrap: "wrap",
           }}
         >
-          <input
+          {/* <input
             type="text"
             placeholder="Enter Name"
             style={{
@@ -76,16 +75,21 @@ function Home() {
             onChange={(e) => {
               setName(e.target.value);
             }}
-          />
-          <div
-            onClick={getID}
-            className={styles.login_button}
-            style={{
-              cursor: "pointer",
+          /> */}
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            value={name}
+            onChange={(event, newValue) => {
+              getID(newValue);
             }}
-          >
-            Submit
-          </div>
+            options={users}
+            getOptionLabel={(option) => option.name || ""}
+            sx={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField {...params} label="Enter Name" />
+            )}
+          />
         </div>
 
         {id && (
