@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import styles from "./CheckIn.module.css";
 import React, { useEffect } from "react";
 import { SupabaseClient } from "../../utils";
+import { toast } from "react-hot-toast";
 
 const steps = ["Verify Payment Details", "Assign User ID", "Confirm User"];
 
@@ -62,10 +63,10 @@ const CheckIn = () => {
   const handleComplete = async () => {
     if (activeStep === 0) {
       if (!paymentId) {
-        alert("Please enter a valid payment id");
+        toast.error("Please enter a valid payment id");
       } else {
         if (users.find((user) => user.id === paymentId) === undefined) {
-          alert("Payment ID does not exist");
+          toast.error("Payment ID does not exist");
           setPaymentId("");
           return;
         }
@@ -75,7 +76,7 @@ const CheckIn = () => {
           //console.log(
           //  users.find((user) => user.payment_id === paymentId).techno_id
          // );
-          alert("User already checked in");
+          toast.error("User already checked in");
           setPaymentId("");
           return;
         }
@@ -87,9 +88,9 @@ const CheckIn = () => {
     }
     if (activeStep === 1) {
       if (users.filter((user) => user.techno_id === userId).length > 0) {
-        alert("User already exists");
+        toast.error("User already exists");
       } else if (!userId) {
-        alert("Please enter a valid user id");
+        toast.error("Please enter a valid user id");
       } else {
         const newCompleted = completed;
         newCompleted[activeStep] = true;
@@ -119,7 +120,10 @@ const CheckIn = () => {
       .eq("id", paymentId);
     if (error) {
       //console.error(error);
+      toast.error("Error in checking in user");
+      return;
     }
+    toast.success("User checked in successfully");
     setPaymentId("");
     setUserId("");
     setActiveStep(0);
