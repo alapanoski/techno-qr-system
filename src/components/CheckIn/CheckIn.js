@@ -70,7 +70,7 @@ const CheckIn = () => {
           return;
         }
         if (
-          (users.find((user) => user.id === paymentId).techno_id !== null) 
+          (users.find((user) => user.id === paymentId).techno_id !== null ||users.find((user) => user.id === paymentId).techno_id !== "" ) 
         ) {
           //console.log(
           //  users.find((user) => user.payment_id === paymentId).techno_id
