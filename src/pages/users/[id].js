@@ -13,7 +13,8 @@ import {
   FaGithub,
   FaDev,
 } from "react-icons/fa";
-import { FiGlobe } from "react-icons/fi";
+import { FiGlobe, FiPhoneCall } from "react-icons/fi";
+import { HiPhone } from "react-icons/hi";
 import Error from "../404";
 import { CustomTitle, SupabaseClient } from "../../utils";
 
@@ -49,16 +50,38 @@ const UserProfile = () => {
         <div className={styles.user_profile_card_container}>
           <div className={styles.user_profile_image_container}>
             <img
-              src={`https://api.dicebear.com/5.x/adventurer/svg?seed=${user.email}`}
+              src={`https://api.dicebear.com/5.x/adventurer/svg?seed=${user?.email}`}
               alt=""
             />
           </div>
           <div className={styles.user_profile_name}>{user.name}</div>
           <div className={styles.user_profile_designation}>
-            {user.designation}
+            {user?.designation.toLowerCase().includes("team")
+              ? user?.designation
+              : `Team ${user?.designation}`}
           </div>
+          <div
+            className={styles.user_profile_designation}
+            style={{
+              textAlign: "center",
+              lineHeight: "1.5",
+            }}
+          >
+            {user?.organization}
+          </div>
+          {user?.grad_year && (
+            <div
+              className={styles.user_profile_designation}
+              style={{
+                textAlign: "center",
+                lineHeight: "1.5",
+              }}
+            >
+              Graduation Year : <b>{user?.grad_year}</b>
+            </div>
+          )}
           <div className={styles.user_profile_about}>{user.bio}</div>
-          {user.email && !view && (
+          {user?.email && !view && (
             <div
               className={styles.user_profile_email_button}
               onClick={() => setView(!view)}
@@ -67,15 +90,15 @@ const UserProfile = () => {
             </div>
           )}
           {view && (
-            <div className={styles.user_profile_email}>{user.email}</div>
+            <div className={styles.user_profile_email}>{user?.email}</div>
           )}
 
           <div className={styles.user_profile_social_icons}>
-            {user.twitter && (
+            {/* {user?.twitter && (
               <FaTwitter
                 style={{ cursor: "pointer" }}
                 onClick={() => {
-                  window.open(user.twitter, "_blank");
+                  window.open(user?.twitter, "_blank");
                 }}
               />
             )}
@@ -94,12 +117,20 @@ const UserProfile = () => {
                   window.open(user.portfolio, "_blank");
                 }}
               />
+            )} */}
+            {user?.phone && (
+              <HiPhone
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  window.open(`tel:${user?.phone}`, "_blank");
+                }}
+              />
             )}
             {user.linkedin && (
               <FaLinkedinIn
                 style={{ cursor: "pointer" }}
                 onClick={() => {
-                  window.open(user.linkedin, "_blank");
+                  window.open(user?.linkedin, "_blank");
                 }}
               />
             )}
@@ -107,15 +138,15 @@ const UserProfile = () => {
               <FaGithub
                 style={{ cursor: "pointer" }}
                 onClick={() => {
-                  window.open(user.github, "_blank");
+                  window.open(user?.github, "_blank");
                 }}
               />
             )}
-            {user.dev && (
+            {user?.devfolio && (
               <FaDev
                 style={{ cursor: "pointer" }}
                 onClick={() => {
-                  window.open(user.dev, "_blank");
+                  window.open(user?.devfolio, "_blank");
                 }}
               />
             )}

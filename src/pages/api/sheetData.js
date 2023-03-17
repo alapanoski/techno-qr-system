@@ -13,7 +13,7 @@ const handler = async (req, res) => {
   if (req.method === "POST") {
     const { error } = await SupabaseClient.from("users")
       .delete()
-      .neq("payment_id", "Payment ID");
+      .neq("id", "Payment ID");
     if (error) {
       res.status(500).json({ error: error.message });
     }
@@ -45,7 +45,7 @@ const handler = async (req, res) => {
       if (payment_id === "Payment ID") continue;
       const { error } = await SupabaseClient.from("users").insert([
         {
-          payment_id: payment_id,
+          id: payment_id,
           name: name,
           linkedin: linkedin,
           github: github,

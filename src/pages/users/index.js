@@ -76,7 +76,9 @@ function Users() {
                   </div>
                   <div className={styles.user_card_name}>{user.name}</div>
                   <div className={styles.user_card_designation}>
-                    {user?.designation}
+                    {user?.designation.toLowerCase().includes("team")
+                      ? user?.designation
+                      : `Team ${user?.designation}`}
                   </div>
                 </div>
               </div>
