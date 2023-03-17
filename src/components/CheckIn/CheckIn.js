@@ -64,13 +64,13 @@ const CheckIn = () => {
       if (!paymentId) {
         alert("Please enter a valid payment id");
       } else {
-        if (users.find((user) => user.payment_id === paymentId) === undefined) {
+        if (users.find((user) => user.id === paymentId) === undefined) {
           alert("Payment ID does not exist");
           setPaymentId("");
           return;
         }
         if (
-          users.find((user) => user.payment_id === paymentId).techno_id !== ""
+          (users.find((user) => user.id === paymentId).techno_id !== null) 
         ) {
           //console.log(
           //  users.find((user) => user.payment_id === paymentId).techno_id
@@ -116,7 +116,7 @@ const CheckIn = () => {
   const handleReset = async () => {
     const { error } = await SupabaseClient.from("users")
       .update({ techno_id: userId })
-      .eq("payment_id", paymentId);
+      .eq("id", paymentId);
     if (error) {
       //console.error(error);
     }
@@ -187,7 +187,7 @@ const CheckIn = () => {
                   <div>
                     Name :{" "}
                     <b>
-                      {users.find((user) => user.payment_id === paymentId).name}
+                      {users.find((user) => user.id === paymentId).name}
                     </b>
                   </div>
                 </div>
