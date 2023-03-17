@@ -1,12 +1,12 @@
 {
-  "theme_color": "#000000",
+  "theme_color": "#041c2b",
   "background_color": "#ffffff",
   "display": "standalone",
   "scope": "/",
   "start_url": "/",
-  "name": "Next PWA",
-  "short_name": "Technopreneur",
-  "description": "This app is to demo PWA in Next.js",
+  "name": "Technopreneur",
+  "short_name": "Techno",
+  "description": "Ticketing QR system for Technopreneur",
   "icons": [
     {
       "src": "/icon-192x192.png",
