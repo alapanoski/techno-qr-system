@@ -12,6 +12,7 @@ import {
   Stepper,
   Typography,
 } from "@mui/material";
+import { toast } from "react-hot-toast";
 
 function Food() {
   const [foodTab, setFoodTab] = React.useState(0);
@@ -72,10 +73,10 @@ function Food() {
   const handleComplete = async () => {
     if (activeStep === 0) {
       if (!userId) {
-        alert("Please enter a valid user id");
+        toast.error("Please enter a valid user id");
       } else {
         if (users.find((user) => user.techno_id === userId) === undefined) {
-          alert("User does not exist");
+          toast.error("User does not exist");
           setUserId("");
           return;
         }
@@ -93,7 +94,7 @@ function Food() {
     }
     // if (activeStep === 1) {
     //   if (foodEaten && foodEaten.length > 0) {
-    //     alert("User has already checked in for this food");
+    //     toast.error("User has already checked in for this food");
     //     setUserId("");
     //     handleReset();
     //     setFoodTab(0);
@@ -119,7 +120,7 @@ function Food() {
 
   const handleReset = async () => {
     if (foodEaten && foodEaten.length > 0) {
-      alert("User has already checked in for this food");
+      toast.error("User has already been logged");
       setUserId("");
       setFoodTab(0);
       return;
@@ -130,7 +131,12 @@ function Food() {
       });
       if (error) {
         //console.error(error);
+        toast.error("Supabase error");
+        return;
       }
+      toast.success("User logged for food successfully")
+      setActiveStep(0);
+      setFoodTab(0);
     }
     setUserId("");
     setActiveStep(0);
