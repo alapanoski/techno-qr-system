@@ -15,7 +15,7 @@ function CheckIn() {
       if (user.techno_id) {
         count++;
       }
-  })
+    });
     setNoOfCheckedIn(count);
 
     setLoading(false);
@@ -28,13 +28,15 @@ function CheckIn() {
   }
   return (
     <>
-      <div style={{
-        padding: "10px 0",
-        display: "flex",
-        flexDirection: "column",
-        gap: "10px",
-        height: "100px",
-      }}>
+      <div
+        style={{
+          padding: "10px 0",
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
+          height: "100px",
+        }}
+      >
         <h1
           style={{
             textAlign: "center",
@@ -64,7 +66,7 @@ function CheckIn() {
               <th>Team</th>
               <th>Name</th>
               <th>Phone</th>
-              <th>Email</th>
+              <th>Check In Time</th>
             </tr>
           </thead>
           <tbody>
@@ -80,7 +82,17 @@ function CheckIn() {
                 <td>{user?.designation}</td>
                 <td>{user?.name}</td>
                 <td>{user?.phone}</td>
-                <td>{user?.email}</td>
+                <td>
+                  {user?.checkin_time
+                    ? new Date(user?.checkin_time).toLocaleDateString() +
+                      ", " +
+                      new Date(user?.checkin_time).toLocaleString("en-US", {
+                        hour: "numeric",
+                        minute: "numeric",
+                        hour12: true,
+                      })
+                    : "Not Checked In"}
+                </td>
               </tr>
             ))}
           </tbody>
