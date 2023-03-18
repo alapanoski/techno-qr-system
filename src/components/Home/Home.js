@@ -12,6 +12,7 @@ function Home() {
   const [currentUser, setCurrentUser] = React.useState("Not Found");
   // const [currentUserFood, setCurrentUserFood] = React.useState([]);
   const [foodMenu, setFoodMenu] = React.useState([]);
+  const [foodLog, setFoodLog] = React.useState([]);
   const [loading1, setLoading1] = React.useState(false);
 
   async function getUsers() {
@@ -22,16 +23,26 @@ function Home() {
     console.log(users);
   }
 
+  async function getFoods() {
+    setLoading1(true);
+    const data = await SupabaseClient.from("food_menu").select("*");
+    setFoodMenu(data.data);
+    setLoading1(false);
+  }
+
+  async function getFoodLog() {
+    setLoading1(true);
+    const data = await SupabaseClient.from("food_log").select("*");
+    setFoodLog(data.data);
+    setLoading1(false);
+  }
+
   async function getID(value) {
     setLoading1(true);
     if (value?.techno_id) {
       users.forEach(async (user) => {
         if (user.name === value.name) {
           setCurrentUser(user);
-          // let temp = await SupabaseClient.from("food_log").select("*").eq("techno_id", user.techno_id).join;
-          // setCurrentUserFood(temp.data);
-          const temp = await SupabaseClient.from("food_menu").select("*");
-          setFoodMenu(temp.data);
         }
       });
     } else {
@@ -44,6 +55,8 @@ function Home() {
 
   useEffect(() => {
     getUsers();
+    getFoods();
+    getFoodLog();
   }, []);
   return (
     <>
@@ -124,13 +137,18 @@ function Home() {
               <p>
                 Check In Time:{" "}
                 <strong>
-                  {new Date(currentUser?.checkin_time).toLocaleDateString()}
-                  {" , "}
-                  {new Date(currentUser?.checkin_time).toLocaleString("en-US", {
-                    hour: "numeric",
-                    minute: "numeric",
-                    hour12: true,
-                  })}
+                  {currentUser?.checkin_time
+                    ? new Date(currentUser?.checkin_time).toLocaleDateString() +
+                      ", " +
+                      new Date(currentUser?.checkin_time).toLocaleString(
+                        "en-US",
+                        {
+                          hour: "numeric",
+                          minute: "numeric",
+                          hour12: true,
+                        }
+                      )
+                    : "Not Checked In"}
                 </strong>
               </p>
               <p>
@@ -142,6 +160,49 @@ function Home() {
               <p>
                 Points: <strong>{currentUser.points}</strong>
               </p>
+              {foodMenu.map((food, index) => {
+                return (
+                  <div
+                    key={index}
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <p>{food.name}</p>{" "}
+                    <b>
+                      {foodLog.filter(
+                        (log) =>
+                          log.food_id === food.id &&
+                          log.techno_id === currentUser.techno_id
+                      ).length > 0
+                        ? new Date(
+                            foodLog.filter(
+                              (log) =>
+                                log.food_id === food.id &&
+                                log.techno_id === currentUser.techno_id
+                            )[0].created_at
+                          ).toLocaleDateString() +
+                          ", " +
+                          new Date(
+                            foodLog.filter(
+                              (log) =>
+                                log.food_id === food.id &&
+                                log.techno_id === currentUser.techno_id
+                            )[0].created_at
+                          ).toLocaleString("en-US", {
+                            hour: "numeric",
+                            minute: "numeric",
+                            hour12: true,
+                          })
+                        : "Not Eaten"}
+                    </b>
+                  </div>
+                );
+              })}
 
               {/* <p>{JSON.stringify(currentUserFood)}</p> */}
               <div
