@@ -19,3 +19,25 @@ input {
   font-weight: 500;
   outline: none;
 }
+table
+{
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 25px;
+  text-align: left;
+}
+thead
+{
+  background-color: #588c7e;
+  color: white;
+  width: 100%;
+}
+tbody
+{
+  margin-top: 150px;
+}
+th, td
+{
+  padding: 10px;
+  border : 1px solid #dddddd;
+}
