@@ -70,11 +70,12 @@ const CheckIn = () => {
           return;
         }
         if (
-          (users.find((user) => user.id === paymentId).techno_id !== null ||users.find((user) => user.id === paymentId).techno_id !== "" ) 
+          users.find((user) => user.id === paymentId).techno_id !== null ||
+          users.find((user) => user.id === paymentId).techno_id !== ""
         ) {
           //console.log(
           //  users.find((user) => user.payment_id === paymentId).techno_id
-         // );
+          // );
           alert("User already checked in");
           setPaymentId("");
           return;
@@ -115,7 +116,7 @@ const CheckIn = () => {
 
   const handleReset = async () => {
     const { error } = await SupabaseClient.from("users")
-      .update({ techno_id: userId })
+      .update({ techno_id: userId, checkin_time: new Date.now() })
       .eq("id", paymentId);
     if (error) {
       //console.error(error);
@@ -186,9 +187,7 @@ const CheckIn = () => {
                   </div>
                   <div>
                     Name :{" "}
-                    <b>
-                      {users.find((user) => user.id === paymentId).name}
-                    </b>
+                    <b>{users.find((user) => user.id === paymentId).name}</b>
                   </div>
                 </div>
               ) : (
