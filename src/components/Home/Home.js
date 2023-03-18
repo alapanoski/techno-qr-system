@@ -25,7 +25,7 @@ function Home() {
 
   async function getFoods() {
     setLoading1(true);
-    const data = await SupabaseClient.from("food_menu").select("*");
+    const data = await SupabaseClient.from("food_menu").select("*").order("id");
     setFoodMenu(data.data);
     setLoading1(false);
   }
