@@ -198,7 +198,7 @@ function Home() {
                             minute: "numeric",
                             hour12: true,
                           })
-                        : "Not Eaten"}
+                        : "Not Taken"}
                     </b>
                   </div>
                 );
