@@ -61,6 +61,7 @@ function CheckIn() {
             <tr>
               <th>ID</th>
               <th>Techno ID</th>
+              <th>Team</th>
               <th>Name</th>
               <th>Phone</th>
               <th>Email</th>
@@ -76,6 +77,7 @@ function CheckIn() {
               >
                 <td>{user?.id}</td>
                 <td>{user?.techno_id}</td>
+                <td>{user?.designation}</td>
                 <td>{user?.name}</td>
                 <td>{user?.phone}</td>
                 <td>{user?.email}</td>
