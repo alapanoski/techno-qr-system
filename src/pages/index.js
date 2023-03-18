@@ -8,6 +8,7 @@ import { Loader } from "../components";
 import { ClipLoader } from "react-spinners";
 import { CustomTitle, SupabaseClient } from "../utils";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
 export default function Home() {
   const router = useRouter();
@@ -38,7 +39,7 @@ export default function Home() {
     });
 
     if (error?.__isAuthError == true) {
-      alert("Incorrect password");
+      toast.error("Incorrect password");
       setPassword("");
     }
   }
