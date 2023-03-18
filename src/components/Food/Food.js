@@ -22,7 +22,7 @@ function Food() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   const [foodData, setFoodData] = useState([]);
-  const steps = ["Verify User ID", "Check In"];
+  const steps = ["Verify User ID", "Log food"];
   const [loading, setLoading] = useState(true);
 
   const totalSteps = () => {
@@ -278,7 +278,7 @@ function Food() {
                     >
                       {completedSteps() === totalSteps() - 1
                         ? "Finish"
-                        : "Complete Step"}
+                        : "Next Step"}
                     </div>
                     {/* ))} */}
                   </Box>

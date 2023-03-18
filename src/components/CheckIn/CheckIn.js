@@ -225,7 +225,7 @@ const CheckIn = () => {
                 >
                   {completedSteps() === totalSteps() - 1
                     ? "Finish"
-                    : "Complete Step"}
+                    : "Next Step"}
                 </div>
                 {/* ))} */}
               </Box>
