@@ -151,6 +151,13 @@ function Home() {
                     : "Not Checked In"}
                 </strong>
               </p>
+              <p style={{
+                width: "100%",
+                fontSize: "1.3rem",
+                fontWeight: "bold",
+                textAlign: "center",
+                padding: "1rem 0",
+              }}>User Details</p>
               <p>
                 Team: <strong>{currentUser.designation}</strong>
               </p>
@@ -160,6 +167,13 @@ function Home() {
               <p>
                 Points: <strong>{currentUser.points}</strong>
               </p>
+              <p  style={{
+                width: "100%",
+                fontSize: "1.3rem",
+                fontWeight: "bold",
+                textAlign: "center",
+                padding: "1rem 0",
+              }}>Food Details</p>
               {foodMenu.map((food, index) => {
                 return (
                   <div

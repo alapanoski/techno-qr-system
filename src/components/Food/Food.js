@@ -155,7 +155,11 @@ function Food() {
           ) ? (
             ""
           ) : (
-            <div className={styles.food_heading}>No food available</div>
+            <div className={styles.food_heading} style={{
+              textAlign: "center",
+              fontSize: "1rem",
+              color: "black",
+            }}>No food available</div>
           )}
           {foodData?.map((food, index) =>
             new Date(food.time).toISOString() <= new Date().toISOString() ? (
