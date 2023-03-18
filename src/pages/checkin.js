@@ -1,51 +1,90 @@
 import { useEffect, useState } from "react";
 import SupabaseClient from "../utils/SupabaseClient";
-import {Loader } from "../components/";
+import { Loader } from "../components/";
 function CheckIn() {
   const [users, setUsers] = useState([]);
-  const [loading , setLoading] = useState(false);
+  const [noOfCheckedIn, setNoOfCheckedIn] = useState(0);
+  const [loading, setLoading] = useState(false);
   async function getUsers() {
     setLoading(true);
     const { data } = await SupabaseClient.from("users").select("*");
     setUsers(data);
+
+    let count = 0;
+    data.forEach((user) => {
+      if (user.techno_id) {
+        count++;
+      }
+  })
+    setNoOfCheckedIn(count);
+
     setLoading(false);
   }
   useEffect(() => {
     getUsers();
   }, []);
-    if (loading) {
-        return <Loader/>;
-    }
+  if (loading) {
+    return <Loader />;
+  }
   return (
-    <div style={{
+    <>
+      <div style={{
+        padding: "10px 0",
         display: "flex",
-    }}>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Techno ID</th>
-            <th>Name</th>
-            <th>Email</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr
-              key={user.id}
-              style={{
-                backgroundColor: user.techno_id ? "green" : "white",
-              }}
-            >
-              <td>{user.id}</td>
-              <td>{user?.techno_id}</td>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
+        flexDirection: "column",
+        gap: "10px",
+        height: "100px",
+      }}>
+        <h1
+          style={{
+            textAlign: "center",
+          }}
+        >
+          Check In Status
+        </h1>
+        <p
+          style={{
+            textAlign: "center",
+          }}
+        >
+          Checked In: <strong>{noOfCheckedIn}</strong>
+        </p>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+        }}
+      >
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Techno ID</th>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Email</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr
+                key={user.id}
+                style={{
+                  backgroundColor: user.techno_id ? "green" : "white",
+                }}
+              >
+                <td>{user?.id}</td>
+                <td>{user?.techno_id}</td>
+                <td>{user?.name}</td>
+                <td>{user?.phone}</td>
+                <td>{user?.email}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 }
 export default CheckIn;
