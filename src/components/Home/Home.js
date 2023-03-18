@@ -9,8 +9,8 @@ import { Autocomplete, TextField } from "@mui/material";
 function Home() {
   const [name, setName] = React.useState("");
   const [users, setUsers] = React.useState([]);
-  const [currentUser, setCurrentUser] = React.useState({});
- // const [currentUserFood, setCurrentUserFood] = React.useState([]);
+  const [currentUser, setCurrentUser] = React.useState("Not Found");
+  // const [currentUserFood, setCurrentUserFood] = React.useState([]);
   const [foodMenu, setFoodMenu] = React.useState([]);
   const [loading1, setLoading1] = React.useState(false);
 
@@ -30,10 +30,10 @@ function Home() {
           setCurrentUser(user);
           // let temp = await SupabaseClient.from("food_log").select("*").eq("techno_id", user.techno_id).join;
           // setCurrentUserFood(temp.data);
-         const temp = await SupabaseClient.from("food_menu").select("*");
-         setFoodMenu(temp.data);
+          const temp = await SupabaseClient.from("food_menu").select("*");
+          setFoodMenu(temp.data);
         }
-      })
+      });
     } else {
       setCurrentUser("Not Found");
     }
@@ -122,6 +122,18 @@ function Home() {
                 Name: <strong>{currentUser.name}</strong>
               </p>
               <p>
+                Check In Time:{" "}
+                <strong>
+                  {new Date(currentUser?.checkin_time).toLocaleDateString()}
+                  {" , "}
+                  {new Date(currentUser?.checkin_time).toLocaleString("en-US", {
+                    hour: "numeric",
+                    minute: "numeric",
+                    hour12: true,
+                  })}
+                </strong>
+              </p>
+              <p>
                 Team: <strong>{currentUser.designation}</strong>
               </p>
               <p>
@@ -130,14 +142,17 @@ function Home() {
               <p>
                 Points: <strong>{currentUser.points}</strong>
               </p>
+
               {/* <p>{JSON.stringify(currentUserFood)}</p> */}
-              <div style={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-              }}>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
                 {/* {foodMenu.map((food, index) => {
                     return (
                       <div
