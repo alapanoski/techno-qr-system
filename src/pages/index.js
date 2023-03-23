@@ -29,6 +29,7 @@ export default function Home() {
   const [pageid, setPageid] = useState("");
 
   useEffect(() => {
+    console.log("User useffect", User);
     if (User) {
       router.push("/dashboard");
     }
