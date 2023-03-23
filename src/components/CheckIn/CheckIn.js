@@ -22,6 +22,7 @@ const CheckIn = () => {
   const [users, setUsers] = React.useState([]);
   const [paymentId, setPaymentId] = React.useState("");
   const [userId, setUserId] = React.useState("");
+  const [registerList, setRegisterList] = React.useState([]);
 
   async function fetchUsers() {
     const { data, error } = await SupabaseClient.from("users").select();
@@ -29,6 +30,15 @@ const CheckIn = () => {
     console.log(data);
     setUsers(data);
   }
+
+  async function fetchRegisterList() {
+    const { data, error } = await SupabaseClient.from("register").select();
+    //console.log(error);
+    console.log(data);
+    setRegisterList(data);
+  }
+
+
     const [age, setAge] = React.useState('');
 
   const handleChange = (event) => {
@@ -36,6 +46,7 @@ const CheckIn = () => {
   };
   useEffect(() => {
     fetchUsers();
+    fetchRegisterList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const totalSteps = () => {
@@ -75,12 +86,16 @@ const CheckIn = () => {
       if (!paymentId) {
         toast.error("Please enter a valid payment id");
       } else {
-        if (users.find((user) => user.id === paymentId) === undefined) {
+        if (registerList.find((registerEntry) => registerEntry.bar_code === paymentId) === undefined) {
           toast.error("Payment ID does not exist");
+          console.log("No boom")
           setPaymentId("");
           return;
         }
-        if (users.find((user) => user.id === paymentId).techno_id !== null) {
+        else {
+          console.log("boom")
+        }
+        if (registerList.find((registerEntry) => registerEntry.bar_code === paymentId).band_id !== null) {
           //console.log(
           //  users.find((user) => user.payment_id === paymentId).techno_id
           // );
@@ -124,9 +139,9 @@ const CheckIn = () => {
 
   const handleReset = async () => {
     let time=new Date().toISOString();
-    const { error } = await SupabaseClient.from("users")
-      .update({ techno_id: userId, checkin_time:time })
-      .eq("id", paymentId);
+    const { error } = await SupabaseClient.from("register")
+      .update({ band_id: userId, check_in_time:time })
+      .eq("bar_code", paymentId);
     if (error) {
       console.log(error);
       toast.error("Error in checking in user");
@@ -193,16 +208,7 @@ const CheckIn = () => {
                 />
               ) : activeStep === 2 ? (
                 <div className={styles.confirm}>
-                  <div>
-                    Payment ID: <b>{paymentId}</b>
-                  </div>
-                  <div>
-                    Techno ID: <b>{userId}</b>
-                  </div>
-                  <div>
-                    Name :{" "}
-                    <b>{users.find((user) => user.id === paymentId).name}</b>
-                  </div>
+                  I don't know what goes here
                 </div>
               ) : (
                 <div>Something went wrong</div>
