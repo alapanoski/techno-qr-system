@@ -28,14 +28,13 @@ export default function Home() {
   const [loading2, setLoading2] = useState(false);
   const [pageid, setPageid] = useState("");
 
-  useEffect(() => {
-    console.log("User useffect", User);
-    if (User) {
-      router.push("/dashboard");
-    }
-    // console.log(User);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [User]);
+  // useEffect(() => {
+  //   if (User) {
+  //     router.push("/dashboard");
+  //   }
+  //   // console.log(User);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [User]);
 
   // useEffect(() => {
   //   if (navigator.userAgent.indexOf("Chrome") === -1) {
@@ -53,8 +52,9 @@ export default function Home() {
 
     if (error?.__isAuthError == true) {
       toast.error("Incorrect password");
-      setPassword("");
     }
+
+    setPassword("");
   }
 
   async function getEvents() {
@@ -65,7 +65,6 @@ export default function Home() {
   useEffect(() => {
     getEvents();
   }, []);
-
 
   // async function signInWithGoogle() {
   //   setLoading1(true);
@@ -92,17 +91,6 @@ export default function Home() {
       <div className={styles.login_container}>
         <Image src={logo} alt="" width={300} />
 
-        <div className="grid-col ">
-          {events?.map((food) => (
-            <EventCard
-              key={food.id}
-              id={food.id}
-              eventname={food.event_name}
-              setEventTab={setEventTab}
-            />
-          ))}
-        </div>
-        <p>Event Selected : {eventTab}</p>
         <div className={styles.login_form}>
           <input
             type="password"
@@ -122,6 +110,31 @@ export default function Home() {
             Submit
           </div>
         </div>
+        {User ? (
+          <>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
+                gap: "2rem",
+                justifyContent: "center",
+              }}
+            >
+              {events?.map((food) => (
+                <EventCard
+                  key={food.id}
+                  id={food.id}
+                  eventname={food.event_name}
+                  setEventTab={setEventTab}
+                />
+              ))}
+            </div>
+            <p>Event Selected : {eventTab}</p>
+          </>
+        ) : (
+          <></>
+        )}
 
         {/* <h2
           style={{
