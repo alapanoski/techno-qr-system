@@ -8,6 +8,11 @@ import Typography from "@mui/material/Typography";
 import styles from "./CheckIn.module.css";
 import React, { useEffect } from "react";
 import { SupabaseClient } from "../../utils";
+import { toast } from "react-hot-toast";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 const steps = ["Verify Payment Details", "Assign User ID", "Confirm User"];
 
@@ -17,14 +22,31 @@ const CheckIn = () => {
   const [users, setUsers] = React.useState([]);
   const [paymentId, setPaymentId] = React.useState("");
   const [userId, setUserId] = React.useState("");
+  const [registerList, setRegisterList] = React.useState([]);
 
   async function fetchUsers() {
     const { data, error } = await SupabaseClient.from("users").select();
-    console.log(error);
+    //console.log(error);
+    console.log(data);
     setUsers(data);
   }
+
+  async function fetchRegisterList() {
+    const { data, error } = await SupabaseClient.from("register").select();
+    //console.log(error);
+    console.log(data);
+    setRegisterList(data);
+  }
+
+
+    const [age, setAge] = React.useState('');
+
+  const handleChange = (event) => {
+    setAge(event.target.value );
+  };
   useEffect(() => {
     fetchUsers();
+    fetchRegisterList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const totalSteps = () => {
@@ -62,20 +84,22 @@ const CheckIn = () => {
   const handleComplete = async () => {
     if (activeStep === 0) {
       if (!paymentId) {
-        alert("Please enter a valid payment id");
+        toast.error("Please enter a valid payment id");
       } else {
-        if (users.find((user) => user.payment_id === paymentId) === undefined) {
-          alert("Payment ID does not exist");
+        if (registerList.find((registerEntry) => registerEntry.bar_code === paymentId) === undefined) {
+          toast.error("Payment ID does not exist");
+          console.log("No boom")
           setPaymentId("");
           return;
         }
-        if (
-          users.find((user) => user.payment_id === paymentId).techno_id !== ""
-        ) {
-          console.log(
-            users.find((user) => user.payment_id === paymentId).techno_id
-          );
-          alert("User already checked in");
+        else {
+          console.log("boom")
+        }
+        if (registerList.find((registerEntry) => registerEntry.bar_code === paymentId).band_id !== null) {
+          //console.log(
+          //  users.find((user) => user.payment_id === paymentId).techno_id
+          // );
+          toast.error("User already checked in");
           setPaymentId("");
           return;
         }
@@ -87,9 +111,9 @@ const CheckIn = () => {
     }
     if (activeStep === 1) {
       if (users.filter((user) => user.techno_id === userId).length > 0) {
-        alert("User already exists");
+        toast.error("User already exists");
       } else if (!userId) {
-        alert("Please enter a valid user id");
+        toast.error("Please enter a valid user id");
       } else {
         const newCompleted = completed;
         newCompleted[activeStep] = true;
@@ -114,12 +138,16 @@ const CheckIn = () => {
   };
 
   const handleReset = async () => {
-    const { error } = await SupabaseClient.from("users")
-      .update({ techno_id: userId })
-      .eq("payment_id", paymentId);
+    let time=new Date().toISOString();
+    const { error } = await SupabaseClient.from("register")
+      .update({ band_id: userId, check_in_time:time })
+      .eq("bar_code", paymentId);
     if (error) {
-      console.error(error);
+      console.log(error);
+      toast.error("Error in checking in user");
+      return;
     }
+    toast.success("User checked in successfully");
     setPaymentId("");
     setUserId("");
     setActiveStep(0);
@@ -149,6 +177,8 @@ const CheckIn = () => {
             </Step>
           ))}
         </Stepper>
+        
+       
         <div>
           {allStepsCompleted() ? (
             ""
@@ -178,18 +208,7 @@ const CheckIn = () => {
                 />
               ) : activeStep === 2 ? (
                 <div className={styles.confirm}>
-                  <div>
-                    Payment ID: <b>{paymentId}</b>
-                  </div>
-                  <div>
-                    Techno ID: <b>{userId}</b>
-                  </div>
-                  <div>
-                    Name :{" "}
-                    <b>
-                      {users.find((user) => user.payment_id === paymentId).name}
-                    </b>
-                  </div>
+                  I don't know what goes here
                 </div>
               ) : (
                 <div>Something went wrong</div>
@@ -223,7 +242,7 @@ const CheckIn = () => {
                 >
                   {completedSteps() === totalSteps() - 1
                     ? "Finish"
-                    : "Complete Step"}
+                    : "Next Step"}
                 </div>
                 {/* ))} */}
               </Box>

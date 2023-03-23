@@ -7,6 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect } from "react";
+import { toast } from "react-hot-toast";
 import { SupabaseClient } from "../../utils";
 import Scanner from "../Scanner/Scanner";
 import styles from "./AddPoints.module.css";
@@ -61,17 +62,18 @@ const AddPoints = () => {
   const handleComplete = async () => {
     if (activeStep === 0) {
       if (!userId) {
-        alert("Please enter a valid user id");
+        toast.error("Please enter a valid user id");
       } else {
         if (users.find((user) => user.techno_id === userId) === undefined) {
-          alert("User does not exist");
+          toast.error("User does not exist");
           setUserId("");
           return;
         }
         const { data, error } = await SupabaseClient.from("users")
           .select()
           .eq("techno_id", userId);
-        if (error) console.log(error);
+        // if (error) 
+        // console.log(error);
         setCurrentUser(data[0]);
       }
     }
@@ -91,9 +93,15 @@ const AddPoints = () => {
     const { data, error } = await SupabaseClient.from("users")
       .update(currentUser)
       .eq("techno_id", currentUser.techno_id);
-    console.log(error);
+    //console.log(error);
+    if(error) {
+      toast.error("Error adding points");
+      return;
+    }
+    toast.success("Points added successfully");
     setActiveStep(0);
     setCompleted({});
+    setUserId("")
   };
 
   async function addPoints() {
@@ -222,7 +230,7 @@ const AddPoints = () => {
                   >
                     {completedSteps() === totalSteps() - 1
                       ? "Finish"
-                      : "Complete Step"}
+                      : "Next Step"}
                   </div>
                   {/* ))} */}
                 </Box>

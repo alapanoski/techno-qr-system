@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import FoodCard from "./FoodCard/FoodCard";
-import styles from "./Food.module.css";
+
+import styles from "./DynamicCheckin.module.css";
 import supabaseClient from "../../utils/SupabaseClient";
 import Scanner from "../Scanner/Scanner";
 import { Box } from "@mui/system";
@@ -14,14 +13,11 @@ import {
   Typography,
 } from "@mui/material";
 import { toast } from "react-hot-toast";
+import FoodCard from "../Food/FoodCard/FoodCard";
 
-function Food() {
-
-  const router = useRouter()
-  
+function DynamicCheckin() {
   const [foodTab, setFoodTab] = React.useState(0);
   const [users, setUsers] = useState([]);
-  const [registerList, setRegisterList] = React.useState([]);
   const [userId, setUserId] = useState("");
   const [foodEaten, setFoodEaten] = useState();
   const [activeStep, setActiveStep] = React.useState(0);
@@ -29,14 +25,12 @@ function Food() {
   const [foodData, setFoodData] = useState([]);
   const steps = ["Verify User ID", "Log food"];
   const [loading, setLoading] = useState(true);
-  const {id} = router.query
 
   const totalSteps = () => {
     return steps.length;
   };
   async function getFoodMenu() {
     const { data, error } = await supabaseClient.from("food_menu").select();
-    console.log(data)
     setFoodData(data);
     setLoading(false);
   }
@@ -45,16 +39,9 @@ function Food() {
     setUsers(data);
     setLoading(false);
   }
-  async function fetchRegisterList() {
-    const { data, error } = await supabaseClient.from("register").select();
-    //console.log(error);
-    console.log(data);
-    setRegisterList(data);
-  }
   useEffect(() => {
     getFoodMenu();
     getUsers();
-    fetchRegisterList();
   }, []);
   const completedSteps = () => {
     return Object.keys(completed).length;
@@ -89,7 +76,7 @@ function Food() {
       if (!userId) {
         toast.error("Please enter a valid user id");
       } else {
-        if (registerList.find((registerEntry) => registerEntry.band_id === userId) === undefined) {
+        if (users.find((user) => user.techno_id === userId) === undefined) {
           toast.error("User does not exist");
           setUserId("");
           return;
@@ -97,10 +84,8 @@ function Food() {
         const { data, error } = await supabaseClient
           .from("food_log")
           .select()
-          .eq("user_id", registerList.find((registerEntry) => registerEntry.band_id === userId).user_id)
-          .eq("food_id", foodData.find((food) => food.id === foodTab).id)
-          .eq("event_id", id);
-          console.log({error, data})
+          .eq("techno_id", userId)
+          .eq("food_id", foodData.find((food) => food.id === foodTab).id);
         setFoodEaten(data);
         const newCompleted = completed;
         newCompleted[activeStep] = true;
@@ -141,16 +126,15 @@ function Food() {
       setFoodTab(0);
     } else {
       const { error } = await supabaseClient.from("food_log").insert({
-        user_id: registerList.find((registerEntry) => registerEntry.band_id === userId).user_id,
+        techno_id: userId,
         food_id: foodData.find((food) => food.id === foodTab).id,
-        event_id: id
       });
       if (error) {
-        console.error(error);
+        //console.error(error);
         toast.error("Supabase error");
         return;
       }
-      toast.success("User logged for food successfully")
+      toast.success("User logged for food successfully");
       setActiveStep(0);
       setFoodTab(0);
     }
@@ -166,14 +150,35 @@ function Food() {
       <div className={styles.food_heading}>Food</div>
       {foodTab == 0 && (
         <div className={styles.food_cards_container}>
-          {foodData?.map((food, index) => (
-            <FoodCard
-              key={food.id}
-              food={food}
-              foodTab={foodTab}
-              setFoodTab={setFoodTab}
-            />
-          ))}
+          {foodData.find(
+            (food) =>
+              new Date(food.time).toISOString() <= new Date().toISOString()
+          ) ? (
+            ""
+          ) : (
+            <div
+              className={styles.food_heading}
+              style={{
+                textAlign: "center",
+                fontSize: "1rem",
+                color: "black",
+              }}
+            >
+              No food available
+            </div>
+          )}
+          {foodData?.map((food, index) =>
+            new Date(food.time).toISOString() <= new Date().toISOString() ? (
+              <FoodCard
+                key={food.id}
+                food={food}
+                foodTab={foodTab}
+                setFoodTab={setFoodTab}
+              />
+            ) : (
+              ""
+            )
+          )}
         </div>
       )}
       {foodTab != 0 && (
@@ -296,4 +301,4 @@ function Food() {
     </div>
   );
 }
-export default Food;
+export default DynamicCheckin;

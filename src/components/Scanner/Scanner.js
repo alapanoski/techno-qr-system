@@ -4,20 +4,28 @@ import styles from "./Scanner.module.css";
 
 function Scanner({ qr_pay, setUserId, userId, setPaymentId, paymentId }) {
   const [result, setResult] = useState("");
+  // const [torchOn, setTorchOn] = useState(false);
+
   const { ref } = useZxing({
-    constraints: { video: { facingMode: "environment" } },
+    constraints: {
+      // torch: {
+      //   on: torchOn,
+      //   off: !torchOn,
+      //   isOn: () => torchOn,
+      //   isAvailable: true
+      // },
+      video: { facingMode: "environment" },
+    },
     onResult(result) {
       setResult(result.getText());
       if (qr_pay) {
         setPaymentId(result.getText());
       } else {
-
         if (
           result.getText().split("/")[
             result.getText().split("/").length - 1
           ] !== ""
         )
-
           setUserId(
             result.getText().split("/")[result.getText().split("/").length - 1]
           );
@@ -29,22 +37,25 @@ function Scanner({ qr_pay, setUserId, userId, setPaymentId, paymentId }) {
     },
     onError(error) {
       if (!(error.name === "NotFoundException")) {
-        console.log(error);
+        //console.log(error);
       }
     },
   });
 
   return (
     <div className={styles.scan_container}>
+      {/* <button onClick={()=>{
+        setTorchOn((prev) => !prev);
+      }}>Torch</button> */}
       <div className={styles.scan}>
         <div className={styles.scan_heading}>
           Scan the {qr_pay ? "Payment" : "Band"} QR code
         </div>
         <video ref={ref} />
       </div>
-      <div className={styles.scan_heading_or}>OR</div>
+      {/* <div className={styles.scan_heading_or}>OR</div> */}
       <div className={styles.text_input}>
-        <div className={styles.scan_heading}>Enter the code manually</div>
+        {/* <div className={styles.scan_heading}>Enter the code manually</div> */}
         <input
           className={styles.input}
           type="text"
