@@ -33,4 +33,4 @@ function Dashboard() {
   );
 }
 
-export default ProtectedRoute(Dashboard, "volunteer");
+export default ProtectedRoute(Dashboard);

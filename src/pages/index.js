@@ -22,24 +22,25 @@ export default function Home() {
   const [loading1, setLoading1] = useState(false);
   const [browser, setBrowser] = useState(false);
   const [eventTab, setEventTab] = useState("");
+  // const [browser, setBrowser] = useState(false);
   const [password, setPassword] = useState("");
   const [foodTab, setFoodTab] = React.useState(0);
   const [loading2, setLoading2] = useState(false);
   const [pageid, setPageid] = useState("");
 
   useEffect(() => {
-    if (User?.role === "volunteer") {
-      router.push(`/${eventTab}`);
+    if (User) {
+      router.push("/dashboard");
     }
     // console.log(User);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [User]);
 
-  useEffect(() => {
-    if (navigator.userAgent.indexOf("Chrome") === -1) {
-      setBrowser(true);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (navigator.userAgent.indexOf("Chrome") === -1) {
+  //     setBrowser(true);
+  //   }
+  // }, []);
 
   async function signInWithAltPassword() {
     //console.log("clicked");
@@ -47,6 +48,7 @@ export default function Home() {
       email: "iedcmec@mec.ac.in",
       password: password,
     });
+    setUser(data?.user);
 
     if (error?.__isAuthError == true) {
       toast.error("Incorrect password");
@@ -63,26 +65,26 @@ export default function Home() {
     getEvents();
   }, []);
 
-  async function signInWithGoogle() {
-    setLoading1(true);
-    const { data, error } = await SupabaseClient.auth.signInWithOAuth({
-      provider: "google",
-    });
-  }
 
+  // async function signInWithGoogle() {
+  //   setLoading1(true);
+  //   const { data, error } = await SupabaseClient.auth.signInWithOAuth({
+  //     provider: "google",
+  //   });
+  // }
   if (loading) return <Loader />;
-  if (browser)
-    return (
-      <>
-        <CustomTitle title="Login" />
-        <div className={styles.login_container}>
-          <Image src={logo} alt="" width={300} />
-          <div className={styles.login_warning}>
-            Please use Google Chrome to use this website.
-          </div>
-        </div>
-      </>
-    );
+  // if (browser)
+  //   return (
+  //     <>
+  //       <CustomTitle title="Login" />
+  //       <div className={styles.login_container}>
+  //         <Image src={logo} alt="" width={300} />
+  //         <div className={styles.login_warning}>
+  //           Please use Google Chrome to use this website.
+  //         </div>
+  //       </div>
+  //     </>
+  //   );
   return (
     <>
       <CustomTitle title="Login" />
