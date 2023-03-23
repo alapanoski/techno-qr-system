@@ -4,20 +4,28 @@ import styles from "./Scanner.module.css";
 
 function Scanner({ qr_pay, setUserId, userId, setPaymentId, paymentId }) {
   const [result, setResult] = useState("");
+  // const [torchOn, setTorchOn] = useState(false);
+
   const { ref } = useZxing({
-    constraints: { video: { facingMode: "environment" } },
+    constraints: {
+      // torch: {
+      //   on: torchOn,
+      //   off: !torchOn,
+      //   isOn: () => torchOn,
+      //   isAvailable: true
+      // },
+      video: { facingMode: "environment" },
+    },
     onResult(result) {
       setResult(result.getText());
       if (qr_pay) {
         setPaymentId(result.getText());
       } else {
-
         if (
           result.getText().split("/")[
             result.getText().split("/").length - 1
           ] !== ""
         )
-
           setUserId(
             result.getText().split("/")[result.getText().split("/").length - 1]
           );
@@ -36,6 +44,9 @@ function Scanner({ qr_pay, setUserId, userId, setPaymentId, paymentId }) {
 
   return (
     <div className={styles.scan_container}>
+      {/* <button onClick={()=>{
+        setTorchOn((prev) => !prev);
+      }}>Torch</button> */}
       <div className={styles.scan}>
         <div className={styles.scan_heading}>
           Scan the {qr_pay ? "Payment" : "Band"} QR code
