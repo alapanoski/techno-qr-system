@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import FoodCard from "./FoodCard/FoodCard";
-import styles from "./Food.module.css";
+
+import styles from "./DynamicCheckin.module.css";
 import supabaseClient from "../../utils/SupabaseClient";
 import Scanner from "../Scanner/Scanner";
 import { Box } from "@mui/system";
@@ -13,8 +13,9 @@ import {
   Typography,
 } from "@mui/material";
 import { toast } from "react-hot-toast";
+import FoodCard from "../Food/FoodCard/FoodCard";
 
-function Food() {
+function DynamicCheckin() {
   const [foodTab, setFoodTab] = React.useState(0);
   const [users, setUsers] = useState([]);
   const [userId, setUserId] = useState("");
@@ -30,7 +31,6 @@ function Food() {
   };
   async function getFoodMenu() {
     const { data, error } = await supabaseClient.from("food_menu").select();
-    console.log(data)
     setFoodData(data);
     setLoading(false);
   }
@@ -134,7 +134,7 @@ function Food() {
         toast.error("Supabase error");
         return;
       }
-      toast.success("User logged for food successfully")
+      toast.success("User logged for food successfully");
       setActiveStep(0);
       setFoodTab(0);
     }
@@ -156,11 +156,16 @@ function Food() {
           ) ? (
             ""
           ) : (
-            <div className={styles.food_heading} style={{
-              textAlign: "center",
-              fontSize: "1rem",
-              color: "black",
-            }}>No food available</div>
+            <div
+              className={styles.food_heading}
+              style={{
+                textAlign: "center",
+                fontSize: "1rem",
+                color: "black",
+              }}
+            >
+              No food available
+            </div>
           )}
           {foodData?.map((food, index) =>
             new Date(food.time).toISOString() <= new Date().toISOString() ? (
@@ -296,4 +301,4 @@ function Food() {
     </div>
   );
 }
-export default Food;
+export default DynamicCheckin;
