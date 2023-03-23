@@ -9,6 +9,10 @@ import styles from "./CheckIn.module.css";
 import React, { useEffect } from "react";
 import { SupabaseClient } from "../../utils";
 import { toast } from "react-hot-toast";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 const steps = ["Verify Payment Details", "Assign User ID", "Confirm User"];
 
@@ -34,6 +38,12 @@ const CheckIn = () => {
     setRegisterList(data);
   }
 
+
+    const [age, setAge] = React.useState('');
+
+  const handleChange = (event) => {
+    setAge(event.target.value );
+  };
   useEffect(() => {
     fetchUsers();
     fetchRegisterList();
@@ -167,6 +177,8 @@ const CheckIn = () => {
             </Step>
           ))}
         </Stepper>
+        
+       
         <div>
           {allStepsCompleted() ? (
             ""

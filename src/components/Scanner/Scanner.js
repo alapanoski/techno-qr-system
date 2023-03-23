@@ -53,9 +53,9 @@ function Scanner({ qr_pay, setUserId, userId, setPaymentId, paymentId }) {
         </div>
         <video ref={ref} />
       </div>
-      <div className={styles.scan_heading_or}>OR</div>
+      {/* <div className={styles.scan_heading_or}>OR</div> */}
       <div className={styles.text_input}>
-        <div className={styles.scan_heading}>Enter the code manually</div>
+        {/* <div className={styles.scan_heading}>Enter the code manually</div> */}
         <input
           className={styles.input}
           type="text"
