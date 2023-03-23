@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import FoodCard from "./FoodCard/FoodCard";
 import styles from "./Food.module.css";
 import supabaseClient from "../../utils/SupabaseClient";
@@ -15,6 +16,9 @@ import {
 import { toast } from "react-hot-toast";
 
 function Food() {
+
+  const router = useRouter()
+  
   const [foodTab, setFoodTab] = React.useState(0);
   const [users, setUsers] = useState([]);
   const [registerList, setRegisterList] = React.useState([]);
@@ -25,6 +29,7 @@ function Food() {
   const [foodData, setFoodData] = useState([]);
   const steps = ["Verify User ID", "Log food"];
   const [loading, setLoading] = useState(true);
+  const {id} = router.query
 
   const totalSteps = () => {
     return steps.length;
@@ -93,7 +98,8 @@ function Food() {
           .from("food_log")
           .select()
           .eq("user_id", registerList.find((registerEntry) => registerEntry.band_id === userId).user_id)
-          .eq("food_id", foodData.find((food) => food.id === foodTab).id);
+          .eq("food_id", foodData.find((food) => food.id === foodTab).id)
+          .eq("event_id", id);
           console.log({error, data})
         setFoodEaten(data);
         const newCompleted = completed;
@@ -137,6 +143,7 @@ function Food() {
       const { error } = await supabaseClient.from("food_log").insert({
         user_id: registerList.find((registerEntry) => registerEntry.band_id === userId).user_id,
         food_id: foodData.find((food) => food.id === foodTab).id,
+        event_id: id
       });
       if (error) {
         console.error(error);
