@@ -49,3 +49,14 @@ th, td
   gap: 2rem;
  
 }
+.grid-row{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 2rem;
+}
+.grid-col
+{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 1rem;
+}

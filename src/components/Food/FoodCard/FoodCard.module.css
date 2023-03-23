@@ -32,3 +32,15 @@
 .check_in_btn:hover {
   background-color: #3e7792;
 }
+@media screen and (max-width: 620px) {
+  .food_card {
+    width: 150px;
+  }
+  .food_card_title {
+    font-size: 14px;
+  }
+  .check_in_btn {
+    font-size: 16px;
+  }
+}
+  

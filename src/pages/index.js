@@ -18,6 +18,7 @@ import EventCard from "../components/EventCard/EventCard";
 export default function Home() {
   const router = useRouter();
   const { User, setUser, loading } = useContext(UserContext);
+  const [events, setEvents] = useState([]);
   const [loading1, setLoading1] = useState(false);
   const [browser, setBrowser] = useState(false);
   const [eventTab, setEventTab] = useState("");
@@ -30,7 +31,7 @@ export default function Home() {
     if (User?.role === "volunteer") {
       router.push(`/${eventTab}`);
     }
-    //console.log(User);
+    // console.log(User);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [User]);
 
@@ -52,6 +53,15 @@ export default function Home() {
       setPassword("");
     }
   }
+
+  async function getEvents() {
+    const { data, error } = await SupabaseClient.from("event_list").select();
+    setEvents(data);
+    console.log(data);
+  }
+  useEffect(() => {
+    getEvents();
+  }, []);
 
   async function signInWithGoogle() {
     setLoading1(true);
@@ -78,29 +88,18 @@ export default function Home() {
       <CustomTitle title="Login" />
       <div className={styles.login_container}>
         <Image src={logo} alt="" width={300} />
-        <div className="flex flex-row ">
-          <EventCard
-            eventname={"Workshop"}
-            id={"1234"}
-            setEventTab={setEventTab}
-          />
-          <EventCard
-            eventname={"Workshop"}
-            id={"1234"}
-            setEventTab={setEventTab}
-          />
-          <EventCard
-            eventname={"Workshop"}
-            id={"1234"}
-            setEventTab={setEventTab}
-          />
-          <EventCard
-            eventname={"Workshop"}
-            id={"1234"}
-            setEventTab={setEventTab}
-          />
-        </div>
 
+        <div className="grid-col ">
+          {events?.map((food) => (
+            <EventCard
+              key={food.id}
+              id={food.id}
+              eventname={food.event_name}
+              setEventTab={setEventTab}
+            />
+          ))}
+        </div>
+        <p>Event Selected : {eventTab}</p>
         <div className={styles.login_form}>
           <input
             type="password"

@@ -1,5 +1,5 @@
 .food_card {
-  width: auto;
+  width: 200px;
   background-color: #04364f;
   border-radius: 10px;
 
@@ -13,8 +13,8 @@
 
 .food_card_title {
   margin-top: 20px;
-  font-size: 24px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 400;
   color: white;
 }
 
@@ -32,3 +32,4 @@
 .check_in_btn:hover {
   background-color: #3e7792;
 }
+
