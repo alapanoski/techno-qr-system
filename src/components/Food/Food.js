@@ -35,7 +35,7 @@ function Food() {
     return steps.length;
   };
   async function getFoodMenu() {
-    const { data, error } = await supabaseClient.from("food_menu").select();
+    const { data, error } = await supabaseClient.from("food_menu").select().eq("event_id", id);
     console.log(data)
     setFoodData(data);
     setLoading(false);
@@ -55,7 +55,7 @@ function Food() {
     getFoodMenu();
     getUsers();
     fetchRegisterList();
-  }, []);
+  }, [id]);
   const completedSteps = () => {
     return Object.keys(completed).length;
   };
@@ -152,7 +152,7 @@ function Food() {
       }
       toast.success("User logged for food successfully")
       setActiveStep(0);
-      setFoodTab(0);
+      // setFoodTab(0);
     }
     setUserId("");
     setActiveStep(0);
@@ -228,10 +228,10 @@ function Food() {
                         Food already checked in at{" "}
                         <b>
                           {new Date(
-                            foodEaten[0].created_at
+                            foodEaten[0].time_stamp
                           ).toLocaleDateString()}
                           {" , "}
-                          {new Date(foodEaten[0].created_at).toLocaleString(
+                          {new Date(foodEaten[0].time_stamp).toLocaleString(
                             "en-US",
                             { hour: "numeric", minute: "numeric", hour12: true }
                           )}

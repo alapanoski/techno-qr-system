@@ -92,49 +92,49 @@ export default function Home() {
         <Image src={logo} alt="" width={300} />
 
         <div className={styles.login_form}>
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-          />
-          <div
-            onClick={signInWithAltPassword}
-            className={styles.login_button}
-            style={{
-              cursor: "pointer",
-            }}
-          >
-            Submit
-          </div>
+          {User ? (
+            <>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  gap: "2rem",
+                  justifyContent: "center",
+                }}
+              >
+                {events?.map((food) => (
+                  <EventCard
+                    key={food.id}
+                    id={food.id}
+                    eventname={food.event_name}
+                    setEventTab={setEventTab}
+                  />
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+              />
+              <div
+                onClick={signInWithAltPassword}
+                className={styles.login_button}
+                style={{
+                  cursor: "pointer",
+                }}
+              >
+                Submit
+              </div>
+            </>
+          )}
         </div>
-        {User ? (
-          <>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                flexWrap: "wrap",
-                gap: "2rem",
-                justifyContent: "center",
-              }}
-            >
-              {events?.map((food) => (
-                <EventCard
-                  key={food.id}
-                  id={food.id}
-                  eventname={food.event_name}
-                  setEventTab={setEventTab}
-                />
-              ))}
-            </div>
-            <p>Event Selected : {eventTab}</p>
-          </>
-        ) : (
-          <></>
-        )}
 
         {/* <h2
           style={{
