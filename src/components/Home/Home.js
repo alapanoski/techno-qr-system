@@ -5,8 +5,12 @@ import styles from "../../styles/Home.module.css";
 import logo from "../../assets/logo.png";
 import { SupabaseClient } from "../../utils";
 import { Autocomplete, TextField } from "@mui/material";
+import { useRouter } from "next/router";
 
 function Home() {
+ const router = useRouter();
+  const { id } = router.query;
+
   const [name, setName] = React.useState("");
   const [users, setUsers] = React.useState([]);
   const [registerList, setRegisterList] = React.useState([]);
@@ -26,7 +30,8 @@ function Home() {
 
   async function getRegisterList() {
     setLoading1(true);
-    const data = await SupabaseClient.from("register").select("*");
+    const data = await SupabaseClient.from("register").select();
+    console.log(data)
     setLoading1(false)
     console.log(registerList)
   }
@@ -140,10 +145,10 @@ function Home() {
               <p>
                 Name: <strong>{currentUser.name}</strong>
               </p>
-              <p>{JSON.stringify(currentUser)}</p>
               <p>Technical Workshop: <strong>{currentUser.technical_workshop_topic}</strong></p>
               <p>Non Technical Workshop: <strong>{currentUser.non_technical_workshop_topic}</strong></p>
               <p>Ticket Number: <strong>{currentUser.ticket_number}</strong></p>
+              <p>Checked in: <strong>{JSON.stringify(registerList)}</strong></p>
               <p  style={{
                 width: "100%",
                 fontSize: "1.3rem",
