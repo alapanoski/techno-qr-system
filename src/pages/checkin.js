@@ -3,16 +3,24 @@ import SupabaseClient from "../utils/SupabaseClient";
 import { Loader } from "../components/";
 function CheckIn() {
   const [users, setUsers] = useState([]);
+  const [registerList, setRegisterList] = useState([])
   const [noOfCheckedIn, setNoOfCheckedIn] = useState(0);
   const [loading, setLoading] = useState(false);
   async function getUsers() {
     setLoading(true);
-    const { data } = await SupabaseClient.from("users").select("*");
+    const { data } = await SupabaseClient.from("users").select('*');
     setUsers(data);
+    setLoading(false);
+  }
 
+  async function getRegisterList() {
+    setLoading(true);
+    const { data } = await SupabaseClient.from("register").select("*, users(*)");
+    setRegisterList(data);
     let count = 0;
-    data.forEach((user) => {
-      if (user.techno_id) {
+    console.log(data);
+    data?.forEach((user) => {
+      if (user.band_id) {
         count++;
       }
     });
@@ -22,12 +30,14 @@ function CheckIn() {
   }
   useEffect(() => {
     getUsers();
+    getRegisterList();
   }, []);
   if (loading) {
     return <Loader />;
   }
   return (
     <>
+    <p>{JSON.stringify(registerList)}</p>
       <div
         style={{
           padding: "10px 0",
@@ -62,15 +72,16 @@ function CheckIn() {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Techno ID</th>
-              <th>Team</th>
+              <th>Band ID</th>
               <th>Name</th>
-              <th>Phone</th>
-              <th>Check In Time</th>
+              <th>Tech Work</th>
+              <th>Non Tech Work</th>
+              <th>Food food_preference</th>
+              <th>Check in time</th>
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {registerList.map((user) => (
               <tr
                 key={user.id}
                 style={{
@@ -78,15 +89,16 @@ function CheckIn() {
                 }}
               >
                 <td>{user?.id}</td>
-                <td>{user?.techno_id}</td>
-                <td>{user?.designation}</td>
-                <td>{user?.name}</td>
-                <td>{user?.phone}</td>
+                <td>{user?.band_id}</td>
+                <td>{user?.users.name}</td>
+                <td>{user?.users?.technical_workshop_topic}</td>
+                <td>{user?.users?.non_technical_workshop_topic}</td>
+                <td>{user?.users?.food_preference}</td>
                 <td>
-                  {user?.checkin_time
-                    ? new Date(user?.checkin_time).toLocaleDateString() +
+                  {user?.check_in_time
+                    ? new Date(user?.check_in_time).toLocaleDateString() +
                       ", " +
-                      new Date(user?.checkin_time).toLocaleString("en-US", {
+                      new Date(user?.check_in_time).toLocaleString("en-US", {
                         hour: "numeric",
                         minute: "numeric",
                         hour12: true,
