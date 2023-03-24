@@ -24,11 +24,15 @@ function FoodCheckInDetails() {
 
   async function getFoodName(id) {
     setLoading1(true);
-    const data = await SupabaseClient.from("food_menu")
-      .select("*")
-      .eq("id", id);
-    setFoodName(data.data[0].name);
-    setLoading1(false);
+    try {
+      const data = await SupabaseClient.from("food_menu")
+        .select("*")
+        .eq("id", id);
+      setFoodName(data?.data[0]?.name);
+      setLoading1(false);
+    } catch (error) {
+      console.log("error bro: ", error);
+    }
   }
 
   async function getUsers() {
@@ -110,12 +114,13 @@ function FoodCheckInDetails() {
                 }}
               >
                 <td>{user.id}</td>
-                <td>{user.techno_id}</td>
+                <td>{user.band_id}</td>
                 <td>{user.designation}</td>
                 <td>{user.name}</td>
                 <td>{user.phone}</td>
                 <td>
-                  {foodLog.find((log) => log.techno_id === user.techno_id)?.created_at
+                  {foodLog.find((log) => log.techno_id === user.techno_id)
+                    ?.created_at
                     ? new Date(
                         foodLog.find(
                           (log) => log.techno_id === user.techno_id

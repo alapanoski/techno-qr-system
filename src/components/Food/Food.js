@@ -18,9 +18,8 @@ import {
 import { toast } from "react-hot-toast";
 
 function Food() {
+  const router = useRouter();
 
-  const router = useRouter()
-  
   const [foodTab, setFoodTab] = React.useState(0);
   const [users, setUsers] = useState([]);
   const [registerList, setRegisterList] = React.useState([]);
@@ -31,11 +30,10 @@ function Food() {
   const [foodData, setFoodData] = useState([]);
   const steps = ["Verify User ID", "Log food"];
   const [loading, setLoading] = useState(true);
-  const {id} = router.query
+  const { id } = router.query;
   const [paymentId, setPaymentId] = useState("");
   const [currentUser, setCurrentUser] = useState("");
   const [name, setName] = useState("");
-
 
   async function getID(value) {
     registerList.forEach(async (registerEntry) => {
@@ -48,15 +46,18 @@ function Food() {
         console.log(registerEntry.users.ticket_number);
       }
     });
-  setName("");
-}
+    setName("");
+  }
 
   const totalSteps = () => {
     return steps.length;
   };
   async function getFoodMenu() {
-    const { data, error } = await supabaseClient.from("food_menu").select().eq("event_id", id);
-    console.log(data)
+    const { data, error } = await supabaseClient
+      .from("food_menu")
+      .select()
+      .eq("event_id", id);
+    console.log(data);
     setFoodData(data);
     setLoading(false);
   }
@@ -66,7 +67,10 @@ function Food() {
     setLoading(false);
   }
   async function fetchRegisterList() {
-    const { data, error} = await supabaseClient.from("register").select("*, users(*)").eq("event_id", id);
+    const { data, error } = await supabaseClient
+      .from("register")
+      .select("*, users(*)")
+      .eq("event_id", id);
     //console.log(error);
     console.log(data);
     setRegisterList(data);
@@ -109,7 +113,11 @@ function Food() {
       if (!userId) {
         toast.error("Please enter a valid user id");
       } else {
-        if (registerList.find((registerEntry) => registerEntry.band_id === userId) === undefined) {
+        if (
+          registerList.find(
+            (registerEntry) => registerEntry.band_id === userId
+          ) === undefined
+        ) {
           toast.error("User does not exist");
           setUserId("");
           return;
@@ -117,10 +125,15 @@ function Food() {
         const { data, error } = await supabaseClient
           .from("food_log")
           .select()
-          .eq("user_id", registerList.find((registerEntry) => registerEntry.band_id === userId).user_id)
+          .eq(
+            "user_id",
+            registerList.find(
+              (registerEntry) => registerEntry.band_id === userId
+            ).user_id
+          )
           .eq("food_id", foodData.find((food) => food.id === foodTab).id)
           .eq("event_id", id);
-          console.log({error, data})
+        console.log({ error, data });
         setFoodEaten(data);
         const newCompleted = completed;
         newCompleted[activeStep] = true;
@@ -161,16 +174,18 @@ function Food() {
       setFoodTab(0);
     } else {
       const { error } = await supabaseClient.from("food_log").insert({
-        user_id: registerList.find((registerEntry) => registerEntry.band_id === userId).user_id,
+        user_id: registerList.find(
+          (registerEntry) => registerEntry.band_id === userId
+        ).user_id,
         food_id: foodData.find((food) => food.id === foodTab).id,
-        event_id: id
+        event_id: id,
       });
       if (error) {
         console.error(error);
         toast.error("Supabase error");
         return;
       }
-      toast.success("User logged for food successfully")
+      toast.success("User logged for food successfully");
       setActiveStep(0);
       // setFoodTab(0);
     }
@@ -256,15 +271,18 @@ function Food() {
                             { hour: "numeric", minute: "numeric", hour12: true }
                           )}
                         </b>{" "}
-                        for Techno ID: <b>{userId}</b>
+                        for Band ID: <b>{userId}</b>
                       </div>
                     ) : (
                       <div className={styles.confirm}>
+                        {/* <div>
+                          Name: <b>{registerEntry.user.name}</b>
+                        </div> */}
                         <div>
-                          Techno ID: <b>{userId}</b>
+                          Band ID: <b>{userId}</b>
                         </div>
                         <div>
-                          Food:{" "}
+                          Food:
                           <b>
                             {foodData.find((food) => food.id === foodTab).name}
                           </b>
@@ -312,17 +330,17 @@ function Food() {
             </div>
           </Box>
           <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "2rem",
-            marginTop: "2rem",
-            flexWrap: "wrap",
-          }}
-        >
-          {/* <input
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "2rem",
+              marginTop: "2rem",
+              flexWrap: "wrap",
+            }}
+          >
+            {/* <input
             type="text"
             placeholder="Enter Name"
             style={{
@@ -333,21 +351,21 @@ function Food() {
               setName(e.target.value);
             }}
           /> */}
-          <Autocomplete
-            disablePortal
-            id="combo-box-demo"
-            value={name}
-            onChange={(event, newValue) => {
-              getID(newValue);
-            }}
-            options={users}
-            getOptionLabel={(option) => option.name || ""}
-            sx={{ width: 300 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Enter Name" />
-            )}
-          />
-        </div>
+            <Autocomplete
+              disablePortal
+              id="combo-box-demo"
+              value={name}
+              onChange={(event, newValue) => {
+                getID(newValue);
+              }}
+              options={users}
+              getOptionLabel={(option) => option.name || ""}
+              sx={{ width: 300 }}
+              renderInput={(params) => (
+                <TextField {...params} label="Enter Name" />
+              )}
+            />
+          </div>
         </div>
       )}
     </div>

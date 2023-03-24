@@ -246,7 +246,7 @@ function DynamicCheckin() {
                     ) : (
                       <div className={styles.confirm}>
                         <div>
-                          Techno ID: <b>{userId}</b>
+                          Band ID: <b>{userId}</b>
                         </div>
                         <div>
                           Food:{" "}
