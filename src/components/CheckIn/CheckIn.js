@@ -20,7 +20,7 @@ const steps = ["Verify Payment Details", "Assign User ID", "Confirm User"];
 
 const CheckIn = () => {
   const router = useRouter();
-  const {id} = router.query;
+  const { id } = router.query;
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   const [users, setUsers] = React.useState([]);
@@ -32,24 +32,25 @@ const CheckIn = () => {
   const [ticketNumber, setTicketNumber] = React.useState("");
   const [eventId, setEventId] = React.useState("");
 
-
   async function fetchRegisterList() {
-    const { data, error} = await SupabaseClient.from("register").select("*, users(*)").eq("event_id", id);
+    const { data, error } = await SupabaseClient.from("register")
+      .select("*, users(*)")
+      .eq("event_id", id);
     //console.log(error);
     console.log(data);
     setRegisterList(data);
   }
 
   async function getID(value) {
-      registerList.forEach(async (registerEntry) => {
-        console.log(registerEntry.name);
-        if (registerEntry.users.name === value?.name) {
-          setCurrentUser(registerEntry);
-          setPaymentId(registerEntry.bar_code);
-          setTicketNumber(registerEntry.users.ticket_number);
-          console.log(registerEntry.users.ticket_number);
-        }
-      });
+    registerList.forEach(async (registerEntry) => {
+      console.log(registerEntry.name);
+      if (registerEntry.users.name === value?.name) {
+        setCurrentUser(registerEntry);
+        setPaymentId(registerEntry.bar_code);
+        setTicketNumber(registerEntry.users.ticket_number);
+        console.log(registerEntry.users.ticket_number);
+      }
+    });
     setName("");
   }
 
@@ -60,12 +61,10 @@ const CheckIn = () => {
     setUsers(data);
   }
 
-
-
-    const [age, setAge] = React.useState('');
+  const [age, setAge] = React.useState("");
 
   const handleChange = (event) => {
-    setAge(event.target.value );
+    setAge(event.target.value);
   };
   useEffect(() => {
     fetchUsers();
@@ -89,6 +88,10 @@ const CheckIn = () => {
   };
 
   const handleNext = async () => {
+    if (activeStep === 1) {
+      setUserId(paymentId);
+      setActiveStep(2);
+    }
     const newActiveStep =
       isLastStep() && !allStepsCompleted()
         ? steps.findIndex((step, i) => !(i in completed))
@@ -109,16 +112,23 @@ const CheckIn = () => {
       if (!paymentId) {
         toast.error("Please enter a valid payment id");
       } else {
-        if (registerList.find((registerEntry) => registerEntry.bar_code === paymentId) === undefined) {
+        if (
+          registerList.find(
+            (registerEntry) => registerEntry.bar_code === paymentId
+          ) === undefined
+        ) {
           toast.error("Payment ID does not exist");
-          console.log("No boom")
+          console.log("No boom");
           setPaymentId("");
           return;
+        } else {
+          console.log("boom");
         }
-        else {
-          console.log("boom")
-        }
-        if (registerList.find((registerEntry) => registerEntry.bar_code === paymentId).band_id !== null) {
+        if (
+          registerList.find(
+            (registerEntry) => registerEntry.bar_code === paymentId
+          ).band_id !== null
+        ) {
           //console.log(
           //  users.find((user) => user.payment_id === paymentId).techno_id
           // );
@@ -133,7 +143,7 @@ const CheckIn = () => {
       }
     }
     if (activeStep === 1) {
-      if (users.filter((user) => user.band_id === userId)?.length ) {
+      if (users.filter((user) => user.band_id === userId)?.length) {
         toast.error("User already exists");
       } else if (!userId) {
         toast.error("Please enter a valid user id");
@@ -161,10 +171,11 @@ const CheckIn = () => {
   };
 
   const handleReset = async () => {
-    let time=new Date().toISOString();
+    let time = new Date().toISOString();
     const { error } = await SupabaseClient.from("register")
-      .update({ band_id: userId, check_in_time:time })
-      .eq("bar_code", paymentId).eq("event_id", id);
+      .update({ band_id: userId, check_in_time: time })
+      .eq("bar_code", paymentId)
+      .eq("event_id", id);
     if (error) {
       console.log(error);
       toast.error("Error in checking in user");
@@ -201,8 +212,7 @@ const CheckIn = () => {
             </Step>
           ))}
         </Stepper>
-        
-       
+
         <div>
           {allStepsCompleted() ? (
             ""
@@ -232,11 +242,61 @@ const CheckIn = () => {
                 />
               ) : activeStep === 2 ? (
                 <div className={styles.confirm}>
-                 <p>Name : <strong>{registerList?.find((registerEntry) => registerEntry?.bar_code === paymentId).users?.name}</strong></p>
-                 <p>Band Id : <strong>{userId}</strong></p>
-                 <p>Payment Id : <strong>{registerList?.find((registerEntry) => registerEntry?.bar_code === paymentId).bar_code}</strong></p>
-                 {registerList?.find((registerEntry) => registerEntry?.bar_code === paymentId).users?.technical_workshop_topic && <p>Tech Workshop : <strong>{registerList?.find((registerEntry) => registerEntry?.bar_code === paymentId).users?.technical_workshop_topic}</strong></p>}
-                 {registerList?.find((registerEntry) => registerEntry?.bar_code === paymentId).users?.non_technical_workshop_topic && <p>Non Tech Workshop : <strong>{registerList?.find((registerEntry) => registerEntry?.bar_code === paymentId).users?.non_technical_workshop_topic}</strong></p>}
+                  <p>
+                    Name :{" "}
+                    <strong>
+                      {
+                        registerList?.find(
+                          (registerEntry) =>
+                            registerEntry?.bar_code === paymentId
+                        ).users?.name
+                      }
+                    </strong>
+                  </p>
+                  <p>
+                    Band Id : <strong>{userId}</strong>
+                  </p>
+                  <p>
+                    Payment Id :{" "}
+                    <strong>
+                      {
+                        registerList?.find(
+                          (registerEntry) =>
+                            registerEntry?.bar_code === paymentId
+                        ).bar_code
+                      }
+                    </strong>
+                  </p>
+                  {registerList?.find(
+                    (registerEntry) => registerEntry?.bar_code === paymentId
+                  ).users?.technical_workshop_topic && (
+                    <p>
+                      Tech Workshop :{" "}
+                      <strong>
+                        {
+                          registerList?.find(
+                            (registerEntry) =>
+                              registerEntry?.bar_code === paymentId
+                          ).users?.technical_workshop_topic
+                        }
+                      </strong>
+                    </p>
+                  )}
+                  {registerList?.find(
+                    (registerEntry) => registerEntry?.bar_code === paymentId
+                  ).users?.non_technical_workshop_topic && (
+                    <p>
+                      Non Tech Workshop :{" "}
+                      <strong>
+                        {
+                          registerList?.find(
+                            (registerEntry) =>
+                              registerEntry?.bar_code === paymentId
+                          ).users?.non_technical_workshop_topic
+                        }
+                      </strong>
+                    </p>
+                  )}
                 </div>
               ) : (
                 <div>Something went wrong</div>
@@ -279,17 +339,17 @@ const CheckIn = () => {
         </div>
       </Box>
       <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "2rem",
-            marginTop: "2rem",
-            flexWrap: "wrap",
-          }}
-        >
-          {/* <input
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "2rem",
+          marginTop: "2rem",
+          flexWrap: "wrap",
+        }}
+      >
+        {/* <input
             type="text"
             placeholder="Enter Name"
             style={{
@@ -300,24 +360,28 @@ const CheckIn = () => {
               setName(e.target.value);
             }}
           /> */}
-          <Autocomplete
-            disablePortal
-            id="combo-box-demo"
-            value={name}
-            onChange={(event, newValue) => {
-              getID(newValue);
+        <Autocomplete
+          disablePortal
+          id="combo-box-demo"
+          value={name}
+          onChange={(event, newValue) => {
+            getID(newValue);
+          }}
+          options={users}
+          getOptionLabel={(option) => option.name || ""}
+          sx={{ width: 300 }}
+          renderInput={(params) => <TextField {...params} label="Enter Name" />}
+        />
+        {ticketNumber && (
+          <p
+            style={{
+              fontSize: "1.2rem",
             }}
-            options={users}
-            getOptionLabel={(option) => option.name || ""}
-            sx={{ width: 300 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Enter Name" />
-            )}
-          />
-          {ticketNumber && <p style={{
-            fontSize: "1.2rem",
-          }}>Ticket number : <strong>{ticketNumber}</strong></p>}
-        </div>
+          >
+            Ticket number : <strong>{ticketNumber}</strong>
+          </p>
+        )}
+      </div>
     </>
   );
 };
