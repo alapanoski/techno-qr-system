@@ -139,7 +139,11 @@ const CheckIn = () => {
         const newCompleted = completed;
         newCompleted[activeStep] = true;
         setCompleted(newCompleted);
+        // console.log("here");
+        setUserId(paymentId);
         handleNext();
+        handleNext();
+        // handleComplete()
       }
     }
     if (activeStep === 1) {
@@ -338,50 +342,43 @@ const CheckIn = () => {
           )}
         </div>
       </Box>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "2rem",
-          marginTop: "2rem",
-          flexWrap: "wrap",
-        }}
-      >
-        {/* <input
-            type="text"
-            placeholder="Enter Name"
-            style={{
-              border: "1px solid #041c2b",
-            }}
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-          /> */}
-        <Autocomplete
-          disablePortal
-          id="combo-box-demo"
-          value={name}
-          onChange={(event, newValue) => {
-            getID(newValue);
+      {activeStep == 0 ? (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "2rem",
+            marginTop: "2rem",
+            flexWrap: "wrap",
           }}
-          options={users}
-          getOptionLabel={(option) => option.name || ""}
-          sx={{ width: 300 }}
-          renderInput={(params) => <TextField {...params} label="Enter Name" />}
-        />
-        {ticketNumber && (
-          <p
-            style={{
-              fontSize: "1.2rem",
+        >
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            value={name}
+            onChange={(event, newValue) => {
+              getID(newValue);
             }}
-          >
-            Ticket number : <strong>{ticketNumber}</strong>
-          </p>
-        )}
-      </div>
+            options={users}
+            getOptionLabel={(option) => option.name || ""}
+            sx={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField {...params} label="Enter Name" />
+            )}
+          />
+          {ticketNumber && (
+            <p
+              style={{
+                fontSize: "1.2rem",
+              }}
+            >
+              Ticket number : <strong>{ticketNumber}</strong>
+            </p>
+          )}
+        </div>
+      ) : null}
     </>
   );
 };

@@ -39,7 +39,7 @@ function CheckIn() {
   useEffect(() => {
     getUsers();
     getRegisterList();
-  }, []);
+  }, [id]);
   if (loading) {
     return <Loader />;
   }
@@ -92,7 +92,7 @@ function CheckIn() {
               <tr
                 key={user.id}
                 style={{
-                  backgroundColor: user.techno_id ? "green" : "white",
+                  backgroundColor: user.band_id ? "green" : "white",
                 }}
               >
                 <td>{user?.id}</td>
