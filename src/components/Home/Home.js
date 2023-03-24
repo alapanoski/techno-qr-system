@@ -9,6 +9,7 @@ import { Autocomplete, TextField } from "@mui/material";
 function Home() {
   const [name, setName] = React.useState("");
   const [users, setUsers] = React.useState([]);
+  const [registerList, setRegisterList] = React.useState([]);
   const [currentUser, setCurrentUser] = React.useState("Not Found");
   // const [currentUserFood, setCurrentUserFood] = React.useState([]);
   const [foodMenu, setFoodMenu] = React.useState([]);
@@ -22,6 +23,14 @@ function Home() {
     setLoading1(false);
     console.log(users);
   }
+
+  async function getRegisterList() {
+    setLoading1(true);
+    const data = await SupabaseClient.from("register").select("*");
+    setLoading1(false)
+    console.log(registerList)
+  }
+
 
   async function getFoods() {
     setLoading1(true);
@@ -39,10 +48,10 @@ function Home() {
 
   async function getID(value) {
     setLoading1(true);
-    if (value?.techno_id) {
-      users.forEach(async (user) => {
-        if (user.name === value.name) {
-          setCurrentUser(user);
+    if (value?.band_id) {
+      registerList.forEach(async (registerEntry) => {
+        if (registerEntry.name === value.name) {
+          setCurrentUser(registerEntry);
         }
       });
     } else {
@@ -55,6 +64,7 @@ function Home() {
 
   useEffect(() => {
     getUsers();
+    getRegisterList();
     getFoods();
     getFoodLog();
   }, []);

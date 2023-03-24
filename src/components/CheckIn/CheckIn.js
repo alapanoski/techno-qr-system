@@ -13,16 +13,45 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { Autocomplete, TextField } from "@mui/material";
+import { Router, useRouter } from "next/router";
 
 const steps = ["Verify Payment Details", "Assign User ID", "Confirm User"];
 
 const CheckIn = () => {
+  const router = useRouter();
+  const {id} = router.query;
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   const [users, setUsers] = React.useState([]);
   const [paymentId, setPaymentId] = React.useState("");
   const [userId, setUserId] = React.useState("");
   const [registerList, setRegisterList] = React.useState([]);
+  const [name, setName] = React.useState("");
+  const [currentUser, setCurrentUser] = React.useState("Not Found");
+  const [ticketNumber, setTicketNumber] = React.useState("");
+  const [eventId, setEventId] = React.useState("");
+
+
+  async function fetchRegisterList() {
+    const { data, error} = await SupabaseClient.from("register").select("*, users(*)").eq("event_id", id);
+    //console.log(error);
+    console.log(data);
+    setRegisterList(data);
+  }
+
+  async function getID(value) {
+      registerList.forEach(async (registerEntry) => {
+        console.log(registerEntry.name);
+        if (registerEntry.users.name === value?.name) {
+          setCurrentUser(registerEntry);
+          setPaymentId(registerEntry.bar_code);
+          setTicketNumber(registerEntry.users.ticket_number);
+          console.log(registerEntry.users.ticket_number);
+        }
+      });
+    setName("");
+  }
 
   async function fetchUsers() {
     const { data, error } = await SupabaseClient.from("users").select();
@@ -31,12 +60,6 @@ const CheckIn = () => {
     setUsers(data);
   }
 
-  async function fetchRegisterList() {
-    const { data, error} = await SupabaseClient.from("register").select("*, users(*)");
-    //console.log(error);
-    console.log(data);
-    setRegisterList(data);
-  }
 
 
     const [age, setAge] = React.useState('');
@@ -110,7 +133,7 @@ const CheckIn = () => {
       }
     }
     if (activeStep === 1) {
-      if (users.filter((user) => user.techno_id === userId).length > 0) {
+      if (users.filter((user) => user.band_id === userId)?.length ) {
         toast.error("User already exists");
       } else if (!userId) {
         toast.error("Please enter a valid user id");
@@ -141,7 +164,7 @@ const CheckIn = () => {
     let time=new Date().toISOString();
     const { error } = await SupabaseClient.from("register")
       .update({ band_id: userId, check_in_time:time })
-      .eq("bar_code", paymentId);
+      .eq("bar_code", paymentId).eq("event_id", id);
     if (error) {
       console.log(error);
       toast.error("Error in checking in user");
@@ -212,8 +235,8 @@ const CheckIn = () => {
                  <p>Name : <strong>{registerList?.find((registerEntry) => registerEntry?.bar_code === paymentId).users?.name}</strong></p>
                  <p>Band Id : <strong>{userId}</strong></p>
                  <p>Payment Id : <strong>{registerList?.find((registerEntry) => registerEntry?.bar_code === paymentId).bar_code}</strong></p>
-                 <p>Tech Workshop : <strong>{registerList?.find((registerEntry) => registerEntry?.bar_code === paymentId).users?.technical_workshop_topic}</strong></p>
-                 <p>Non Tech Workshop : <strong>{registerList?.find((registerEntry) => registerEntry?.bar_code === paymentId).users?.non_technical_workshop_topic}</strong></p>
+                 {registerList?.find((registerEntry) => registerEntry?.bar_code === paymentId).users?.technical_workshop_topic && <p>Tech Workshop : <strong>{registerList?.find((registerEntry) => registerEntry?.bar_code === paymentId).users?.technical_workshop_topic}</strong></p>}
+                 {registerList?.find((registerEntry) => registerEntry?.bar_code === paymentId).users?.non_technical_workshop_topic && <p>Non Tech Workshop : <strong>{registerList?.find((registerEntry) => registerEntry?.bar_code === paymentId).users?.non_technical_workshop_topic}</strong></p>}
                 </div>
               ) : (
                 <div>Something went wrong</div>
@@ -255,6 +278,46 @@ const CheckIn = () => {
           )}
         </div>
       </Box>
+      <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "2rem",
+            marginTop: "2rem",
+            flexWrap: "wrap",
+          }}
+        >
+          {/* <input
+            type="text"
+            placeholder="Enter Name"
+            style={{
+              border: "1px solid #041c2b",
+            }}
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+          /> */}
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            value={name}
+            onChange={(event, newValue) => {
+              getID(newValue);
+            }}
+            options={users}
+            getOptionLabel={(option) => option.name || ""}
+            sx={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField {...params} label="Enter Name" />
+            )}
+          />
+          {ticketNumber && <p style={{
+            fontSize: "1.2rem",
+          }}>Ticket number : <strong>{ticketNumber}</strong></p>}
+        </div>
     </>
   );
 };
