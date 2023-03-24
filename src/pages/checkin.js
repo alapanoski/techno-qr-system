@@ -1,21 +1,25 @@
 import { useEffect, useState } from "react";
 import SupabaseClient from "../utils/SupabaseClient";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+
 import { Loader } from "../components/";
 function CheckIn() {
   const [users, setUsers] = useState([]);
-  const [registerList, setRegisterList] = useState([])
+  const [registerList, setRegisterList] = useState([]);
   const [noOfCheckedIn, setNoOfCheckedIn] = useState(0);
   const [loading, setLoading] = useState(false);
   async function getUsers() {
     setLoading(true);
-    const { data } = await SupabaseClient.from("users").select('*');
+    const { data } = await SupabaseClient.from("users").select("*");
     setUsers(data);
     setLoading(false);
   }
 
   async function getRegisterList() {
     setLoading(true);
-    const { data } = await SupabaseClient.from("register").select("*, users(*)");
+    const { data } = await SupabaseClient.from("register").select(
+      "*, users(*)"
+    );
     setRegisterList(data);
     let count = 0;
     console.log(data);
@@ -35,16 +39,47 @@ function CheckIn() {
   if (loading) {
     return <Loader />;
   }
+  const rows = registerList.map((user) => ({
+    id: user.id,
+    col1: user?.band_id,
+    col2: user.users.name,
+    col3: user.users.technical_workshop_topic,
+    col4: user.users.non_technical_workshop_topic,
+    col5: user.check_in_time
+      ? new Date(user?.check_in_time).toLocaleDateString() +
+        ", " +
+        new Date(user?.check_in_time).toLocaleString("en-US", {
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true,
+        })
+      : "Not Checked In",
+  }));
+
+  const columns = [
+    { field: "id", headerName: "ID", width: 70 },
+    { field: "col1", headerName: "Band ID", width: 140 },
+    { field: "col2", headerName: "Name", width: 300 },
+    { field: "col3", headerName: "Tech Workshop", width: 400 },
+    { field: "col4", headerName: "Non Tech Workshop", width: 400 },
+    {
+      field: "col5",
+      headerName: "Check In Time",
+      width: 300,
+    },
+  ];
+
   return (
     <>
-    <p>{JSON.stringify(registerList)}</p>
+      {/* <p>{JSON.stringify(registerList)}</p> */}
       <div
         style={{
-          padding: "10px 0",
           display: "flex",
           flexDirection: "column",
-          gap: "10px",
-          height: "100px",
+          alignItems: "flex-start sty",
+          justifyContent: "center",
+          gap: "2rem",
+          padding: "2rem",
         }}
       >
         <h1
@@ -54,16 +89,15 @@ function CheckIn() {
         >
           Check In Status
         </h1>
-        <p
+        <div
           style={{
             textAlign: "center",
           }}
         >
           Checked In: <strong>{noOfCheckedIn}</strong>
-        </p>
-      </div>
+        </div>
 
-      <div
+      {/* <div
         style={{
           display: "flex",
         }}
@@ -109,6 +143,32 @@ function CheckIn() {
             ))}
           </tbody>
         </table>
+      </div> */}
+      <div
+        style={{
+          display: "flex",
+          height: "100%",
+          flexGrow: 1,
+        }}
+      >
+        <div style={{ flexGrow: 1 ,overflow:"auto"}}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            components={{
+              Toolbar: GridToolbar,
+            }}
+            componentsProps={{
+              toolbar: {
+                showQuickFilter: true,
+
+                quickFilterProps: { debounceMs: 500 },
+              },
+            }}
+            autoHeight
+          />
+        </div>
+      </div>
       </div>
     </>
   );
