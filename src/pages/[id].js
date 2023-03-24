@@ -14,7 +14,7 @@ function Dashboard() {
   }
   useEffect(() => {
     getFoodLogById(id);
-  }, []);
+  }, [id]);
   const [tab, setTab] = useState(0);
   return (
     <>

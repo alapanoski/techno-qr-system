@@ -150,6 +150,7 @@ const CheckIn = () => {
     toast.success("User checked in successfully");
     setPaymentId("");
     setUserId("");
+    fetchRegisterList();
     setActiveStep(0);
     setCompleted({});
   };
@@ -208,7 +209,7 @@ const CheckIn = () => {
                 />
               ) : activeStep === 2 ? (
                 <div className={styles.confirm}>
-                  I don't know what goes here
+                  I dont know what goes here
                 </div>
               ) : (
                 <div>Something went wrong</div>
