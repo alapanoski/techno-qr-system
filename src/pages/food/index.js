@@ -54,7 +54,7 @@ function Food() {
                 food.id
           }>
             <Image
-              src={food.image ? food.image : foodimage}
+              src={food.image ? food.image : ""}
               alt="Food Name"
               width={250}
               height={150}
