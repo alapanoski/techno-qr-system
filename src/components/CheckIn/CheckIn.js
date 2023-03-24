@@ -32,7 +32,7 @@ const CheckIn = () => {
   }
 
   async function fetchRegisterList() {
-    const { data, error } = await SupabaseClient.from("register").select();
+    const { data, error} = await SupabaseClient.from("register").select("*, users(*)");
     //console.log(error);
     console.log(data);
     setRegisterList(data);
@@ -209,7 +209,11 @@ const CheckIn = () => {
                 />
               ) : activeStep === 2 ? (
                 <div className={styles.confirm}>
-                  I dont know what goes here
+                 <p>Name : <strong>{registerList?.find((registerEntry) => registerEntry?.bar_code === paymentId).users?.name}</strong></p>
+                 <p>Band Id : <strong>{userId}</strong></p>
+                 <p>Payment Id : <strong>{registerList?.find((registerEntry) => registerEntry?.bar_code === paymentId).bar_code}</strong></p>
+                 <p>Tech Workshop : <strong>{registerList?.find((registerEntry) => registerEntry?.bar_code === paymentId).users?.technical_workshop_topic}</strong></p>
+                 <p>Non Tech Workshop : <strong>{registerList?.find((registerEntry) => registerEntry?.bar_code === paymentId).users?.non_technical_workshop_topic}</strong></p>
                 </div>
               ) : (
                 <div>Something went wrong</div>
