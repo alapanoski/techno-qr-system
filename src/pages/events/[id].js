@@ -83,7 +83,7 @@ function CheckIn() {
               <th>Name</th>
               <th>Tech Work</th>
               <th>Non Tech Work</th>
-              <th>Food food_preference</th>
+              <th>Food</th>
               <th>Check in time</th>
             </tr>
           </thead>
