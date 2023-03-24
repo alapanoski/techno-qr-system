@@ -24,7 +24,6 @@ function Dashboard() {
         <div className={styles.content}>
           {tab === 0 && <Home />}
           {tab === 1 && <CheckIn />}
-          {id}
           {tab === 2 && <Food />}
           {tab === 3 && <AddPoints />}
         </div>

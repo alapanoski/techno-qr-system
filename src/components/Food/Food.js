@@ -6,11 +6,13 @@ import supabaseClient from "../../utils/SupabaseClient";
 import Scanner from "../Scanner/Scanner";
 import { Box } from "@mui/system";
 import {
+  Autocomplete,
   Button,
   CircularProgress,
   Step,
   StepButton,
   Stepper,
+  TextField,
   Typography,
 } from "@mui/material";
 import { toast } from "react-hot-toast";
@@ -30,6 +32,24 @@ function Food() {
   const steps = ["Verify User ID", "Log food"];
   const [loading, setLoading] = useState(true);
   const {id} = router.query
+  const [paymentId, setPaymentId] = useState("");
+  const [currentUser, setCurrentUser] = useState("");
+  const [name, setName] = useState("");
+
+
+  async function getID(value) {
+    registerList.forEach(async (registerEntry) => {
+      console.log(registerEntry.name);
+      if (registerEntry.users.name === value?.name) {
+        setCurrentUser(registerEntry);
+        setPaymentId(registerEntry.bar_code);
+        setUserId(registerEntry.band_id);
+        console.log(registerEntry);
+        console.log(registerEntry.users.ticket_number);
+      }
+    });
+  setName("");
+}
 
   const totalSteps = () => {
     return steps.length;
@@ -46,7 +66,7 @@ function Food() {
     setLoading(false);
   }
   async function fetchRegisterList() {
-    const { data, error } = await supabaseClient.from("register").select();
+    const { data, error} = await supabaseClient.from("register").select("*, users(*)").eq("event_id", id);
     //console.log(error);
     console.log(data);
     setRegisterList(data);
@@ -291,6 +311,43 @@ function Food() {
               )}
             </div>
           </Box>
+          <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "2rem",
+            marginTop: "2rem",
+            flexWrap: "wrap",
+          }}
+        >
+          {/* <input
+            type="text"
+            placeholder="Enter Name"
+            style={{
+              border: "1px solid #041c2b",
+            }}
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+          /> */}
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            value={name}
+            onChange={(event, newValue) => {
+              getID(newValue);
+            }}
+            options={users}
+            getOptionLabel={(option) => option.name || ""}
+            sx={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField {...params} label="Enter Name" />
+            )}
+          />
+        </div>
         </div>
       )}
     </div>
