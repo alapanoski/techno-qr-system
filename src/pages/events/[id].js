@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import SupabaseClient from "../../utils/SupabaseClient";
 import { Loader } from "../../components/";
 import { useRouter } from "next/router";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 function CheckIn() {
   const router = useRouter();
 
@@ -10,6 +11,7 @@ function CheckIn() {
   const [noOfCheckedIn, setNoOfCheckedIn] = useState(0);
   const [loading, setLoading] = useState(false);
   const { id } = router.query;
+
 
   async function getUsers() {
     setLoading(true);
@@ -23,7 +25,7 @@ function CheckIn() {
     setLoading(true);
     const { data, error } = await SupabaseClient.from("register")
       .select("*, users(*)")
-      .eq("event_id", id);
+      .eq("event_id", parseInt(id));
     setRegisterList(data);
     let count = 0;
     console.log(data);
@@ -40,18 +42,49 @@ function CheckIn() {
     getUsers();
     getRegisterList();
   }, [id]);
+
+  const rows = registerList.map((user) => ({
+    id: user.id,
+    col1: user?.band_id,
+    col2: user.users.name,
+    col3: user.users.technical_workshop_topic,
+    col4: user.users.non_technical_workshop_topic,
+    col5: user.check_in_time
+      ? new Date(user?.check_in_time).toLocaleDateString() +
+        ", " +
+        new Date(user?.check_in_time).toLocaleString("en-US", {
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true,
+        })
+      : "Not Checked In",
+  }));
+  const columns = [
+    { field: "id", headerName: "ID", width: 70 },
+    { field: "col1", headerName: "Band ID", width: 140 },
+    { field: "col2", headerName: "Name", width: 300 },
+    { field: "col3", headerName: "Tech Workshop", width: 400 },
+    { field: "col4", headerName: "Non Tech Workshop", width: 400 },
+    {
+      field: "col5",
+      headerName: "Check In Time",
+      width: 300,
+    },
+  ];
   if (loading) {
     return <Loader />;
   }
   return (
     <>
+      {/* <p>{JSON.stringify(registerList)}</p> */}
       <div
         style={{
-          padding: "10px 0",
           display: "flex",
           flexDirection: "column",
-          gap: "10px",
-          height: "100px",
+          alignItems: "flex-start sty",
+          justifyContent: "center",
+          gap: "2rem",
+          padding: "2rem",
         }}
       >
         <h1
@@ -61,16 +94,14 @@ function CheckIn() {
         >
           Check In Status
         </h1>
-        <p
+        <div
           style={{
             textAlign: "center",
           }}
         >
           Checked In: <strong>{noOfCheckedIn}</strong>
-        </p>
-      </div>
-
-      <div
+        </div>
+        {/* <div
         style={{
           display: "flex",
         }}
@@ -83,16 +114,16 @@ function CheckIn() {
               <th>Name</th>
               <th>Tech Work</th>
               <th>Non Tech Work</th>
-              <th>Food</th>
+              <th>Food food_preference</th>
               <th>Check in time</th>
             </tr>
           </thead>
           <tbody>
-            {registerList?.map((user) => (
+            {registerList.map((user) => (
               <tr
                 key={user.id}
                 style={{
-                  backgroundColor: user.band_id ? "green" : "white",
+                  backgroundColor: user.techno_id ? "green" : "white",
                 }}
               >
                 <td>{user?.id}</td>
@@ -116,6 +147,32 @@ function CheckIn() {
             ))}
           </tbody>
         </table>
+      </div> */}
+        <div
+          style={{
+            display: "flex",
+            height: "100%",
+            flexGrow: 1,
+          }}
+        >
+          <div style={{ flexGrow: 1, overflow: "auto" }}>
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              components={{
+                Toolbar: GridToolbar,
+              }}
+              componentsProps={{
+                toolbar: {
+                  showQuickFilter: true,
+
+                  quickFilterProps: { debounceMs: 500 },
+                },
+              }}
+              autoHeight
+            />
+          </div>
+        </div>
       </div>
     </>
   );
