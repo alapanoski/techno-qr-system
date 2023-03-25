@@ -88,10 +88,6 @@ const CheckIn = () => {
   };
 
   const handleNext = async () => {
-    if (activeStep === 1) {
-      setUserId(paymentId);
-      setActiveStep(2);
-    }
     const newActiveStep =
       isLastStep() && !allStepsCompleted()
         ? steps.findIndex((step, i) => !(i in completed))
@@ -140,8 +136,6 @@ const CheckIn = () => {
         newCompleted[activeStep] = true;
         setCompleted(newCompleted);
         // console.log("here");
-        setUserId(paymentId);
-        handleNext();
         handleNext();
         // handleComplete()
       }
