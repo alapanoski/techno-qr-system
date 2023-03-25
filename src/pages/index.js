@@ -60,7 +60,7 @@ export default function Home() {
   async function getEvents() {
     const { data, error } = await SupabaseClient.from("event_list").select();
     setEvents(data);
-    console.log(data);
+    //console.log(data);
   }
   useEffect(() => {
     getEvents();

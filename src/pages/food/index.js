@@ -12,7 +12,7 @@ function Food() {
   const getFoods = async () => {
     setLoading(true);
     const response = await SupabaseClient.from("food_menu").select("*");
-    console.log(response.data);
+    //console.log(response.data);
     setFoodMenu(response.data);
     setLoading(false);
   };

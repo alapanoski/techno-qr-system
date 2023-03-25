@@ -8,7 +8,7 @@ function Error() {
   async function fetchEvents() {
     const { data, error } = await SupabaseClient.from("event_list").select();
     //console.log(error);
-    console.log(data);
+    //console.log(data);
     setEvents(data);
   }
 

@@ -25,15 +25,17 @@ function Home() {
     const data = await SupabaseClient.from("users").select("*");
     setUsers(data.data);
     setLoading1(false);
-    console.log(users);
+    //console.log(users);
   }
 
   async function getRegisterList() {
     setLoading1(true);
-    const data = await SupabaseClient.from("register").select();
-    console.log(data)
+    const data = await SupabaseClient.from("register").select().select("*, users(*)")
+    .eq("event_id", id);
+    //console.log(data)
+    setRegisterList(data.data)
     setLoading1(false)
-    console.log(registerList)
+    //console.log(registerList)
   }
 
 
@@ -53,7 +55,7 @@ function Home() {
 
   async function getID(value) {
     setLoading1(true);
-    console.log(value)
+    //console.log(value)
     setCurrentUser(value);  
     // if (value?.band_id) {
     //   registerList.forEach(async (registerEntry) => {
@@ -141,76 +143,82 @@ function Home() {
             gap: "1rem",
           }}
         >
-            
-              <p>
-                Name: <strong>{currentUser.name}</strong>
-              </p>
-              <p>Technical Workshop: <strong>{currentUser.technical_workshop_topic}</strong></p>
-              <p>Non Technical Workshop: <strong>{currentUser.non_technical_workshop_topic}</strong></p>
-              <p>Ticket Number: <strong>{currentUser.ticket_number}</strong></p>
-              <p>Checked in: <strong>{JSON.stringify(registerList)}</strong></p>
+          <p>
+            User id: <strong>{currentUser?.id}</strong>
+          </p>
+          <p>
+            Name: <strong>{currentUser?.name}</strong>
+          </p>
+              <p>Technical Workshop: <strong>{currentUser?.technical_workshop_topic}</strong></p>
+              <p>Non Technical Workshop: <strong>{currentUser?.non_technical_workshop_topic}</strong></p>
+              <p>Ticket Number: <strong>{currentUser?.ticket_number}</strong></p>
+              {registerList.filter((register) => register?.user_id === currentUser?.id).length > 0 ? (
+                <p>Checked in: <strong>{new Date(registerList.filter((register) => register.user_id === currentUser.id)[0].check_in_time).toLocaleString()}</strong></p>
+              ) : (
+                <p>Checked in: <strong>Not Checked In</strong></p>
+              )}
               <p  style={{
-                width: "100%",
-                fontSize: "1.3rem",
-                fontWeight: "bold",
-                textAlign: "center",
-                padding: "1rem 0",
+              width: "100%",
+              fontSize: "1.3rem",
+              fontWeight: "bold",
+              textAlign: "center",
+              padding: "1rem 0",
               }}>Food Details</p>
-              {foodMenu.map((food, index) => {
-                return (
-                  <div
-                    key={index}
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <p>{food.name}</p>{" "}
-                    <b>
-                      {foodLog.filter(
-                        (log) =>
-                          log.food_id === food.id &&
-                          log.user_id === currentUser.id
-                      ).length > 0
-                        ? new Date(
-                            foodLog.filter(
-                              (log) =>
-                                log.food_id === food.id &&
-                                log.user_id === currentUser.id
-                            )[0].created_at
-                          ).toLocaleDateString() +
-                          ", " +
-                          new Date(
-                            foodLog.filter(
-                              (log) =>
-                                log.food_id === food.id &&
-                                log.user_id === currentUser.id
-                            )[0].created_at
-                          ).toLocaleString("en-US", {
-                            hour: "numeric",
-                            minute: "numeric",
-                            hour12: true,
-                          })
-                        : "Not Taken"}
-                    </b>
-                  </div>
-                );
-              })}
-
-              {/* <p>{JSON.stringify(currentUserFood)}</p> */}
+          {/* {foodMenu.map((food, index) => {
+            return (
               <div
+                key={index}
                 style={{
                   width: "100%",
                   display: "flex",
-                  flexDirection: "column",
+                  flexDirection: "row",
                   alignItems: "center",
-                  justifyContent: "center",
+                  justifyContent: "space-between",
                 }}
               >
-                {/* {foodMenu.map((food, index) => {
+                <p>{food.name}</p>{" "}
+                <b>
+                  {foodLog.filter(
+                    (log) =>
+                          log.food_id === food.id &&
+                          log.user_id === currentUser.id
+                  ).length > 0
+                    ? new Date(
+                        foodLog.filter(
+                          (log) =>
+                            log.food_id === food.id &&
+                            log.user_id === currentUser.id
+                        )[0].created_at
+                      ).toLocaleDateString() +
+                      ", " +
+                      new Date(
+                        foodLog.filter(
+                          (log) =>
+                            log.food_id === food.id &&
+                            log.user_id === currentUser.id
+                        )[0].created_at
+                      ).toLocaleString("en-US", {
+                        hour: "numeric",
+                        minute: "numeric",
+                        hour12: true,
+                      })
+                    : "Not Taken"}
+                </b>
+              </div>
+            );
+          })} */}
+
+          {/* <p>{JSON.stringify(currentUserFood)}</p> */}
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {/* {foodMenu.map((food, index) => {
                     return (
                       <div
                         key={index}
@@ -227,8 +235,8 @@ function Home() {
                       </div>
                     );
                 })} */}
-              </div>
-              {/* <p>{currentUser.email}</p>
+          </div>
+          {/* <p>{currentUser.email}</p>
               <p>{currentUser.phone}</p>
               <p>{currentUser.github}</p>
               <p>{currentUser.devfolio}</p>

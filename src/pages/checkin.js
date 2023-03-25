@@ -22,7 +22,7 @@ function CheckIn() {
     );
     setRegisterList(data);
     let count = 0;
-    console.log(data);
+   // console.log(data);
     data?.forEach((user) => {
       if (user.band_id) {
         count++;

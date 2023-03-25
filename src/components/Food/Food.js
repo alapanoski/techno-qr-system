@@ -37,13 +37,13 @@ function Food() {
 
   async function getID(value) {
     registerList.forEach(async (registerEntry) => {
-      console.log(registerEntry.name);
+      //console.log(registerEntry.name);
       if (registerEntry.users.name === value?.name) {
         setCurrentUser(registerEntry);
         setPaymentId(registerEntry.bar_code);
         setUserId(registerEntry.band_id);
-        console.log(registerEntry);
-        console.log(registerEntry.users.ticket_number);
+        //console.log(registerEntry);
+        //console.log(registerEntry.users.ticket_number);
       }
     });
     setName("");
@@ -57,7 +57,7 @@ function Food() {
       .from("food_menu")
       .select()
       .eq("event_id", id);
-    console.log(data);
+    //console.log(data);
     setFoodData(data);
     setLoading(false);
   }
@@ -72,7 +72,7 @@ function Food() {
       .select("*, users(*)")
       .eq("event_id", id);
     //console.log(error);
-    console.log(data);
+    //console.log(data);
     setRegisterList(data);
   }
   useEffect(() => {
@@ -133,7 +133,7 @@ function Food() {
           )
           .eq("food_id", foodData.find((food) => food.id === foodTab).id)
           .eq("event_id", id);
-        console.log({ error, data });
+        //console.log({ error, data });
         setFoodEaten(data);
         const newCompleted = completed;
         newCompleted[activeStep] = true;

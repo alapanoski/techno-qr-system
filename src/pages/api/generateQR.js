@@ -3,7 +3,7 @@ const Jimp = require("jimp");
 
 async function generateQr(req, res) {
   try {
-    console.log("going to generate qr");
+    //console.log("going to generate qr");
 
     const logo = "src/assets/qrLogo_10.jpg";
     const backgroundImage = "src/assets/tyvek.png"; // add path to background image
@@ -12,7 +12,7 @@ async function generateQr(req, res) {
       const string = "http://users.technopreneur.co.in/33/T" + i;
       const filePath = "qrCodes/T" + i + ".png";
       const name = "T" + i;
-      console.log("generating QR ", name);
+      //console.log("generating QR ", name);
 
       await qrcode.toFile(filePath, string, {
         color: {
@@ -51,7 +51,7 @@ async function generateQr(req, res) {
       await background.writeAsync(filePath);
     }
 
-    console.log("done generating");
+    //console.log("done generating");
 
     res.status(200).json({ message: "QR codes with images generated" });
   } catch (error) {
