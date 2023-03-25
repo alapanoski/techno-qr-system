@@ -30,7 +30,8 @@ function Home() {
 
   async function getRegisterList() {
     setLoading1(true);
-    const data = await SupabaseClient.from("register").select();
+    const data = await SupabaseClient.from("register").select().select("*, users(*)")
+    .eq("event_id", id);
     //console.log(data)
     setRegisterList(data.data)
     setLoading1(false)
@@ -143,15 +144,19 @@ function Home() {
           }}
         >
           <p>
-            User id: <strong>{currentUser.id}</strong>
+            User id: <strong>{currentUser?.id}</strong>
           </p>
           <p>
-            Name: <strong>{currentUser.name}</strong>
+            Name: <strong>{currentUser?.name}</strong>
           </p>
-              <p>Technical Workshop: <strong>{currentUser.technical_workshop_topic}</strong></p>
-              <p>Non Technical Workshop: <strong>{currentUser.non_technical_workshop_topic}</strong></p>
-              <p>Ticket Number: <strong>{currentUser.ticket_number}</strong></p>
-              <p>Checked in: <strong>{JSON.stringify(registerList)}</strong></p>
+              <p>Technical Workshop: <strong>{currentUser?.technical_workshop_topic}</strong></p>
+              <p>Non Technical Workshop: <strong>{currentUser?.non_technical_workshop_topic}</strong></p>
+              <p>Ticket Number: <strong>{currentUser?.ticket_number}</strong></p>
+              {registerList.filter((register) => register?.user_id === currentUser?.id).length > 0 ? (
+                <p>Checked in: <strong>{new Date(registerList.filter((register) => register.user_id === currentUser.id)[0].check_in_time).toLocaleString()}</strong></p>
+              ) : (
+                <p>Checked in: <strong>Not Checked In</strong></p>
+              )}
               <p  style={{
               width: "100%",
               fontSize: "1.3rem",
@@ -159,7 +164,7 @@ function Home() {
               textAlign: "center",
               padding: "1rem 0",
               }}>Food Details</p>
-          {foodMenu.map((food, index) => {
+          {/* {foodMenu.map((food, index) => {
             return (
               <div
                 key={index}
@@ -201,7 +206,7 @@ function Home() {
                 </b>
               </div>
             );
-          })}
+          })} */}
 
           {/* <p>{JSON.stringify(currentUserFood)}</p> */}
           <div
