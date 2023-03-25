@@ -171,16 +171,19 @@ function Home() {
             User id: <strong>{currentUser?.id}</strong>
           </p>
           <p>
-            Name: <strong>{currentUser?.name}</strong>
+            Band id: <strong>{currentUser?.users?.band_id}</strong>
           </p>
           <p>
+            Name: <strong>{currentUser?.name}</strong>
+          </p>
+          {/* <p>
             Technical Workshop:{" "}
             <strong>{currentUser?.technical_workshop_topic}</strong>
           </p>
           <p>
             Non Technical Workshop:{" "}
             <strong>{currentUser?.non_technical_workshop_topic}</strong>
-          </p>
+          </p> */}
           <p>
             Ticket Number: <strong>{currentUser?.ticket_number}</strong>
           </p>
@@ -202,7 +205,7 @@ function Home() {
               Checked in: <strong>Not Checked In</strong>
             </p>
           )}
-          <p
+          {/* <p
             style={{
               width: "100%",
               fontSize: "1.3rem",
@@ -212,7 +215,7 @@ function Home() {
             }}
           >
             Food Details
-          </p>
+          </p> */}
           {/* {foodMenu.map((food, index) => {
             return (
               <div
@@ -295,13 +298,13 @@ function Home() {
         </div>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column" }}>
+      {/* <div style={{ display: "flex", flexDirection: "column" }}>
         {Object.entries(workshopCountMap).map(([key, val]) => (
           <span key={key}>
             <b>{key}</b>:{val}
           </span>
         ))}
-      </div>
+      </div> */}
 
       {/* <div style={{ width: "100%" }}>
         {users.map((user, index) => {
