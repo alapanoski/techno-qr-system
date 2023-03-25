@@ -59,7 +59,11 @@ function CheckIn() {
           hour12: true,
         })
       : "Not Checked In",
+    col6: user.users.phone,
+
   })) : [];
+  
+  
 
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
@@ -72,6 +76,11 @@ function CheckIn() {
       headerName: "Check In Time",
       width: 300,
     },
+    {
+      field: "col6",
+      headerName: "Phone",
+      width: 300,
+    }
   ];
   if (loading) {
     return <Loader />;
