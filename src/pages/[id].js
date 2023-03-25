@@ -10,7 +10,7 @@ function Dashboard() {
   const router = useRouter();
   const { id } = router.query;
   async function getFoodLogById(id) {
-    console.log(id);
+    //console.log(id);
   }
   useEffect(() => {
     getFoodLogById(id);

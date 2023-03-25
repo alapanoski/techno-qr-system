@@ -37,18 +37,18 @@ const CheckIn = () => {
       .select("*, users(*)")
       .eq("event_id", id);
     //console.log(error);
-    console.log(data);
+    //console.log(data);
     setRegisterList(data);
   }
 
   async function getID(value) {
     registerList.forEach(async (registerEntry) => {
-      console.log(registerEntry.name);
+      //console.log(registerEntry.name);
       if (registerEntry.users.name === value?.name) {
         setCurrentUser(registerEntry);
         setPaymentId(registerEntry.bar_code);
         setTicketNumber(registerEntry.users.ticket_number);
-        console.log(registerEntry.users.ticket_number);
+        //console.log(registerEntry.users.ticket_number);
       }
     });
     setName("");
@@ -57,7 +57,7 @@ const CheckIn = () => {
   async function fetchUsers() {
     const { data, error } = await SupabaseClient.from("users").select();
     //console.log(error);
-    console.log(data);
+    //console.log(data);
     setUsers(data);
   }
 
@@ -118,11 +118,11 @@ const CheckIn = () => {
           ) === undefined
         ) {
           toast.error("Payment ID does not exist");
-          console.log("No boom");
+          //console.log("No boom");
           setPaymentId("");
           return;
         } else {
-          console.log("boom");
+          //console.log("boom");
         }
         if (
           registerList.find(
@@ -181,7 +181,7 @@ const CheckIn = () => {
       .eq("bar_code", paymentId)
       .eq("event_id", id);
     if (error) {
-      console.log(error);
+      //console.log(error);
       toast.error("Error in checking in user");
       return;
     }
