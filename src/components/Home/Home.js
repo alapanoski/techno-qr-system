@@ -44,7 +44,7 @@ function Home() {
   async function getWorkshopCount() {
     const { data: registerList, error } = await SupabaseClient.from("register")
       .select("*, users(*)")
-      .eq("event_id", 22);
+      .eq("event_id", 11);
     //console.log(error);
     const countMap = {};
     const checkedInUsers = registerList.filter((reg) => reg.check_in_time);
