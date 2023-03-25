@@ -265,7 +265,7 @@ const CheckIn = () => {
                       }
                     </strong>
                   </p>
-                  {registerList?.find(
+                  {/* {registerList?.find(
                     (registerEntry) => registerEntry?.bar_code === paymentId
                   ).users?.technical_workshop_topic && (
                     <p>
@@ -279,8 +279,8 @@ const CheckIn = () => {
                         }
                       </strong>
                     </p>
-                  )}
-                  {registerList?.find(
+                  )} */}
+                  {/* {registerList?.find(
                     (registerEntry) => registerEntry?.bar_code === paymentId
                   ).users?.non_technical_workshop_topic && (
                     <p>
@@ -294,7 +294,7 @@ const CheckIn = () => {
                         }
                       </strong>
                     </p>
-                  )}
+                  )} */}
                 </div>
               ) : (
                 <div>Something went wrong</div>
