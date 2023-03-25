@@ -297,7 +297,7 @@ function Home() {
 
       <div style={{ display: "flex", flexDirection: "column" }}>
         {Object.entries(workshopCountMap).map(([key, val]) => (
-          <span>
+          <span key={key}>
             <b>{key}</b>:{val}
           </span>
         ))}
