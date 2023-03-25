@@ -21,29 +21,30 @@ function CheckIn() {
   }
 
   async function getRegisterList() {
-    console.log("id" + id);
     setLoading(true);
-    const { data, error } = await SupabaseClient.from("register")
+
+    if (id){      
+      const { data, error } = await SupabaseClient.from("register")
       .select("*, users(*)")
       .eq("event_id", parseInt(id));
-    setRegisterList(data);
-    let count = 0;
-    console.log(data);
-    data?.forEach((user) => {
-      if (user.band_id) {
-        count++;
-      }
-    });
-    setNoOfCheckedIn(count);
-
-    setLoading(false);
+      console.log(id, data)
+      setRegisterList(data);
+      let count = 0;
+      data?.forEach((user) => {
+        if (user.band_id) {
+          count++;
+        }
+      });
+      setNoOfCheckedIn(count)
+      setLoading(false);
+    }
   }
   useEffect(() => {
     getUsers();
     getRegisterList();
   }, [id]);
 
-  const rows = registerList.map((user) => ({
+  const rows = registerList?.length ?  registerList.map((user) => ({
     id: user.id,
     col1: user?.band_id,
     col2: user.users.name,
@@ -58,7 +59,8 @@ function CheckIn() {
           hour12: true,
         })
       : "Not Checked In",
-  }));
+  })) : [];
+
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
     { field: "col1", headerName: "Band ID", width: 140 },
