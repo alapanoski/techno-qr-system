@@ -14,6 +14,8 @@ function CheckIn() {
     setUsers(data);
     setLoading(false);
   }
+  const columns = [];
+  const rows = [];
 
   async function getRegisterList() {
     setLoading(true);
@@ -21,6 +23,36 @@ function CheckIn() {
       "*, users(*)"
     );
     setRegisterList(data);
+    const rows = registerList.map((user) => ({
+      id: user.id,
+      col1: user?.band_id,
+      col2: user.users.name,
+      col3: user.users.technical_workshop_topic,
+      col4: user.users.non_technical_workshop_topic,
+      col5: user.check_in_time
+        ? new Date(user?.check_in_time).toLocaleDateString() +
+          ", " +
+          new Date(user?.check_in_time).toLocaleString("en-US", {
+            hour: "numeric",
+            minute: "numeric",
+            hour12: true,
+          })
+        : "Not Checked In",
+    }));
+  
+    const columns = [
+      { field: "id", headerName: "ID", width: 70 },
+      { field: "col1", headerName: "Band ID", width: 140 },
+      { field: "col2", headerName: "Name", width: 300 },
+      { field: "col3", headerName: "Tech Workshop", width: 400 },
+      { field: "col4", headerName: "Non Tech Workshop", width: 400 },
+      {
+        field: "col5",
+        headerName: "Check In Time",
+        width: 300,
+      },
+    ];
+  
     let count = 0;
    // console.log(data);
     data?.forEach((user) => {
@@ -39,36 +71,7 @@ function CheckIn() {
   if (loading) {
     return <Loader />;
   }
-  const rows = registerList.map((user) => ({
-    id: user.id,
-    col1: user?.band_id,
-    col2: user.users.name,
-    col3: user.users.technical_workshop_topic,
-    col4: user.users.non_technical_workshop_topic,
-    col5: user.check_in_time
-      ? new Date(user?.check_in_time).toLocaleDateString() +
-        ", " +
-        new Date(user?.check_in_time).toLocaleString("en-US", {
-          hour: "numeric",
-          minute: "numeric",
-          hour12: true,
-        })
-      : "Not Checked In",
-  }));
-
-  const columns = [
-    { field: "id", headerName: "ID", width: 70 },
-    { field: "col1", headerName: "Band ID", width: 140 },
-    { field: "col2", headerName: "Name", width: 300 },
-    { field: "col3", headerName: "Tech Workshop", width: 400 },
-    { field: "col4", headerName: "Non Tech Workshop", width: 400 },
-    {
-      field: "col5",
-      headerName: "Check In Time",
-      width: 300,
-    },
-  ];
-
+  
   return (
     <>
       {/* <p>{JSON.stringify(registerList)}</p> */}
