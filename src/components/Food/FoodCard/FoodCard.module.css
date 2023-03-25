@@ -9,6 +9,7 @@
 
 .food_card_img {
   border-radius: 10px;
+  width: 100%;
 }
 
 .food_card_title {
