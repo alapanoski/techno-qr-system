@@ -114,11 +114,6 @@ function Home() {
         }}
       >
         <Image src={logo} alt="" width={300} />
-        {Object.entries(workshopCountMap).map(([key, val]) => (
-          <div>
-            <b>{key}</b> : {val}
-          </div>
-        ))}
         <h2
           style={{
             color: "#041c2b",
@@ -298,6 +293,14 @@ function Home() {
               <p>{currentUser.organization}</p>
               <p>{currentUser.grad_year}</p> */}
         </div>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        {Object.entries(workshopCountMap).map(([key, val]) => (
+          <span>
+            <b>{key}</b>:{val}
+          </span>
+        ))}
       </div>
 
       {/* <div style={{ width: "100%" }}>
