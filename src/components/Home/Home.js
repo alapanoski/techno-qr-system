@@ -40,7 +40,7 @@ function Home() {
     setLoading1(false);
     //console.log(registerList)
   }
-
+``
   async function getWorkshopCount() {
     const { data: registerList, error } = await SupabaseClient.from("register")
       .select("*, users(*)")
