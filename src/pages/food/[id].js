@@ -1,3 +1,4 @@
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { Loader } from "../../components";
@@ -50,6 +51,31 @@ function FoodCheckInDetails() {
   useEffect(() => {
     getUsers();
   }, []);
+  const rows = users.map((user) => ({
+    id: user.id,
+    col1: user.name,
+    col2: user.phone,
+    col3: foodLog.some((log) => log.user_id === user.id)
+      ? new Date(
+          foodLog.find((log) => log.user_id === user.id).time_stamp
+        ).toLocaleDateString() +
+        ", " +
+        new Date(
+          foodLog.find((log) => log.user_id === user.id).time_stamp
+        ).toLocaleString("en-US", {
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true,
+        })
+      : "Not Checked In",
+  }));
+
+  const columns = [
+    { field: "id", headerName: "ID", width: 70 },
+    { field: "col1", headerName: "Name", width: 250 },
+    { field: "col2", headerName: "Phone", width: 130 },
+    { field: "col3", headerName: "Check In Time", width: 250 },
+  ];
 
   if (loading1) {
     return <Loader />;
@@ -59,33 +85,30 @@ function FoodCheckInDetails() {
     <>
       <div
         style={{
-          padding: "10px 0",
           display: "flex",
           flexDirection: "column",
-          gap: "10px",
-          paddingTop: "2rem",
+          alignItems: "flex-start sty",
+          justifyContent: "center",
+          gap: "2rem",
+          padding: "2rem",
         }}
       >
         <h1
           style={{
             textAlign: "center",
-            paddingBottom: "1rem",
           }}
         >
           {foodName} Check In Status
         </h1>
-        <p
+        <div
           style={{
             textAlign: "center",
-            fontSize: "1.5rem",
-            paddingBottom: "1rem",
           }}
         >
           Checked In: <strong>{foodLog.length}</strong>
-        </p>
-      </div>
+        </div>
 
-      <div
+        {/* <div
         style={{
           display: "flex",
         }}
@@ -141,7 +164,33 @@ function FoodCheckInDetails() {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table> 
+      </div>*/}
+        <div
+          style={{
+            display: "flex",
+            height: "100%",
+            flexGrow: 1,
+          }}
+        >
+          <div style={{ flexGrow: 1, overflow: "auto" }}>
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              components={{
+                Toolbar: GridToolbar,
+              }}
+              componentsProps={{
+                toolbar: {
+                  showQuickFilter: true,
+
+                  quickFilterProps: { debounceMs: 500 },
+                },
+              }}
+              autoHeight
+            />
+          </div>
+        </div>
       </div>
     </>
   );
