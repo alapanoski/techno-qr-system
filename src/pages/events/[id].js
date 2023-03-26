@@ -12,7 +12,6 @@ function CheckIn() {
   const [loading, setLoading] = useState(false);
   const { id } = router.query;
 
-
   async function getUsers() {
     setLoading(true);
     const { data } = await SupabaseClient.from("users").select("*");
@@ -48,8 +47,8 @@ function CheckIn() {
     id: user.id,
     col1: user?.band_id,
     col2: user.users.name,
-    col3: user.users.technical_workshop_topic,
-    col4: user.users.non_technical_workshop_topic,
+    col3: user.users.phone,
+    col4: user.users.email,
     col5: user.check_in_time
       ? new Date(user?.check_in_time).toLocaleDateString() +
         ", " +
@@ -69,8 +68,8 @@ function CheckIn() {
     { field: "id", headerName: "ID", width: 70 },
     { field: "col1", headerName: "Band ID", width: 140 },
     { field: "col2", headerName: "Name", width: 300 },
-    { field: "col3", headerName: "Tech Workshop", width: 400 },
-    { field: "col4", headerName: "Non Tech Workshop", width: 400 },
+    { field: "col3", headerName: "Phone", width: 400 },
+    { field: "col4", headerName: "Email", width: 400 },
     {
       field: "col5",
       headerName: "Check In Time",
