@@ -209,7 +209,7 @@ function Home() {
             style={{
               width: "100%",
               fontSize: "1.3rem",
-              fontWeight: "bold",
+              fontWeight: "bold",   
               textAlign: "center",
               padding: "1rem 0",
             }}

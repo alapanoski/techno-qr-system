@@ -99,6 +99,7 @@ function Food() {
         : activeStep + 1;
     setActiveStep(newActiveStep);
   };
+  console.log({ userId, users });
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -135,6 +136,9 @@ function Food() {
           .eq("event_id", id);
         //console.log({ error, data });
         setFoodEaten(data);
+        setCurrentUser(
+          registerList.find((registerEntry) => registerEntry.band_id === userId)
+        );
         const newCompleted = completed;
         newCompleted[activeStep] = true;
         setCompleted(newCompleted);
@@ -176,7 +180,7 @@ function Food() {
       const { error } = await supabaseClient.from("food_log").insert({
         user_id: registerList.find(
           (registerEntry) => registerEntry.band_id === userId
-        ).user_id,
+        )?.user_id,
         food_id: foodData.find((food) => food.id === foodTab).id,
         event_id: id,
       });
@@ -272,6 +276,9 @@ function Food() {
                           )}
                         </b>{" "}
                         for Band ID: <b>{userId}</b>
+                        <div>
+                          Name : <b>{currentUser?.users?.name}</b>
+                        </div>
                       </div>
                     ) : (
                       <div className={styles.confirm}>
@@ -280,6 +287,9 @@ function Food() {
                         </div> */}
                         <div>
                           Band ID: <b>{userId}</b>
+                        </div>
+                        <div>
+                          Name : <b>{currentUser?.users?.name}</b>
                         </div>
                         <div>
                           Food:
