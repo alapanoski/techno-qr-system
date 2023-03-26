@@ -62,6 +62,7 @@ function CheckIn() {
             })
           : "Not Checked In",
         col6: user.users?.category,
+        col7:user.users?.food_preference
       }))
     : [];
 
@@ -81,6 +82,11 @@ function CheckIn() {
       headerName: "Category",
       width: 200,
     },
+    {
+      field:"col7",
+      headerName:"Food Preference",
+      width:200
+    }
   ];
   if (loading) {
     return <Loader />;
