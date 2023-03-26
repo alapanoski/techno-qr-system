@@ -8,7 +8,7 @@ import { Autocomplete, TextField } from "@mui/material";
 import { useRouter } from "next/router";
 
 function Home() {
- const router = useRouter();
+  const router = useRouter();
   const { id } = router.query;
 
   const [name, setName] = React.useState("");
@@ -19,6 +19,7 @@ function Home() {
   const [foodMenu, setFoodMenu] = React.useState([]);
   const [foodLog, setFoodLog] = React.useState([]);
   const [loading1, setLoading1] = React.useState(false);
+  const [workshopCountMap, setWorkshopCountMap] = React.useState({});
 
   async function getUsers() {
     setLoading1(true);
@@ -30,14 +31,36 @@ function Home() {
 
   async function getRegisterList() {
     setLoading1(true);
-    const data = await SupabaseClient.from("register").select().select("*, users(*)")
-    .eq("event_id", id);
+    const data = await SupabaseClient.from("register")
+      .select()
+      .select("*, users(*)")
+      .eq("event_id", id);
     //console.log(data)
-    setRegisterList(data.data)
-    setLoading1(false)
+    setRegisterList(data.data);
+    setLoading1(false);
     //console.log(registerList)
   }
+``
+  async function getWorkshopCount() {
+    const { data: registerList, error } = await SupabaseClient.from("register")
+      .select("*, users(*)")
+      .eq("event_id", 11);
+    //console.log(error);
+    const countMap = {};
+    const checkedInUsers = registerList.filter((reg) => reg.check_in_time);
+    checkedInUsers.forEach(({ users }) => {
+      const ttWorkshopTopic = users.technical_workshop_topic;
+      countMap[ttWorkshopTopic] = (countMap[ttWorkshopTopic] || 0) + 1;
+    });
+    countMap["No-Code 101: Building No-Code WebApps with CodeDesign"] +=
+      countMap["No Code App Building"];
+    delete countMap["No Code App Building"];
 
+    countMap["Linux And Cloud Fundamentals"] +=
+      countMap["Cloud Services Workshop"];
+    delete countMap["Cloud Services Workshop"];
+    setWorkshopCountMap(countMap);
+  }
 
   async function getFoods() {
     setLoading1(true);
@@ -56,7 +79,7 @@ function Home() {
   async function getID(value) {
     setLoading1(true);
     //console.log(value)
-    setCurrentUser(value);  
+    setCurrentUser(value);
     // if (value?.band_id) {
     //   registerList.forEach(async (registerEntry) => {
     //     if (registerEntry.name === value.name) {
@@ -76,6 +99,7 @@ function Home() {
     getRegisterList();
     getFoods();
     getFoodLog();
+    getWorkshopCount();
   }, []);
   return (
     <>
@@ -147,23 +171,51 @@ function Home() {
             User id: <strong>{currentUser?.id}</strong>
           </p>
           <p>
+            Band id: <strong>{currentUser?.users?.band_id}</strong>
+          </p>
+          <p>
             Name: <strong>{currentUser?.name}</strong>
           </p>
-              <p>Technical Workshop: <strong>{currentUser?.technical_workshop_topic}</strong></p>
-              <p>Non Technical Workshop: <strong>{currentUser?.non_technical_workshop_topic}</strong></p>
-              <p>Ticket Number: <strong>{currentUser?.ticket_number}</strong></p>
-              {registerList.filter((register) => register?.user_id === currentUser?.id).length > 0 ? (
-                <p>Checked in: <strong>{new Date(registerList.filter((register) => register.user_id === currentUser.id)[0].check_in_time).toLocaleString()}</strong></p>
-              ) : (
-                <p>Checked in: <strong>Not Checked In</strong></p>
-              )}
-              <p  style={{
+          {/* <p>
+            Technical Workshop:{" "}
+            <strong>{currentUser?.technical_workshop_topic}</strong>
+          </p>
+          <p>
+            Non Technical Workshop:{" "}
+            <strong>{currentUser?.non_technical_workshop_topic}</strong>
+          </p> */}
+          <p>
+            Ticket Number: <strong>{currentUser?.ticket_number}</strong>
+          </p>
+          {registerList.filter(
+            (register) => register?.user_id === currentUser?.id
+          ).length > 0 ? (
+            <p>
+              Checked in:{" "}
+              <strong>
+                {new Date(
+                  registerList.filter(
+                    (register) => register.user_id === currentUser.id
+                  )[0].check_in_time
+                ).toLocaleString()}
+              </strong>
+            </p>
+          ) : (
+            <p>
+              Checked in: <strong>Not Checked In</strong>
+            </p>
+          )}
+          {/* <p
+            style={{
               width: "100%",
               fontSize: "1.3rem",
               fontWeight: "bold",   
               textAlign: "center",
               padding: "1rem 0",
-              }}>Food Details</p>
+            }}
+          >
+            Food Details
+          </p> */}
           {/* {foodMenu.map((food, index) => {
             return (
               <div
@@ -245,6 +297,14 @@ function Home() {
               <p>{currentUser.grad_year}</p> */}
         </div>
       </div>
+
+      {/* <div style={{ display: "flex", flexDirection: "column" }}>
+        {Object.entries(workshopCountMap).map(([key, val]) => (
+          <span key={key}>
+            <b>{key}</b>:{val}
+          </span>
+        ))}
+      </div> */}
 
       {/* <div style={{ width: "100%" }}>
         {users.map((user, index) => {

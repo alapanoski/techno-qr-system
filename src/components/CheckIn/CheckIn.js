@@ -88,10 +88,6 @@ const CheckIn = () => {
   };
 
   const handleNext = async () => {
-    if (activeStep === 1) {
-      setUserId(paymentId);
-      setActiveStep(2);
-    }
     const newActiveStep =
       isLastStep() && !allStepsCompleted()
         ? steps.findIndex((step, i) => !(i in completed))
@@ -140,8 +136,6 @@ const CheckIn = () => {
         newCompleted[activeStep] = true;
         setCompleted(newCompleted);
         // console.log("here");
-        setUserId(paymentId);
-        handleNext();
         handleNext();
         // handleComplete()
       }
@@ -271,7 +265,7 @@ const CheckIn = () => {
                       }
                     </strong>
                   </p>
-                  {registerList?.find(
+                  {/* {registerList?.find(
                     (registerEntry) => registerEntry?.bar_code === paymentId
                   ).users?.technical_workshop_topic && (
                     <p>
@@ -285,8 +279,8 @@ const CheckIn = () => {
                         }
                       </strong>
                     </p>
-                  )}
-                  {registerList?.find(
+                  )} */}
+                  {/* {registerList?.find(
                     (registerEntry) => registerEntry?.bar_code === paymentId
                   ).users?.non_technical_workshop_topic && (
                     <p>
@@ -300,7 +294,7 @@ const CheckIn = () => {
                         }
                       </strong>
                     </p>
-                  )}
+                  )} */}
                 </div>
               ) : (
                 <div>Something went wrong</div>
