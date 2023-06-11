@@ -123,20 +123,20 @@ function Food() {
           setUserId("");
           return;
         }
-        if (
-          registerList.find((registerEntry) => registerEntry.band_id === userId)
-            .users.food_preference !== "Iftar Box"
-        ) {
-          console.log("pref");
-          console.log(
-            registerList.find(
-              (registerEntry) => registerEntry.band_id === userId
-            ).users.food_preference
-          );
-          toast.error("User has not opted for iftar box");
-          setUserId("");
-          return;
-        }
+        // if (
+        //   registerList.find((registerEntry) => registerEntry.band_id === userId)
+        //     .users.food_preference !== "Iftar Box"
+        // ) {
+        //   console.log("pref");
+        //   console.log(
+        //     registerList.find(
+        //       (registerEntry) => registerEntry.band_id === userId
+        //     ).users.food_preference
+        //   );
+        //   toast.error("User has not opted for iftar box");
+        //   setUserId("");
+        //   return;
+        // }
 
         const { data, error } = await supabaseClient
           .from("food_log")
