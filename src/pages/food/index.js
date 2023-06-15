@@ -12,7 +12,7 @@ function Food() {
   const getFoods = async () => {
     setLoading(true);
     const response = await SupabaseClient.from("food_menu").select("*");
-    console.log(response.data);
+    //console.log(response.data);
     setFoodMenu(response.data);
     setLoading(false);
   };
@@ -54,7 +54,7 @@ function Food() {
                 food.id
           }>
             <Image
-              src={food.image ? food.image : foodimage}
+              src={food.image ? food.image : ""}
               alt="Food Name"
               width={250}
               height={150}

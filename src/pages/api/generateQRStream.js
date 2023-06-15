@@ -36,7 +36,7 @@ export default async function generateQrStream(req, res) {
         });
         fs.createReadStream(filePath).pipe(res);
     } catch (error) {
-        console.log(error);
+        //console.log(error);
         res.status(500).json({ error });
     }
 }

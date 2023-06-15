@@ -5,22 +5,61 @@ import styles from "../../styles/Home.module.css";
 import logo from "../../assets/logo.png";
 import { SupabaseClient } from "../../utils";
 import { Autocomplete, TextField } from "@mui/material";
+import { useRouter } from "next/router";
 
 function Home() {
+  const router = useRouter();
+  const { id } = router.query;
+
   const [name, setName] = React.useState("");
   const [users, setUsers] = React.useState([]);
+  const [registerList, setRegisterList] = React.useState([]);
   const [currentUser, setCurrentUser] = React.useState("Not Found");
   // const [currentUserFood, setCurrentUserFood] = React.useState([]);
   const [foodMenu, setFoodMenu] = React.useState([]);
   const [foodLog, setFoodLog] = React.useState([]);
   const [loading1, setLoading1] = React.useState(false);
+  const [workshopCountMap, setWorkshopCountMap] = React.useState({});
 
   async function getUsers() {
     setLoading1(true);
     const data = await SupabaseClient.from("users").select("*");
     setUsers(data.data);
     setLoading1(false);
-    console.log(users);
+    //console.log(users);
+  }
+
+  async function getRegisterList() {
+    setLoading1(true);
+    const data = await SupabaseClient.from("register")
+      .select()
+      .select("*, users(*)")
+      .eq("event_id", id);
+    //console.log(data)
+    setRegisterList(data.data);
+    setLoading1(false);
+    //console.log(registerList)
+  }
+``
+  async function getWorkshopCount() {
+    const { data: registerList, error } = await SupabaseClient.from("register")
+      .select("*, users(*)")
+      .eq("event_id", 11);
+    //console.log(error);
+    const countMap = {};
+    const checkedInUsers = registerList.filter((reg) => reg.check_in_time);
+    checkedInUsers.forEach(({ users }) => {
+      const ttWorkshopTopic = users.technical_workshop_topic;
+      countMap[ttWorkshopTopic] = (countMap[ttWorkshopTopic] || 0) + 1;
+    });
+    countMap["No-Code 101: Building No-Code WebApps with CodeDesign"] +=
+      countMap["No Code App Building"];
+    delete countMap["No Code App Building"];
+
+    countMap["Linux And Cloud Fundamentals"] +=
+      countMap["Cloud Services Workshop"];
+    delete countMap["Cloud Services Workshop"];
+    setWorkshopCountMap(countMap);
   }
 
   async function getFoods() {
@@ -39,15 +78,17 @@ function Home() {
 
   async function getID(value) {
     setLoading1(true);
-    if (value?.techno_id) {
-      users.forEach(async (user) => {
-        if (user.name === value.name) {
-          setCurrentUser(user);
-        }
-      });
-    } else {
-      setCurrentUser("Not Found");
-    }
+    //console.log(value)
+    setCurrentUser(value);
+    // if (value?.band_id) {
+    //   registerList.forEach(async (registerEntry) => {
+    //     if (registerEntry.name === value.name) {
+    //       setCurrentUser(registerEntry);
+    //     }
+    //   });
+    // } else {
+    //   setCurrentUser("Not Found");
+    // }
 
     setName("");
     setLoading1(false);
@@ -55,8 +96,10 @@ function Home() {
 
   useEffect(() => {
     getUsers();
+    getRegisterList();
     getFoods();
     getFoodLog();
+    getWorkshopCount();
   }, []);
   return (
     <>
@@ -124,111 +167,110 @@ function Home() {
             gap: "1rem",
           }}
         >
-          {currentUser === "Not Found" ? (
-            <p>Not Checked In</p>
+          <p>
+            User id: <strong>{currentUser?.id}</strong>
+          </p>
+          <p>
+            Band id: <strong>{currentUser?.users?.band_id}</strong>
+          </p>
+          <p>
+            Name: <strong>{currentUser?.name}</strong>
+          </p>
+          {/* <p>
+            Technical Workshop:{" "}
+            <strong>{currentUser?.technical_workshop_topic}</strong>
+          </p>
+          <p>
+            Non Technical Workshop:{" "}
+            <strong>{currentUser?.non_technical_workshop_topic}</strong>
+          </p> */}
+          <p>
+            Ticket Number: <strong>{currentUser?.ticket_number}</strong>
+          </p>
+          {registerList.filter(
+            (register) => register?.user_id === currentUser?.id
+          ).length > 0 ? (
+            <p>
+              Checked in:{" "}
+              <strong>
+                {new Date(
+                  registerList.filter(
+                    (register) => register.user_id === currentUser.id
+                  )[0].check_in_time
+                ).toLocaleString()}
+              </strong>
+            </p>
           ) : (
-            <>
-              {/* <p>
-                DB id: <strong>{currentUser.id}</strong>
-              </p> */}
-              <p>
-                Name: <strong>{currentUser.name}</strong>
-              </p>
-              <p>
-                Check In Time:{" "}
-                <strong>
-                  {currentUser?.checkin_time
-                    ? new Date(currentUser?.checkin_time).toLocaleDateString() +
-                      ", " +
-                      new Date(currentUser?.checkin_time).toLocaleString(
-                        "en-US",
-                        {
-                          hour: "numeric",
-                          minute: "numeric",
-                          hour12: true,
-                        }
-                      )
-                    : "Not Checked In"}
-                </strong>
-              </p>
-              <p style={{
-                width: "100%",
-                fontSize: "1.3rem",
-                fontWeight: "bold",
-                textAlign: "center",
-                padding: "1rem 0",
-              }}>User Details</p>
-              <p>
-                Team: <strong>{currentUser.designation}</strong>
-              </p>
-              <p>
-                Techno Id: <strong>{currentUser.techno_id}</strong>
-              </p>
-              <p>
-                Points: <strong>{currentUser.points}</strong>
-              </p>
-              <p  style={{
-                width: "100%",
-                fontSize: "1.3rem",
-                fontWeight: "bold",
-                textAlign: "center",
-                padding: "1rem 0",
-              }}>Food Details</p>
-              {foodMenu.map((food, index) => {
-                return (
-                  <div
-                    key={index}
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <p>{food.name}</p>{" "}
-                    <b>
-                      {foodLog.filter(
-                        (log) =>
-                          log.food_id === food.id &&
-                          log.techno_id === currentUser.techno_id
-                      ).length > 0
-                        ? new Date(
-                            foodLog.filter(
-                              (log) =>
-                                log.food_id === food.id &&
-                                log.techno_id === currentUser.techno_id
-                            )[0].created_at
-                          ).toLocaleDateString() +
-                          ", " +
-                          new Date(
-                            foodLog.filter(
-                              (log) =>
-                                log.food_id === food.id &&
-                                log.techno_id === currentUser.techno_id
-                            )[0].created_at
-                          ).toLocaleString("en-US", {
-                            hour: "numeric",
-                            minute: "numeric",
-                            hour12: true,
-                          })
-                        : "Not Taken"}
-                    </b>
-                  </div>
-                );
-              })}
-
-              {/* <p>{JSON.stringify(currentUserFood)}</p> */}
+            <p>
+              Checked in: <strong>Not Checked In</strong>
+            </p>
+          )}
+          {/* <p
+            style={{
+              width: "100%",
+              fontSize: "1.3rem",
+              fontWeight: "bold",   
+              textAlign: "center",
+              padding: "1rem 0",
+            }}
+          >
+            Food Details
+          </p> */}
+          {/* {foodMenu.map((food, index) => {
+            return (
               <div
+                key={index}
                 style={{
                   width: "100%",
                   display: "flex",
-                  flexDirection: "column",
+                  flexDirection: "row",
                   alignItems: "center",
-                  justifyContent: "center",
+                  justifyContent: "space-between",
                 }}
               >
-                {/* {foodMenu.map((food, index) => {
+                <p>{food.name}</p>{" "}
+                <b>
+                  {foodLog.filter(
+                    (log) =>
+                          log.food_id === food.id &&
+                          log.user_id === currentUser.id
+                  ).length > 0
+                    ? new Date(
+                        foodLog.filter(
+                          (log) =>
+                            log.food_id === food.id &&
+                            log.user_id === currentUser.id
+                        )[0].created_at
+                      ).toLocaleDateString() +
+                      ", " +
+                      new Date(
+                        foodLog.filter(
+                          (log) =>
+                            log.food_id === food.id &&
+                            log.user_id === currentUser.id
+                        )[0].created_at
+                      ).toLocaleString("en-US", {
+                        hour: "numeric",
+                        minute: "numeric",
+                        hour12: true,
+                      })
+                    : "Not Taken"}
+                </b>
+              </div>
+            );
+          })} */}
+
+          {/* <p>{JSON.stringify(currentUserFood)}</p> */}
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {/* {foodMenu.map((food, index) => {
                     return (
                       <div
                         key={index}
@@ -245,18 +287,24 @@ function Home() {
                       </div>
                     );
                 })} */}
-              </div>
-              {/* <p>{currentUser.email}</p>
+          </div>
+          {/* <p>{currentUser.email}</p>
               <p>{currentUser.phone}</p>
               <p>{currentUser.github}</p>
               <p>{currentUser.devfolio}</p>
               <p>{currentUser.linkedin}</p>
               <p>{currentUser.organization}</p>
               <p>{currentUser.grad_year}</p> */}
-            </>
-          )}
         </div>
       </div>
+
+      {/* <div style={{ display: "flex", flexDirection: "column" }}>
+        {Object.entries(workshopCountMap).map(([key, val]) => (
+          <span key={key}>
+            <b>{key}</b>:{val}
+          </span>
+        ))}
+      </div> */}
 
       {/* <div style={{ width: "100%" }}>
         {users.map((user, index) => {
