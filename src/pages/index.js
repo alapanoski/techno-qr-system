@@ -1,7 +1,7 @@
 import React from "react";
 import { useContext, useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.svg";
 import { UserContext } from "../context/userContext";
 import { useRouter } from "next/router";
 import Image from "next/image";

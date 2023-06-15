@@ -2,7 +2,7 @@ import Image from "next/image";
 import React, { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import styles from "../../styles/Home.module.css";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/logo.svg";
 import { SupabaseClient } from "../../utils";
 import { Autocomplete, TextField } from "@mui/material";
 import { useRouter } from "next/router";

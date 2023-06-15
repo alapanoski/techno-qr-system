@@ -8,14 +8,15 @@ function CheckIn() {
   const [registerList, setRegisterList] = useState([]);
   const [noOfCheckedIn, setNoOfCheckedIn] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [rows, setRows] = useState([]);
+  const [columns, setColumns] = useState([]);
+
   async function getUsers() {
     setLoading(true);
     const { data } = await SupabaseClient.from("users").select("*");
     setUsers(data);
     setLoading(false);
   }
-  const columns = [];
-  const rows = [];
 
   async function getRegisterList() {
     setLoading(true);
@@ -23,13 +24,12 @@ function CheckIn() {
       "*, users(*)"
     );
     setRegisterList(data);
+    //console.log(data);
     const rows = registerList.map((user) => ({
       id: user.id,
       col1: user?.band_id,
       col2: user.users.name,
-      col3: user.users.technical_workshop_topic,
-      col4: user.users.non_technical_workshop_topic,
-      col5: user.check_in_time
+      col3: user.check_in_time
         ? new Date(user?.check_in_time).toLocaleDateString() +
           ", " +
           new Date(user?.check_in_time).toLocaleString("en-US", {
@@ -39,22 +39,22 @@ function CheckIn() {
           })
         : "Not Checked In",
     }));
-  
+    setRows(rows);
+
     const columns = [
       { field: "id", headerName: "ID", width: 70 },
       { field: "col1", headerName: "Band ID", width: 140 },
       { field: "col2", headerName: "Name", width: 300 },
-      { field: "col3", headerName: "Tech Workshop", width: 400 },
-      { field: "col4", headerName: "Non Tech Workshop", width: 400 },
       {
-        field: "col5",
+        field: "col3",
         headerName: "Check In Time",
         width: 300,
       },
     ];
-  
+    setColumns(columns);
+
     let count = 0;
-   // console.log(data);
+    // console.log(data);
     data?.forEach((user) => {
       if (user.band_id) {
         count++;
@@ -64,14 +64,16 @@ function CheckIn() {
 
     setLoading(false);
   }
+
   useEffect(() => {
     getUsers();
     getRegisterList();
   }, []);
+
   if (loading) {
     return <Loader />;
   }
-  
+
   return (
     <>
       {/* <p>{JSON.stringify(registerList)}</p> */}
@@ -100,7 +102,7 @@ function CheckIn() {
           Checked In: <strong>{noOfCheckedIn}</strong>
         </div>
 
-      {/* <div
+        {/* <div
         style={{
           display: "flex",
         }}
@@ -147,31 +149,31 @@ function CheckIn() {
           </tbody>
         </table>
       </div> */}
-      <div
-        style={{
-          display: "flex",
-          height: "100%",
-          flexGrow: 1,
-        }}
-      >
-        <div style={{ flexGrow: 1 ,overflow:"auto"}}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            components={{
-              Toolbar: GridToolbar,
-            }}
-            componentsProps={{
-              toolbar: {
-                showQuickFilter: true,
+        <div
+          style={{
+            display: "flex",
+            height: "100%",
+            flexGrow: 1,
+          }}
+        >
+          <div style={{ flexGrow: 1, overflow: "auto" }}>
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              components={{
+                Toolbar: GridToolbar,
+              }}
+              componentsProps={{
+                toolbar: {
+                  showQuickFilter: true,
 
-                quickFilterProps: { debounceMs: 500 },
-              },
-            }}
-            autoHeight
-          />
+                  quickFilterProps: { debounceMs: 500 },
+                },
+              }}
+              autoHeight
+            />
+          </div>
         </div>
-      </div>
       </div>
     </>
   );
