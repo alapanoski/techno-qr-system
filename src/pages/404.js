@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React from "react";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.svg";
 import styles from "../styles/Error.module.css";
 import { CustomTitle } from "../utils";
 function Error() {

@@ -6,33 +6,33 @@ const handler = async (req, res) => {
   const fs = require("fs");
   const results = [];
   let count = 0;
-  fs.createReadStream(
-    path.join(process.cwd(), "public", "data", "allMainDay.csv")
-  )
+  fs.createReadStream(path.join(process.cwd(), "public", "data", "deb.csv"))
 
     .pipe(csv())
     .on("data", (data) => results.push(data))
     .on("end", async () => {
       try {
         for (const row of results) {
+          console.log(row);
           const { data: users, error: usersError } = await SupabaseClient.from(
             "users"
           )
             .insert([
               {
+                id: row["id"],
                 name: row["Name"],
                 email: row["Email"],
-                phone: row["Phone Number"],
-                first_name: row["First Name"],
-                last_name: row["Last Name"],
-                ticket_type: row["Ticket Type"],
-                food_preference: row["food-preferrence"],
-                institution: row["institutionorganization"],
-                category: row["category"],
-                ticket_number: row["Ticket No"],
+                phone: row["phone"],
+                // first_name: row["First Name"],
+                // last_name: row["Last Name"],
+                // ticket_type: row["Ticket Type"],
+                food_preference: row["veg"] == "TRUE" ? "veg" : "non-veg",
+                institution: row["college"],
+                //category: row["category"],
+                points: 0,
               },
             ])
-            .select("id,name");
+            .select("id, name");
           console.log(users);
 
           const userId = users[0].id;
@@ -42,9 +42,9 @@ const handler = async (req, res) => {
           let { data: registers, error: registersError } =
             await SupabaseClient.from("register").insert([
               {
-                bar_code: row["BAR/QR code No."],
+                bar_code: row["bar_code"],
                 user_id: userId,
-                event_id: 33,
+                event_id: 44,
               },
             ]);
           console.log({ registersError });

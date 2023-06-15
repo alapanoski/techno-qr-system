@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React from "react";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/logo.svg";
 import styles from "./Sidebar.module.css";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { SupabaseClient } from "../../utils";

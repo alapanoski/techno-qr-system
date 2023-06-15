@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { AddPoints, CheckIn, Food, Home, Sidebar } from "../components";
 import styles from "../styles/Dashboard.module.css";
 import Image from "next/image";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.svg";
 import { CustomTitle, ProtectedRoute } from "../utils";
 import { useRouter } from "next/router";
 
