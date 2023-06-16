@@ -28,7 +28,7 @@ function CheckIn() {
       const { data, error } = await SupabaseClient.from("register")
         .select("*, users(*)")
         .eq("event_id", parseInt(id));
-      // console.log(id, data);
+      console.log(id, data);
       setRegisterList(data);
       let count = 0;
       data?.forEach((user) => {
@@ -48,6 +48,7 @@ function CheckIn() {
   const rows = registerList?.length
     ? registerList.map((user) => ({
         id: user.id,
+        col0: user?.bar_code,
         col1: user?.band_id,
         col2: user.users.name,
         col3: user.users.phone,
@@ -61,15 +62,16 @@ function CheckIn() {
               hour12: true,
             })
           : "Not Checked In",
-        col6: user.users?.category,
-        col7:user.users?.food_preference
+        col6: user.users?.institution,
+        col7: user.users?.food_preference,
       }))
     : [];
 
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
+    { field: "col0", headerName: "Invite ID", width: 140 },
     { field: "col1", headerName: "Band ID", width: 140 },
-    { field: "col2", headerName: "Name", width: 300 },
+    { field: "col2", headerName: "Name", width: 200 },
     { field: "col3", headerName: "Phone", width: 200 },
     { field: "col4", headerName: "Email", width: 300 },
     {
@@ -79,14 +81,14 @@ function CheckIn() {
     },
     {
       field: "col6",
-      headerName: "Category",
+      headerName: "institution",
       width: 200,
     },
     {
-      field:"col7",
-      headerName:"Food Preference",
-      width:200
-    }
+      field: "col7",
+      headerName: "Food Preference",
+      width: 200,
+    },
   ];
   if (loading) {
     return <Loader />;

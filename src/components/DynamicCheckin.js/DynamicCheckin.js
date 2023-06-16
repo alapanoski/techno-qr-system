@@ -23,7 +23,7 @@ function DynamicCheckin() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   const [foodData, setFoodData] = useState([]);
-  const steps = ["Verify User ID", "Log food"];
+  const steps = ["Verify User ID", "Log extra"];
   const [loading, setLoading] = useState(true);
 
   const totalSteps = () => {

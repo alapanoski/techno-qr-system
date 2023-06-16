@@ -53,9 +53,11 @@ function FoodCheckInDetails() {
   }, []);
   const rows = users.map((user) => ({
     id: user.id,
-    col1: user.name,
-    col2: user.phone,
-    col3: foodLog.some((log) => log.user_id === user.id)
+    col0: user.invite_id,
+    col1: user.band_id,
+    col2: user.name,
+    col3: user.phone,
+    col4: foodLog.some((log) => log.user_id === user.id)
       ? new Date(
           foodLog.find((log) => log.user_id === user.id).time_stamp
         ).toLocaleDateString() +
@@ -72,9 +74,11 @@ function FoodCheckInDetails() {
 
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
-    { field: "col1", headerName: "Name", width: 250 },
-    { field: "col2", headerName: "Phone", width: 130 },
-    { field: "col3", headerName: "Check In Time", width: 250 },
+    { field: "col0", headerName: "Invite ID", width: 130 },
+    { field: "col1", headerName: "Band ID", width: 130 },
+    { field: "col2", headerName: "Name", width: 250 },
+    { field: "col3", headerName: "Phone", width: 130 },
+    { field: "col4", headerName: "Check In Time", width: 250 },
   ];
 
   if (loading1) {

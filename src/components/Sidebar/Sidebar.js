@@ -10,7 +10,7 @@ import { UserContext } from "../../context/userContext";
 function Sidebar({ tab, setTab }) {
   const router = useRouter();
   const [expanded, setExpanded] = React.useState(false);
-  const {setUser}=React.useContext(UserContext);
+  const { setUser } = React.useContext(UserContext);
   return (
     <div className={styles.dashboard_menu_container}>
       <div className={styles.dashboard_logo}>
@@ -18,6 +18,7 @@ function Sidebar({ tab, setTab }) {
           src={logo}
           alt=""
           width={200}
+          height={50}
           style={{ cursor: "pointer" }}
           onClick={() => {
             setTab(0);
@@ -67,7 +68,7 @@ function Sidebar({ tab, setTab }) {
             setTab(2);
           }}
         >
-          Food
+          Extras
         </div>
         <div
           className={
@@ -81,11 +82,14 @@ function Sidebar({ tab, setTab }) {
         >
           Add Points
         </div>
+        <div className={styles.dashboard_menu_item}>
+          <a href="/events/44">Dashboard - Event</a>
+        </div>
         <div
           onClick={() => {
             SupabaseClient.auth.signOut().then(() => {
               sessionStorage.removeItem("user");
-              setUser(null)
+              setUser(null);
               router.push("/");
             });
           }}
@@ -133,7 +137,7 @@ function Sidebar({ tab, setTab }) {
               setExpanded(false);
             }}
           >
-            Food
+            Extras
           </div>
           <div
             className={
@@ -148,11 +152,14 @@ function Sidebar({ tab, setTab }) {
           >
             Add Points
           </div>
+          <div className={styles.dashboard_menu_item}>
+            <a href="/events/44">Dashboard - Event</a>
+          </div>
           <div
             onClick={() => {
               SupabaseClient.auth.signOut().then(() => {
                 sessionStorage.removeItem("user");
-                setUser(null)
+                setUser(null);
                 router.push("/");
               });
             }}

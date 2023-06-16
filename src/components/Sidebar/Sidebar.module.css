@@ -35,6 +35,12 @@
   align-items: center;
   justify-content: center;
 }
+
+.dashboard_menu_item a {
+  color: white;
+  text-decoration: none;
+}
+
 .dashboard_menu_item_active {
   background-color: #00a1ea;
   border-radius: 0.5rem;
