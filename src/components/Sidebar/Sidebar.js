@@ -83,7 +83,7 @@ function Sidebar({ tab, setTab }) {
           Add Points
         </div>
         <div className={styles.dashboard_menu_item}>
-          <a href="/events/44">Dashboard - Event</a>
+          <Link to="/events/44">Dashboard - Event</Link>
         </div>
         <div
           onClick={() => {
@@ -153,7 +153,7 @@ function Sidebar({ tab, setTab }) {
             Add Points
           </div>
           <div className={styles.dashboard_menu_item}>
-            <a href="/events/44">Dashboard - Event</a>
+            <Link to="/events/44">Dashboard - Event</Link>
           </div>
           <div
             onClick={() => {
