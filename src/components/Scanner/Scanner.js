@@ -77,7 +77,6 @@ function Scanner({ qr_pay, setUserId, userId, setPaymentId, paymentId }) {
           onError={handleError}
           style={{ width: "300px" }}
         />
-        z{" "}
       </div>
 
       {/* <div className={styles.scan_heading_or}>OR</div> */}

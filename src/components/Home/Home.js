@@ -35,12 +35,12 @@ function Home() {
       .select()
       .select("*, users(*)")
       .eq("event_id", id);
-    //console.log(data)
+    console.log(data);
     setRegisterList(data.data);
     setLoading1(false);
     //console.log(registerList)
   }
-``
+  ``;
   async function getWorkshopCount() {
     const { data: registerList, error } = await SupabaseClient.from("register")
       .select("*, users(*)")
@@ -113,13 +113,13 @@ function Home() {
           flexWrap: "wrap",
         }}
       >
-        <Image src={logo} alt="" width={300} />
+        <Image src={logo} alt="" width={300} height={100} />
         <h2
           style={{
             color: "#041c2b",
           }}
         >
-          FIND TECHNO ID
+          Participants
         </h2>
         <div
           style={{
@@ -168,28 +168,26 @@ function Home() {
           }}
         >
           <p>
-            User id: <strong>{currentUser?.id}</strong>
-          </p>
-          <p>
-            Band id: <strong>{currentUser?.users?.band_id}</strong>
-          </p>
-          <p>
             Name: <strong>{currentUser?.name}</strong>
           </p>
-          {/* <p>
-            Technical Workshop:{" "}
-            <strong>{currentUser?.technical_workshop_topic}</strong>
+          <p>
+            Email: <strong>{currentUser?.email}</strong>
           </p>
           <p>
-            Non Technical Workshop:{" "}
-            <strong>{currentUser?.non_technical_workshop_topic}</strong>
-          </p> */}
+            Phone: <strong>{currentUser?.phone}</strong>
+          </p>
           <p>
-            Ticket Number: <strong>{currentUser?.ticket_number}</strong>
+            Food Preference: <strong>{currentUser?.food_preference}</strong>
+          </p>
+          <p>
+            Institution: <strong>{currentUser?.institution}</strong>
           </p>
           {registerList.filter(
             (register) => register?.user_id === currentUser?.id
-          ).length > 0 ? (
+          ).length > 0 &&
+          registerList.filter(
+            (register) => register.user_id === currentUser.id
+          )[0].check_in_time != null ? (
             <p>
               Checked in:{" "}
               <strong>

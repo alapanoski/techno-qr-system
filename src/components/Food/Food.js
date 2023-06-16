@@ -28,7 +28,7 @@ function Food() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   const [foodData, setFoodData] = useState([]);
-  const steps = ["Verify User ID", "Log food"];
+  const steps = ["Verify User ID", "Log extra"];
   const [loading, setLoading] = useState(true);
   const { id } = router.query;
   const [paymentId, setPaymentId] = useState("");
@@ -217,7 +217,7 @@ function Food() {
   }
   return (
     <div className={styles.food_container}>
-      <div className={styles.food_heading}>Food</div>
+      <div className={styles.food_heading}>Extras</div>
       {foodTab == 0 && (
         <div className={styles.food_cards_container}>
           {foodData?.map((food, index) => (

@@ -190,7 +190,7 @@ const CheckIn = () => {
   };
   return (
     <>
-      <div className={styles.heading}>Check In Page</div>
+      <div className={styles.heading}>Check In</div>
       <Box className={styles.box}>
         <Stepper nonLinear activeStep={activeStep}>
           {steps.map((label, index) => (
