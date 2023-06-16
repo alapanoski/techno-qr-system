@@ -49,7 +49,7 @@ function Scanner({ qr_pay, setUserId, userId, setPaymentId, paymentId }) {
     setResult(result);
     if (qr_pay) {
       if (result != null) {
-        setUserId(result);
+        setPaymentId(result);
       }
     } else {
       if (result != null) {
