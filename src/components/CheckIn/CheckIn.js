@@ -37,13 +37,13 @@ const CheckIn = () => {
       .select("*, users(*)")
       .eq("event_id", id);
     //console.log(error);
-    //console.log(data);
+    console.log(data);
     setRegisterList(data);
   }
 
   async function getID(value) {
     registerList.forEach(async (registerEntry) => {
-      //console.log(registerEntry.name);
+      console.log("ssad" + registerEntry.name);
       if (registerEntry.users.name === value?.name) {
         setCurrentUser(registerEntry);
         setPaymentId(registerEntry.bar_code);
@@ -113,7 +113,8 @@ const CheckIn = () => {
             (registerEntry) => registerEntry.bar_code === paymentId
           ) === undefined
         ) {
-          toast.error("Payment ID does not exist");
+          console.log(paymentId);
+          toast.error("Invite ID is invalid");
           //console.log("No boom");
           setPaymentId("");
           return;
@@ -141,6 +142,7 @@ const CheckIn = () => {
       }
     }
     if (activeStep === 1) {
+      console.log(JSON.stringify(users));
       if (users.filter((user) => user.band_id === userId)?.length) {
         toast.error("User already exists");
       } else if (!userId) {
