@@ -48,12 +48,13 @@ function Scanner({ qr_pay, setUserId, userId, setPaymentId, paymentId }) {
     console.log(result);
     setResult(result);
     if (qr_pay) {
-      console.log(result);
-      if (result !== null || result === undefined || result === "")
-        setPaymentId(result);
+      if (result != null) {
+        setUserId(result);
+      }
     } else {
-      if (result !== null || result === undefined || result === "" ) setUserId(result);
-      else setUserId(result);
+      if (result != null) {
+        setUserId(result);
+      }
     }
   };
 
@@ -71,14 +72,13 @@ function Scanner({ qr_pay, setUserId, userId, setPaymentId, paymentId }) {
           Scan the {qr_pay ? "Payment" : "Band"} QR code
         </div>
         {/* <video ref={ref} /> */}
-
         <QrReader
           onScan={handleScan}
           onError={handleError}
           style={{ width: "300px" }}
         />
-
-z      </div>
+        z{" "}
+      </div>
 
       {/* <div className={styles.scan_heading_or}>OR</div> */}
       <div className={styles.text_input}>
