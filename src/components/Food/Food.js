@@ -307,6 +307,9 @@ function Food() {
                           Name : <b>{currentUser?.users?.name}</b>
                         </div>
                         <div>
+                          Preference: <b>{currentUser?.users?.food_preference}</b>
+                        </div>
+                        <div>
                           Food:
                           <b>
                             {foodData.find((food) => food.id === foodTab).name}
