@@ -57,7 +57,8 @@ function FoodCheckInDetails() {
     col1: user.band_id,
     col2: user.name,
     col3: user.phone,
-    col4: foodLog.some((log) => log.user_id === user.id)
+    col4: user.food_preference,
+    col5: foodLog.some((log) => log.user_id === user.id)
       ? new Date(
           foodLog.find((log) => log.user_id === user.id).time_stamp
         ).toLocaleDateString() +
@@ -78,7 +79,8 @@ function FoodCheckInDetails() {
     { field: "col1", headerName: "Band ID", width: 130 },
     { field: "col2", headerName: "Name", width: 250 },
     { field: "col3", headerName: "Phone", width: 130 },
-    { field: "col4", headerName: "Check In Time", width: 250 },
+    { field: "col4", headerName: "Food Preference", width: 250 },
+    { field: "col5", headerName: "Check In Time", width: 250 },
   ];
 
   if (loading1) {
