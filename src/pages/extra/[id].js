@@ -38,7 +38,8 @@ function FoodCheckInDetails() {
 
   async function getUsers() {
     setLoading1(true);
-    const data = await SupabaseClient.from("users").select("*");
+    const data = await SupabaseClient.from("users").select("*, register(*)");
+    console.log(data.data);
     setUsers(data.data);
     setLoading1(false);
   }
@@ -53,8 +54,8 @@ function FoodCheckInDetails() {
   }, []);
   const rows = users.map((user) => ({
     id: user.id,
-    col0: user.invite_id,
-    col1: user.band_id,
+    col0: user?.register[0]?.bar_code,
+    col1: user?.register[0]?.band_id,
     col2: user.name,
     col3: user.phone,
     col4: user.food_preference,
